@@ -7,49 +7,57 @@
 :root{--bg:{{BG}};--accent:{{ACCENT}};--text:{{TEXT}};--muted:{{MUTED}};--ink:color-mix(in srgb,var(--muted) 75%,#000)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1350px}
-body{position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Archivo',sans-serif;font-stretch:125%}
+body{position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Archivo',sans-serif}
 .abs{position:absolute}
-.circle{left:-130px;top:560px;width:560px;height:560px;border-radius:50%;background:var(--text)}
+.circle{left:-150px;top:400px;width:540px;height:540px;border-radius:50%;background:var(--text)}
 .spray{left:0;top:0;width:1080px;height:1350px}
-.ht{right:40px;bottom:44px;width:540px;color:var(--ink)}
+.ht{right:40px;bottom:50px;width:440px;color:var(--ink)}
 .ht svg{width:100%;height:auto;display:block}
 .logo{left:92px;top:80px;height:78px;width:auto;max-width:380px}
-.logo-text{left:92px;top:96px;font-weight:800;font-size:30px;color:var(--text)}
-h1{position:absolute;left:92px;top:210px;height:1060px;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;font-size:118px;line-height:1;letter-spacing:-.01em;text-transform:uppercase;overflow-wrap:anywhere;color:var(--ink)}
-.copy{position:absolute;right:92px;top:150px;height:760px;writing-mode:vertical-rl;font-size:32px;line-height:1.5;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
-.meta{left:30px;top:210px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:26px;font-weight:300;letter-spacing:.3em;color:var(--text);white-space:nowrap}
-.hook h1{font-size:130px}
+.logo-text{left:92px;top:96px;font-weight:800;font-size:32px;font-stretch:115%;color:var(--text)}
+.counter{right:92px;top:96px;font-size:30px;font-weight:600;font-stretch:115%;color:var(--ink)}
+h1{position:absolute;left:92px;top:250px;width:896px;font-weight:800;font-stretch:115%;font-size:104px;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance;color:var(--ink)}
+.copy{position:absolute;left:92px;bottom:120px;width:460px;font-size:34px;line-height:1.45;font-weight:500;color:var(--ink)}
+.handle{left:92px;bottom:60px;font-size:28px;font-weight:600;font-stretch:115%;color:var(--text)}
 /* closing slide inverts the palette */
 .cta{background:var(--text)}
 .cta .circle{background:var(--accent)}
-.cta h1,.cta .copy{color:var(--bg)}
+.cta h1,.cta .copy,.cta .counter{color:var(--bg)}
 .cta .ht{color:var(--bg)}
-.cta .meta,.cta .logo-text{color:var(--accent)}
+.cta .handle,.cta .logo-text{color:var(--accent)}
 .cta .logo{background:var(--bg);padding:10px 18px;border-radius:12px}
 </style>
 </head>
 <body class="{{KIND}}">
   <svg class="abs spray" viewBox="0 0 1080 1350">
     <defs>
-      <linearGradient id="g" x1="1" y1="0" x2="0.3" y2="0.55">
+      <linearGradient id="g" x1="1" y1="0" x2="0.25" y2="0.65">
         <stop offset="0" style="stop-color:var(--accent)"/>
-        <stop offset="0.45" style="stop-color:var(--accent)"/>
+        <stop offset="0.5" style="stop-color:var(--accent)"/>
         <stop offset="1" style="stop-color:var(--text)"/>
       </linearGradient>
       <filter id="f" x="-20%" y="-20%" width="140%" height="140%">
         <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/>
         <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  14 0 0 0 -6.2" result="a"/>
-        <feGaussianBlur in="SourceGraphic" stdDeviation="46" result="b"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="56" result="b"/>
         <feComposite in="b" in2="a" operator="in"/>
       </filter>
     </defs>
-    <path d="M1080 0 L1080 700 C 940 650 770 500 640 270 C 600 160 640 60 720 0 Z" fill="url(#g)" filter="url(#f)"/>
+    <path d="M1080 0 L1080 940 C 930 900 690 760 520 450 C 440 300 470 110 600 0 Z" fill="url(#g)" filter="url(#f)"/>
   </svg>
   <div class="abs circle"></div>
   <div class="abs ht">{{HALFTONE}}</div>
   {{LOGO}}
-  <div class="abs meta">{{NUM}}/{{TOTAL}} &nbsp; {{HANDLE}}</div>
+  <div class="abs counter">{{NUM}}/{{TOTAL}}</div>
   <h1>{{TITLE}}</h1>
   <div class="copy">{{BODY}}</div>
+  <div class="abs handle">{{HANDLE}}</div>
+<script>
+/* shrink the headline until it clears the body text */
+function fit(){var h=document.querySelector('h1'),s=parseFloat(getComputedStyle(h).fontSize);
+  while(h.getBoundingClientRect().bottom>840&&s>56){s-=4;h.style.fontSize=s+'px';}}
+fit();
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
+</script>
 </body>
 </html>
