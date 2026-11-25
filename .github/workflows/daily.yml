@@ -5,6 +5,14 @@ on:
     - cron: "30 5 * * *"   # backup run if the first one failed
     - cron: "30 7 * * *"   # second backup run
   workflow_dispatch:
+    inputs:
+      force:
+        description: "Publish even if a carousel already went out today"
+        type: boolean
+        default: false
+concurrency:
+  group: carousel
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
@@ -12,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}  # branch tip, so a run queued behind another sees its commits
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -36,6 +46,7 @@ jobs:
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          FORCE_PUBLISH: ${{ inputs.force }}
       - name: Save posted state
         if: vars.AUTO_PUBLISH == 'true'
         run: |
