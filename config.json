@@ -8,6 +8,12 @@
   "cta": "Follow RXT for better financial health",
   "slides": 7,
   "templates": ["spray", "arches", "collage", "brutal", "ribbon"],
+  "learning": {
+    "measure_after_days": 3,
+    "explore_rate": 0.3,
+    "min_measured": 5,
+    "weights": {"reach": 1, "shares": 5, "saved": 3, "comments": 2, "likes": 1}
+  },
   "colors": {
     "bg": "#FFFFFF",
     "accent": "#F2C94C",

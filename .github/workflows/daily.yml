@@ -29,6 +29,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           playwright install --with-deps chromium
+      - name: Learn from posts that are 3+ days old
+        continue-on-error: true  # never block the daily post if Instagram insights fail
+        run: python main.py learn
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       - name: Generate
         run: python main.py generate
         env:
