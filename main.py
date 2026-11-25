@@ -1,4 +1,4 @@
-﻿"""Daily Instagram carousel bot.
+"""Daily Instagram carousel bot.
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
 """
@@ -28,6 +28,7 @@ def ask_gemini(past):
     prompt = f"""You write Instagram carousels for {CFG['brand']}.
 Business and audience: {CFG['niche']}
 Voice: {CFG['voice']}
+Rules: {CFG.get('rules', '')}
 Topics already covered (do not repeat): {past[-40:]}
 
 Pick ONE fresh, specific, genuinely useful topic. Write a carousel with exactly {n} slides:
@@ -54,6 +55,13 @@ def render(data, outdir):
     c = CFG["colors"]
     n = len(data["slides"])
     names = []
+    logo = ROOT / "logo.png"
+    if logo.exists():
+        import base64
+        logo_html = '<img class="abs logo" src="data:image/png;base64,' + base64.b64encode(logo.read_bytes()).decode() + '">'
+    else:
+        logo_html = '<div class="abs logo-text">' + html.escape(CFG["brand"]) + '</div>'
+    halftone = (ROOT / "assets" / "halftone.svg").read_text()
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1080, "height": 1350})
@@ -62,7 +70,7 @@ def render(data, outdir):
             progress = "".join(f'<i class="{"on" if j <= i else ""}"></i>' for j in range(1, n + 1))
             values = {
                 "KIND": kind, "TITLE": html.escape(s["title"]), "BODY": html.escape(s["body"]),
-                "NUM": str(i), "TOTAL": str(n), "PROGRESS": progress,
+                "LOGO": logo_html, "HALFTONE": halftone, "NUM": str(i), "TOTAL": str(n), "PROGRESS": progress,
                 "BRAND": html.escape(CFG["brand"]), "HANDLE": html.escape(CFG["handle"]),
                 "BG": c["bg"], "ACCENT": c["accent"], "TEXT": c["text"], "MUTED": c["muted"],
             }
@@ -99,7 +107,8 @@ def generate():
     repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
     base = f"https://raw.githubusercontent.com/{repo}/main/posts/{day}"
     LATEST.write_text(json.dumps({
-        "day": day, "topic": data["topic"], "caption": data["caption"],
+        "day": day, "topic": data["topic"],
+        "caption": (data["caption"].strip() + "\n\n" + CFG.get("caption_footer", "")).strip(),
         "urls": [f"{base}/{n}" for n in names], "posted": False,
     }, indent=2))
     history.append({"day": day, "topic": data["topic"]})
