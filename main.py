@@ -18,6 +18,7 @@ CFG = json.loads((ROOT / "config.json").read_text())
 POSTS = ROOT / "posts"
 LATEST = POSTS / "latest.json"
 HISTORY = ROOT / "history.json"
+PUBLISHED = POSTS / "published.json"  # log of every carousel sent to Instagram
 DEFAULT_CAPTION_STYLE = (
     "Structure: (1) one hook line that restates the carousel's main idea; "
     "(2) two or three short plain-language sentences adding useful context; "
@@ -118,10 +119,22 @@ def render(data, outdir):
     return names
 
 
+def today():
+    return dt.datetime.now(dt.timezone.utc).date().isoformat()
+
+
+def forced():
+    return os.environ.get("FORCE_PUBLISH", "").strip().lower() in ("1", "true", "yes")
+
+
+def published_log():
+    return json.loads(PUBLISHED.read_text()) if PUBLISHED.exists() else []
+
+
 def generate():
     # backup scheduled runs: skip if today's carousel was already made
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists():
-        if json.loads(LATEST.read_text()).get("day") == dt.date.today().isoformat():
+        if json.loads(LATEST.read_text()).get("day") == today():
             print("Today's carousel already exists, skipping")
             return
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
@@ -136,15 +149,19 @@ def generate():
     if data is None:
         sys.exit("Could not generate a carousel")
 
-    day = dt.date.today().isoformat()
-    outdir = POSTS / day
+    now = dt.datetime.now(dt.timezone.utc)
+    day = now.date().isoformat()
+    # a fresh folder per run (date + time) so a rerun never overwrites slides that
+    # Instagram or the raw.githubusercontent.com cache may still be serving
+    folder = now.strftime("%Y-%m-%d_%H%M%S")
+    outdir = POSTS / folder
     outdir.mkdir(parents=True, exist_ok=True)
     names = render(data, outdir)
 
     repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
-    base = f"https://raw.githubusercontent.com/{repo}/main/posts/{day}"
+    base = f"https://raw.githubusercontent.com/{repo}/main/posts/{folder}"
     LATEST.write_text(json.dumps({
-        "day": day, "topic": data["topic"],
+        "day": day, "folder": folder, "topic": data["topic"],
         "caption": (data["caption"].strip() + "\n\n" + CFG.get("caption_footer", "")).strip(),
         "urls": [f"{base}/{n}" for n in names], "posted": False,
     }, indent=2))
@@ -179,6 +196,12 @@ def publish():
     if post["posted"]:
         print("Latest carousel was already posted")
         return
+    day = today()
+    done_today = [p for p in published_log() if p["day"] == day]
+    if done_today and not forced():
+        print(f"Already published today ({done_today[-1]['topic']}). "
+              "Skipping. Run the publish workflow with 'force' ticked to post again.")
+        return
     wait_for_urls(post["urls"])
     uid = os.environ["IG_USER_ID"]
     kids = [api(f"{uid}/media", image_url=u, is_carousel_item="true")["id"] for u in post["urls"]]
@@ -194,9 +217,16 @@ def publish():
         if status == "ERROR":
             sys.exit("Instagram could not process the carousel")
         time.sleep(5)
-    api(f"{uid}/media_publish", creation_id=parent)
+    media = api(f"{uid}/media_publish", creation_id=parent)
     post["posted"] = True
     LATEST.write_text(json.dumps(post, indent=2))
+    log = published_log()
+    log.append({
+        "day": day, "folder": post.get("folder", post["day"]), "topic": post["topic"],
+        "media_id": media.get("id"), "forced": bool(done_today),
+        "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+    })
+    PUBLISHED.write_text(json.dumps(log[-200:], indent=2))
     print("Published:", post["topic"])
 
 
