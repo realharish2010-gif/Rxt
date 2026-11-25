@@ -3,6 +3,7 @@
    python main.py publish    -> posts the latest generated carousel to Instagram
    python main.py preview [template ...] -> renders sample slides for each template into previews/
    python main.py learn      -> measures posts that are 3+ days old (see learning.py)
+   python main.py trends     -> refreshes news, search trends and competitor patterns (see trends.py)
 """
 import datetime as dt
 import html
@@ -17,6 +18,7 @@ import time
 import requests
 
 import learning
+import trends
 
 ROOT = pathlib.Path(__file__).parent
 CFG = json.loads((ROOT / "config.json").read_text())
@@ -191,11 +193,22 @@ def generate():
             return
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
     # plan this post from what has worked so far (content type, hook, topic area, template)
-    chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history))
+    # and from today's safe news/search trends and what works for similar accounts
+    trend_info = trends.current()
+    if trend_info:
+        trend_info["share"] = trends.settings()["share"]
+    chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history), trend_info)
     forced_tpl = os.environ.get("TEMPLATE", "").strip()
     if forced_tpl:
         chosen["template"] = pick_template(history)  # validates and returns the forced one
     learnings = learning.prompt_block(chosen)
+    if chosen.get("trend"):
+        learnings += "\n\n" + trends.prompt_block(chosen["trend"])
+    notes = (trend_info.get("patterns") or {}).get("notes") or []
+    if notes:
+        learnings += ("\n\nOpening and format techniques working for similar finance accounts right now "
+                      "(borrow the technique only, never their content or claims):\n"
+                      + "\n".join(f"- {n}" for n in notes[:5]))
     data = None
     for attempt in range(6):
         try:
@@ -217,6 +230,11 @@ def generate():
     template = chosen["template"]
     print("Template:", template)
     tags = {d: chosen[d] for d in learning.DIMENSIONS}
+    tags["angle"] = chosen["angle"]
+    if chosen.get("trend"):
+        t = chosen["trend"]
+        tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published")}
+        trends.mark_used(t["id"])
     tags["hook"] = data["slides"][0]["title"]
     names = render(data, outdir, template)
 
@@ -287,7 +305,7 @@ def publish():
     log.append({
         "day": day, "folder": post.get("folder", post["day"]), "topic": post["topic"],
         "template": post.get("template"),
-        **{k: post[k] for k in ("hook", *learning.DIMENSIONS) if post.get(k)},
+        **{k: post[k] for k in ("hook", *learning.TAGS) if post.get(k)},
         "media_id": media.get("id"), "forced": bool(done_today),
         "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
     })
@@ -325,5 +343,11 @@ if __name__ == "__main__":
         preview(sys.argv[2:])
     elif cmd == "learn":
         learning.sync(classify=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
+    elif cmd == "trends":
+        if (os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists()
+                and json.loads(LATEST.read_text()).get("day") == today()):
+            print("Today's carousel already exists, skipping trends")
+        else:
+            trends.refresh(ask=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     else:
         {"generate": generate, "publish": publish}[cmd]()

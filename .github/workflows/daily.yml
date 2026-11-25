@@ -36,6 +36,13 @@ jobs:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Check news, search trends and similar accounts
+        continue-on-error: true  # never block the daily post if a feed or Instagram fails
+        run: python main.py trends
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       - name: Generate
         run: python main.py generate
         env:
