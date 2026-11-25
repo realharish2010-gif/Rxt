@@ -1,4 +1,4 @@
-"""Daily Instagram carousel bot.
+﻿"""Daily Instagram carousel bot.
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
 """
@@ -38,7 +38,7 @@ Also write an Instagram caption (max 600 characters) ending with 5 relevant hash
 Return ONLY JSON: {{"topic": "...", "slides": [{{"title": "...", "body": "..."}}], "caption": "..."}}"""
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     r = client.models.generate_content(
-        model=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"),  # check AI Studio for the current free model name
+        model=os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),  # check AI Studio for the current free model name
         contents=prompt,
         config={"response_mime_type": "application/json"},
     )
