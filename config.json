@@ -1,0 +1,16 @@
+{
+  "brand": "RXT Financial Health Clinic",
+  "handle": "@testrxt",
+  "niche": "RXT is a financial health clinic. It helps individuals build financial health through simple financial education and guidance: budgeting, saving, debt, credit, emergency funds, insurance basics, and making informed money decisions. The audience is everyday people who feel unsure about money and want clear, practical steps.",
+  "voice": "professional, trustworthy, clear, confident and approachable. Educational, never salesy. Plain language, short sentences, no jargon without a quick explanation.",
+  "rules": "Educational content only. Never promise or imply returns, never recommend specific stocks, funds, loans, or products, and never give personalised advice. Teach general principles and give one concrete, realistic example or action step per content slide. Do not use scare tactics or hype.",
+  "caption_footer": "Educational content only. This is not personalised financial advice.",
+  "cta": "Follow RXT for better financial health",
+  "slides": 7,
+  "colors": {
+    "bg": "#FFFFFF",
+    "accent": "#F2C94C",
+    "text": "#087A50",
+    "muted": "#333333"
+  }
+}

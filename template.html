@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:{{BG}};--accent:{{ACCENT}};--text:{{TEXT}};--muted:{{MUTED}}}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px}
+body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;display:flex;flex-direction:column;padding:96px 92px 84px;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:var(--muted)}
+.top b{color:var(--accent);font-weight:800}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;gap:44px}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-.025em;max-width:900px}
+p{font-size:44px;line-height:1.5;color:var(--muted);max-width:820px}
+.bar{display:flex;gap:10px;margin-bottom:36px}
+.bar i{flex:1;height:8px;border-radius:4px;background:color-mix(in srgb,var(--text) 18%,transparent)}
+.bar i.on{background:var(--accent)}
+.foot{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:var(--muted)}
+.hook h1{font-size:138px;line-height:.98}
+.hook main{justify-content:flex-end;padding-bottom:40px}
+.cta{background:var(--accent);color:var(--bg)}
+.cta h1{font-size:120px}
+.cta .top,.cta .foot,.cta p{color:color-mix(in srgb,var(--bg) 78%,var(--accent))}
+.cta .top b{color:var(--bg)}
+.cta .bar i{background:color-mix(in srgb,var(--bg) 25%,transparent)}
+.cta .bar i.on{background:var(--bg)}
+</style>
+</head>
+<body class="{{KIND}}">
+  <div class="top"><b>{{BRAND}}</b><span>{{NUM}}/{{TOTAL}}</span></div>
+  <main>
+    <h1>{{TITLE}}</h1>
+    <p>{{BODY}}</p>
+  </main>
+  <div class="bar">{{PROGRESS}}</div>
+  <div class="foot">{{HANDLE}}</div>
+</body>
+</html>
