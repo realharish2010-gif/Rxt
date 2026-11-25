@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- "Brutal": brutalist poster. A giant slide number bleeding off the page, heavy
+     wide caps, concrete grain, a slanted dark slab for the body and raw outline frames. -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:{{BG}};--accent:{{ACCENT}};--text:{{TEXT}};--muted:{{MUTED}};
+  --ink:color-mix(in srgb,var(--muted) 70%,#000);
+  --paper:color-mix(in srgb,var(--bg) 90%,var(--muted));
+  --big:var(--text);--head:var(--ink)}
+.cta{--paper:var(--text);--big:var(--accent);--head:var(--bg)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px}
+body{position:relative;overflow:hidden;background:var(--paper);color:var(--head);font-family:'Archivo',sans-serif}
+.abs{position:absolute}
+.grain{inset:0;opacity:.45;mix-blend-mode:multiply;pointer-events:none;z-index:8}
+.big{left:-40px;top:-150px;font-weight:900;font-stretch:125%;font-size:640px;line-height:1;letter-spacing:-.06em;color:var(--big);white-space:nowrap}
+.hatch{right:-40px;top:90px;width:360px;height:300px;background:repeating-linear-gradient(90deg,var(--head) 0 4px,transparent 4px 14px);opacity:.18;transform:rotate(8deg)}
+.logo-text{right:60px;bottom:52px;font-weight:900;font-stretch:125%;font-size:24px;color:var(--head);text-transform:uppercase;text-align:right;z-index:4}
+.logo{right:60px;bottom:40px;height:60px;width:auto;z-index:4}
+.squares{right:60px;top:70px;display:flex;gap:8px;z-index:3}
+.squares i{width:22px;height:22px;border:3px solid var(--head)}
+.squares i.on{background:var(--big);border-color:var(--big)}
+h1{position:absolute;z-index:3;left:70px;top:470px;width:940px;font-weight:900;font-stretch:118%;font-size:104px;line-height:.95;letter-spacing:-.025em;text-transform:uppercase;text-wrap:balance;color:var(--head)}
+.side{left:28px;bottom:70px;transform-origin:left bottom;transform:rotate(-90deg) translate(0,100%);font-weight:700;font-size:19px;letter-spacing:.16em;text-transform:uppercase;color:var(--head);white-space:nowrap;opacity:.8;z-index:3}
+.frame{border:5px solid var(--big);z-index:1}
+.bar{background:var(--accent);z-index:2}
+.cta .bar{background:var(--bg)}
+.slab{position:absolute;z-index:4;left:250px;right:60px;bottom:110px;background:var(--ink);color:var(--bg);padding:84px 54px 54px;clip-path:polygon(0 48px,100% 0,100% 100%,0 100%)}
+.cta .slab{background:var(--bg);color:var(--ink)}
+.slab .copy{font-size:36px;line-height:1.36;font-weight:600}
+.hook .slab .copy{font-size:40px}
+.handle{left:250px;bottom:52px;font-weight:900;font-stretch:125%;font-size:28px;color:var(--head);z-index:4}
+</style>
+</head>
+<body class="{{KIND}}">
+  <div class="abs hatch"></div>
+  <div class="abs big" id="big">{{NUM2}}</div>
+  {{LOGO}}
+  <div class="abs squares">{{PROGRESS}}</div>
+  <h1>{{TITLE}}</h1>
+  <div class="abs frame" id="frame"></div>
+  <div class="abs bar" id="bar"></div>
+  <div class="slab"><div class="copy">{{BODY}}</div></div>
+  <div class="abs side">{{BRAND}} / educational only / {{HANDLE}}</div>
+  <div class="abs handle">{{HANDLE}}</div>
+  <svg class="abs grain" viewBox="0 0 1080 1350" style="width:1080px;height:1350px"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="3" seed="3"/><feColorMatrix values="0 0 0 0 .15  0 0 0 0 .15  0 0 0 0 .15  0 0 0 .7 -.05"/></filter><rect width="1080" height="1350" filter="url(#n)"/></svg>
+<script>
+(function(){var b=document.getElementById('big');if(document.body.className=='cta') b.textContent='RXT';
+  /* keep the giant number off the top-right corner where the progress squares sit */
+  var s=640;while(b.getBoundingClientRect().right>790&&s>300){s-=10;b.style.fontSize=s+'px';b.style.top=(-s*.23)+'px';}})();
+/* shrink the headline until it clears the slab, then hang the frame and bar off the slab */
+function fit(){var h=document.querySelector('h1'),s=parseFloat(getComputedStyle(h).fontSize),
+  slab=document.querySelector('.slab').getBoundingClientRect();
+  while(h.getBoundingClientRect().bottom>slab.top-85&&s>56){s-=4;h.style.fontSize=s+'px';}
+  var f=document.getElementById('frame'),b=document.getElementById('bar'),hb=h.getBoundingClientRect().bottom;
+  f.style.left=(slab.left-40)+'px';f.style.top=(slab.top-70)+'px';f.style.width=(slab.width+10)+'px';f.style.height=(slab.height+40)+'px';f.style.transform='rotate(-3deg)';
+  b.style.left='130px';b.style.width='84px';b.style.top=Math.max(hb+30,slab.top-120)+'px';b.style.bottom='0';}
+fit();
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- "Arches": Swiss / modernist poster. Nested line arches, a sun disc, a tinted
+     side strip with a vertical word, and a solid info bar for the body copy. -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:{{BG}};--accent:{{ACCENT}};--text:{{TEXT}};--muted:{{MUTED}};
+  --ink:color-mix(in srgb,var(--text) 30%,#0b0f0d);
+  --field:var(--text);--line:var(--ink);--head:var(--bg);--strip1:var(--bg);--strip2:var(--accent);--sun:var(--accent)}
+.cta{--field:var(--accent);--line:var(--text);--head:var(--ink);--strip1:var(--bg);--strip2:var(--text);--sun:var(--bg)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px}
+body{position:relative;overflow:hidden;background:var(--field);color:var(--head);font-family:'Montserrat',sans-serif}
+.abs{position:absolute}
+.frame{inset:28px;border:3px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.logo-text{left:80px;top:78px;font-weight:800;font-size:28px;letter-spacing:.02em;color:var(--head)}
+.logo{left:80px;top:66px;height:70px;width:auto;max-width:360px;background:var(--bg);padding:8px 14px;border-radius:10px}
+.counter{right:80px;top:70px;font-weight:800;font-size:40px;color:var(--sun);border:4px solid var(--sun);padding:4px 14px 6px;line-height:1}
+.counter small{font-size:24px;font-weight:600;opacity:.85}
+h1{position:absolute;left:80px;top:190px;width:920px;font-weight:900;font-size:100px;line-height:.98;letter-spacing:-.02em;text-transform:uppercase;text-wrap:balance;color:var(--head)}
+.strip{left:80px;top:600px;width:190px;height:470px;background:linear-gradient(180deg,var(--strip1),var(--strip2));overflow:hidden}
+.strip span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);font-weight:900;font-size:150px;letter-spacing:.02em;color:transparent;-webkit-text-stroke:3px var(--ink);white-space:nowrap}
+.arches{left:300px;top:560px;width:700px;height:520px}
+.arches{overflow:visible}
+.arrow{left:80px;top:552px;width:190px;height:30px}
+.bar{position:absolute;left:80px;right:80px;bottom:70px;background:var(--ink);color:var(--bg);padding:34px 40px 32px;display:flex;gap:34px;align-items:flex-start}
+.bar .tag{flex:none;font-weight:800;font-size:24px;letter-spacing:.08em;color:var(--accent);line-height:1.25;padding-top:6px;width:120px;text-transform:uppercase}
+.bar .tag b{display:block;font-size:44px;letter-spacing:0;font-weight:900}
+.bar .copy{font-size:33px;line-height:1.38;font-weight:500}
+.bar .handle{position:absolute;right:40px;top:-46px;font-weight:700;font-size:24px;color:var(--head)}
+.hook .bar .copy{font-size:36px;font-weight:600}
+</style>
+</head>
+<body class="{{KIND}}">
+  <div class="abs frame"></div>
+  {{LOGO}}
+  <div class="abs counter">{{NUM2}}<small>/{{TOTAL2}}</small></div>
+  <h1>{{TITLE}}</h1>
+  <svg class="abs arrow" viewBox="0 0 190 30"><path d="M0 15H180M164 3l16 12-16 12" fill="none" stroke="var(--line)" stroke-width="5"/></svg>
+  <div class="abs strip"><span>RXT</span></div>
+  <svg class="abs arches" viewBox="0 0 700 520" preserveAspectRatio="xMidYMax meet" id="arches"></svg>
+  <div class="bar">
+    <div class="tag" id="tag">Tip<b>{{NUM2}}</b></div>
+    <div class="copy">{{BODY}}</div>
+    <div class="handle">{{HANDLE}}</div>
+  </div>
+<script>
+/* nested arches: a stack of outlined arches stepping inward, a half-bowl and a sun */
+(function(){
+  var s=document.getElementById('arches'),k=document.body.className,n=+'{{NUM}}',out='';
+  var cx=n%2?400:330, base=520, w=400, h=500, step=32;
+  for(var i=0;i<7;i++){
+    var ww=w-i*step*1.25, hh=h-i*step*1.1, x0=cx-ww/2, x1=cx+ww/2, r=ww/2;
+    out+='<path d="M'+x0+' '+base+'V'+(base-hh+r)+'A'+r+' '+r+' 0 0 1 '+x1+' '+(base-hh+r)+'V'+base+'" fill="none" stroke="var(--line)" stroke-width="'+(i%3==0?14:7)+'"/>';
+  }
+  var bx=cx, by=base-150;
+  out+='<circle cx="'+(bx+20)+'" cy="'+(by-150)+'" r="62" fill="var(--sun)"/>';
+  out+='<path d="M'+(bx+20)+' '+(by-190)+'q6 34 40 40q-34 6-40 40q-6-34-40-40q34-6 40-40z" fill="var(--ink)"/>';
+  out+='<path d="M'+(bx-120)+' '+by+'h240a120 120 0 0 1-240 0z" fill="var(--line)"/>';
+  out+='<rect x="'+(bx-14)+'" y="'+(by+110)+'" width="28" height="'+(base-by-110)+'" fill="var(--line)"/>';
+  s.innerHTML=out;
+  var tag=document.getElementById('tag');
+  if(k=='hook') tag.innerHTML='Read<b>&rarr;</b>';
+  if(k=='cta') tag.innerHTML='Follow<b>&#9733;</b>';
+})();
+/* shrink the headline until it clears the artwork, then fill the gap with the artwork */
+function fit(){var h=document.querySelector('h1'),s=parseFloat(getComputedStyle(h).fontSize);
+  while(h.getBoundingClientRect().bottom>530&&s>52){s-=3;h.style.fontSize=s+'px';}
+  var top=h.getBoundingClientRect().bottom+50, bot=document.querySelector('.bar').getBoundingClientRect().top-60, ht=bot-top;
+  var a=document.querySelector('.arches'), st=document.querySelector('.strip'), ar=document.querySelector('.arrow');
+  a.style.top=top+'px'; a.style.height=ht+'px';
+  st.style.top=(top+40)+'px'; st.style.height=(ht-40)+'px'; ar.style.top=(top-8)+'px';}
+fit();
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
+</script>
+</body>
+</html>

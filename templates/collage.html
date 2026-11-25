@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- "Collage": maximalist paper collage. Oversized condensed headline, torn paper
+     blocks, halftone patches and hand-drawn scribbles, with the body copy on a taped note. -->
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:{{BG}};--accent:{{ACCENT}};--text:{{TEXT}};--muted:{{MUTED}};
+  --ink:color-mix(in srgb,var(--muted) 70%,#000);
+  --paper:color-mix(in srgb,var(--bg) 86%,var(--accent));
+  --head:var(--text)}
+.cta{--paper:var(--text);--head:var(--bg)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px}
+body{position:relative;overflow:hidden;background:var(--paper);color:var(--ink);font-family:'Archivo',sans-serif}
+.abs{position:absolute}
+.grain{inset:0;opacity:.35;mix-blend-mode:multiply;z-index:9;pointer-events:none}
+.blocks,.scribbles{inset:0}
+.blk{position:absolute;box-shadow:0 6px 0 rgba(0,0,0,.08)}
+.blk.dots{background-color:transparent;background-image:radial-gradient(circle,var(--ink) 34%,transparent 36%);background-size:16px 16px;opacity:.55}
+.blk.lines{background:repeating-linear-gradient(-45deg,var(--text) 0 6px,transparent 6px 18px);opacity:.5}
+.blk.solid{background:var(--accent)}
+.blk.tint{background:color-mix(in srgb,var(--text) 22%,var(--paper))}
+.cta .blk.tint{background:color-mix(in srgb,var(--bg) 18%,var(--text))}
+.cta .blk.dots{background-image:radial-gradient(circle,var(--bg) 30%,transparent 33%);opacity:.35}
+.cta .blk.lines{background:repeating-linear-gradient(-45deg,var(--accent) 0 6px,transparent 6px 18px)}
+h1{position:absolute;z-index:3;left:70px;top:150px;width:940px;font-family:'Anton',sans-serif;font-weight:400;font-size:200px;line-height:.9;text-transform:uppercase;letter-spacing:.005em;color:var(--head);
+  -webkit-text-stroke:14px var(--paper);paint-order:stroke fill;text-wrap:balance}
+.top{left:70px;top:64px;right:70px;display:flex;justify-content:space-between;align-items:baseline;z-index:4;font-weight:800;font-size:26px;font-stretch:110%;color:var(--head);text-transform:uppercase;letter-spacing:.04em}
+.top .logo-text,.top .logo{position:static}
+.top .logo{height:64px;width:auto}
+.top .no{font-family:'Caveat',cursive;font-size:56px;letter-spacing:0;text-transform:none;color:var(--head)}
+.side{right:34px;bottom:420px;z-index:4;transform-origin:right bottom;transform:rotate(-90deg) translateX(100%);font-weight:700;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--head);white-space:nowrap;opacity:.85}
+.note{position:absolute;z-index:5;left:90px;bottom:140px;width:780px;background:var(--bg);padding:42px 46px 44px;transform:rotate(-1.6deg);box-shadow:0 14px 30px rgba(0,0,0,.14)}
+.note .copy{font-size:37px;line-height:1.38;font-weight:600;color:var(--ink)}
+.note .tape{position:absolute;width:150px;height:44px;background:color-mix(in srgb,var(--accent) 75%,transparent);top:-20px}
+.note .tape.l{left:-30px;transform:rotate(-24deg)}
+.note .tape.r{right:-30px;transform:rotate(20deg)}
+.hook .note .copy{font-size:40px}
+.handle{right:90px;bottom:52px;z-index:5;font-family:'Caveat',cursive;font-weight:700;font-size:48px;color:var(--head)}
+</style>
+</head>
+<body class="{{KIND}}">
+  <div class="abs blocks" id="blocks"></div>
+  <svg class="abs scribbles" id="scr" viewBox="0 0 1080 1350"></svg>
+  <div class="abs top">{{LOGO}}<span class="no">no. {{NUM2}}/{{TOTAL2}}</span></div>
+  <h1>{{TITLE}}</h1>
+  <div class="abs side">{{BRAND}} &middot; educational only &middot; {{NUM2}}</div>
+  <div class="note"><i class="tape l"></i><i class="tape r"></i><div class="copy">{{BODY}}</div></div>
+  <div class="abs handle">{{HANDLE}}</div>
+  <svg class="abs grain" viewBox="0 0 1080 1350" style="width:1080px;height:1350px"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .2  0 0 0 0 .2  0 0 0 .55 0"/></filter><rect width="1080" height="1350" filter="url(#n)"/></svg>
+<script>
+(function(){
+  var n=+'{{NUM}}', seed=n*7919+13;
+  function r(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+  function R(a,b){return a+(b-a)*r();}
+  /* paper blocks */
+  var kinds=['solid','dots','tint','lines','solid','dots'], out='';
+  for(var i=0;i<5;i++){
+    var w=R(220,420),h=R(180,360),x=R(-60,1080-w+60),y=R(160,860-h*.3);
+    out+='<div class="blk '+kinds[(i+n)%kinds.length]+'" style="left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px;transform:rotate('+R(-8,8)+'deg)"></div>';
+  }
+  document.getElementById('blocks').innerHTML=out;
+  /* hand-drawn scribbles */
+  var acc='var(--accent)', grn=document.body.className=='cta'?'var(--bg)':'var(--text)', ink='var(--ink)', s='';
+  function zig(x,y,w,h,rows,col,sw){var d='M'+x+' '+y;for(var k=0;k<rows;k++){d+=' L'+(x+w+R(-20,20))+' '+(y+k*h/rows+R(-6,6))+' L'+(x+R(-20,20))+' '+(y+(k+.5)*h/rows+R(-6,6));}
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"/>';}
+  function loop(cx,cy,rx,ry,col,sw){var d='',t;for(t=0;t<=Math.PI*4.3;t+=.2){var j=1+R(-.05,.05);d+=(t?' L':'M')+(cx+Math.cos(t)*rx*j)+' '+(cy+Math.sin(t)*ry*j);}
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'" stroke-linecap="round"/>';}
+  function star(cx,cy,rr,col){var d='';for(var k=0;k<11;k++){var a=k*Math.PI*4/5-Math.PI/2;d+=(k?' L':'M')+(cx+Math.cos(a)*rr+R(-4,4))+' '+(cy+Math.sin(a)*rr+R(-4,4));}
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="6" stroke-linejoin="round"/>';}
+  s+=zig(R(560,760),R(880,960),R(200,280),R(160,220),9,acc,22);
+  s+=loop(R(140,300),R(820,900),R(90,140),R(60,90),grn,7);
+  s+=star(R(950,985),R(1120,1150),R(34,44),ink);
+  s+=zig(R(-40,40),R(1180,1220),R(260,380),90,4,grn,10);
+  s+=loop(R(820,960),R(560,700),R(50,80),R(50,80),acc,10);
+  document.getElementById('scr').innerHTML=s;
+})();
+/* shrink the headline until it clears the note */
+function fit(){var h=document.querySelector('h1'),s=parseFloat(getComputedStyle(h).fontSize),
+  lim=document.querySelector('.note').getBoundingClientRect().top-30;
+  while(h.getBoundingClientRect().bottom>lim&&s>70){s-=6;h.style.fontSize=s+'px';}}
+fit();
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}
+</script>
+</body>
+</html>

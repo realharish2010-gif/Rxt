@@ -7,6 +7,7 @@
   "caption_footer": "Educational content only. This is not personalised financial advice.",
   "cta": "Follow RXT for better financial health",
   "slides": 7,
+  "templates": ["spray", "arches", "collage", "brutal", "ribbon"],
   "colors": {
     "bg": "#FFFFFF",
     "accent": "#F2C94C",
