@@ -1,4 +1,4 @@
-"""Daily Instagram carousel bot.
+﻿"""Daily Instagram carousel bot.
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
 """
@@ -18,7 +18,7 @@ CFG = json.loads((ROOT / "config.json").read_text())
 POSTS = ROOT / "posts"
 LATEST = POSTS / "latest.json"
 HISTORY = ROOT / "history.json"
-GRAPH = os.environ.get("IG_GRAPH", "https://graph.instagram.com/v23.0")  # check Meta docs for the current version
+GRAPH = os.environ.get("IG_GRAPH", "https://graph.facebook.com/v27.0")  # check Meta docs for the current version
 
 
 def ask_gemini(past):
