@@ -1,12 +1,14 @@
 """Daily Instagram carousel bot.
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
+   python main.py preview [template ...] -> renders sample slides for each template into previews/
 """
 import datetime as dt
 import html
 import json
 import os
 import pathlib
+import random
 import shutil
 import sys
 import time
@@ -19,6 +21,7 @@ POSTS = ROOT / "posts"
 LATEST = POSTS / "latest.json"
 HISTORY = ROOT / "history.json"
 PUBLISHED = POSTS / "published.json"  # log of every carousel sent to Instagram
+TEMPLATES = ROOT / "templates"  # one HTML slide design per file; a different one is used each post
 DEFAULT_CAPTION_STYLE = (
     "Structure: (1) one hook line that restates the carousel's main idea; "
     "(2) two or three short plain-language sentences adding useful context; "
@@ -81,10 +84,43 @@ def candidate_models(client):
     return names[:4]
 
 
-def render(data, outdir):
+def available_templates():
+    """Templates to rotate through: config.json "templates" if set, else every templates/*.html."""
+    found = sorted(f.stem for f in TEMPLATES.glob("*.html"))
+    wanted = CFG.get("templates") or found
+    names = [t for t in wanted if t in found]
+    if not names:
+        sys.exit("No slide templates found in templates/")
+    return names
+
+
+def pick_template(history):
+    """Shuffle through the templates: each one is used once (in random order) before any
+    repeats, and never the same design two posts in a row. TEMPLATE=<name> forces one."""
+    names = available_templates()
+    forced_tpl = os.environ.get("TEMPLATE", "").strip()
+    if forced_tpl:
+        if forced_tpl not in names:
+            sys.exit(f"Unknown template {forced_tpl!r}. Choose from: {', '.join(names)}")
+        return forced_tpl
+    used = [h["template"] for h in history if h.get("template") in names]
+    cycle = set()  # templates already used in the current round
+    for t in used:
+        if t in cycle:  # round broke early (templates list changed or a forced pick)
+            cycle = set()
+        cycle.add(t)
+        if len(cycle) == len(names):
+            cycle = set()
+    choices = [t for t in names if t not in cycle]
+    if used and len(choices) > 1:
+        choices = [t for t in choices if t != used[-1]] or choices
+    return random.choice(choices)
+
+
+def render(data, outdir, template="spray"):
     from playwright.sync_api import sync_playwright
 
-    tpl = (ROOT / "template.html").read_text()
+    tpl = (TEMPLATES / f"{template}.html").read_text()
     c = CFG["colors"]
     n = len(data["slides"])
     names = []
@@ -96,7 +132,7 @@ def render(data, outdir):
         logo_html = '<div class="abs logo-text">' + html.escape(CFG["brand"]) + '</div>'
     halftone = (ROOT / "assets" / "halftone.svg").read_text()
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(executable_path=os.environ.get("CHROMIUM_PATH") or None)
         page = browser.new_page(viewport={"width": 1080, "height": 1350})
         for i, s in enumerate(data["slides"], 1):
             kind = "hook" if i == 1 else "cta" if i == n else "content"
@@ -104,6 +140,7 @@ def render(data, outdir):
             values = {
                 "KIND": kind, "TITLE": html.escape(s["title"]), "BODY": html.escape(s["body"]),
                 "LOGO": logo_html, "HALFTONE": halftone, "NUM": str(i), "TOTAL": str(n), "PROGRESS": progress,
+                "NUM2": f"{i:02d}", "TOTAL2": f"{n:02d}",
                 "BRAND": html.escape(CFG["brand"]), "HANDLE": html.escape(CFG["handle"]),
                 "BG": c["bg"], "ACCENT": c["accent"], "TEXT": c["text"], "MUTED": c["muted"],
             }
@@ -156,16 +193,18 @@ def generate():
     folder = now.strftime("%Y-%m-%d_%H%M%S")
     outdir = POSTS / folder
     outdir.mkdir(parents=True, exist_ok=True)
-    names = render(data, outdir)
+    template = pick_template(history)
+    print("Template:", template)
+    names = render(data, outdir, template)
 
     repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
     base = f"https://raw.githubusercontent.com/{repo}/main/posts/{folder}"
     LATEST.write_text(json.dumps({
-        "day": day, "folder": folder, "topic": data["topic"],
+        "day": day, "folder": folder, "topic": data["topic"], "template": template,
         "caption": (data["caption"].strip() + "\n\n" + CFG.get("caption_footer", "")).strip(),
         "urls": [f"{base}/{n}" for n in names], "posted": False,
     }, indent=2))
-    history.append({"day": day, "topic": data["topic"]})
+    history.append({"day": day, "topic": data["topic"], "template": template})
     HISTORY.write_text(json.dumps(history, indent=2))
 
     # keep only the 14 newest post folders so the repo stays small
@@ -223,6 +262,7 @@ def publish():
     log = published_log()
     log.append({
         "day": day, "folder": post.get("folder", post["day"]), "topic": post["topic"],
+        "template": post.get("template"),
         "media_id": media.get("id"), "forced": bool(done_today),
         "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
     })
@@ -230,5 +270,33 @@ def publish():
     print("Published:", post["topic"])
 
 
+SAMPLE = {
+    "topic": "Sample: building an emergency fund",
+    "slides": [
+        {"title": "Your first emergency fund starts with one small step",
+         "body": "A simple plan to build a cushion without changing your whole life."},
+        {"title": "Pick a starter target", "body": "Aim for a small first goal, like one month of essential bills. A clear number is easier to work towards than a vague idea."},
+        {"title": "Give it its own home", "body": "Keep the fund in a separate account from everyday spending, so it is easy to see and harder to dip into."},
+        {"title": "Automate a small amount", "body": "Set up a transfer on payday, even a modest one. Small, regular amounts add up faster than waiting for a big lump sum."},
+        {"title": "Define a real emergency", "body": "Write down what counts: job loss, urgent repairs, medical bills. A sale or a holiday does not."},
+        {"title": "Refill after you use it", "body": "Using the fund is the point. Afterwards, restart the automatic transfer until it is back to your target."},
+        {"title": "Small steps build real security", "body": "Follow RXT for better financial health"},
+    ],
+}
+
+
+def preview(names=None):
+    """Render the sample carousel with each template into previews/<template>/ (no Gemini needed)."""
+    for t in names or available_templates():
+        out = ROOT / "previews" / t
+        out.mkdir(parents=True, exist_ok=True)
+        render(SAMPLE, out, t)
+        print("Rendered", t, "->", out)
+
+
 if __name__ == "__main__":
-    {"generate": generate, "publish": publish}[sys.argv[1]]()
+    cmd = sys.argv[1]
+    if cmd == "preview":
+        preview(sys.argv[2:])
+    else:
+        {"generate": generate, "publish": publish}[cmd]()
