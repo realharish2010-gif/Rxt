@@ -2,6 +2,7 @@
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
    python main.py preview [template ...] -> renders sample slides for each template into previews/
+   python main.py learn      -> measures posts that are 3+ days old (see learning.py)
 """
 import datetime as dt
 import html
@@ -14,6 +15,8 @@ import sys
 import time
 
 import requests
+
+import learning
 
 ROOT = pathlib.Path(__file__).parent
 CFG = json.loads((ROOT / "config.json").read_text())
@@ -34,9 +37,7 @@ DEFAULT_CAPTION_STYLE = (
 GRAPH = os.environ.get("IG_GRAPH", "https://graph.facebook.com/v27.0")  # check Meta docs for the current version
 
 
-def ask_gemini(past):
-    from google import genai
-
+def ask_gemini(past, learnings=""):
     n = CFG["slides"]
     prompt = f"""You write Instagram carousels for {CFG['brand']}.
 Business and audience: {CFG['niche']}
@@ -44,12 +45,25 @@ Voice: {CFG['voice']}
 Rules: {CFG.get('rules', '')}
 Topics already covered (do not repeat): {past[-40:]}
 
+{learnings}
+
 Pick ONE fresh, specific, genuinely useful topic. Write a carousel with exactly {n} slides:
 - slide 1: a scroll-stopping hook as the title (max 9 words); body is a short teaser (max 15 words)
 - slides 2 to {n - 1}: one idea each; title max 6 words, body max 25 words
 - slide {n}: call to action: {CFG['cta']}; keep it short
 Also write the Instagram caption. {CFG.get('caption_style', DEFAULT_CAPTION_STYLE)}
 Return ONLY JSON: {{"topic": "...", "slides": [{{"title": "...", "body": "..."}}], "caption": "..."}}"""
+
+    def check(data):
+        assert len(data["slides"]) == n, "wrong slide count"
+
+    return gemini_json(prompt, check)
+
+
+def gemini_json(prompt, check=None):
+    """Ask Gemini for JSON, trying backup models if the preferred one fails."""
+    from google import genai
+
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     last_error = None
     for model in candidate_models(client):
@@ -60,7 +74,8 @@ Return ONLY JSON: {{"topic": "...", "slides": [{{"title": "...", "body": "..."}}
                 config={"response_mime_type": "application/json"},
             )
             data = json.loads(r.text)
-            assert len(data["slides"]) == n, "wrong slide count"
+            if check:
+                check(data)
             print("Used model:", model)
             return data
         except Exception as e:  # overloaded, retired model, bad JSON
@@ -175,10 +190,16 @@ def generate():
             print("Today's carousel already exists, skipping")
             return
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
+    # plan this post from what has worked so far (content type, hook, topic area, template)
+    chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history))
+    forced_tpl = os.environ.get("TEMPLATE", "").strip()
+    if forced_tpl:
+        chosen["template"] = pick_template(history)  # validates and returns the forced one
+    learnings = learning.prompt_block(chosen)
     data = None
     for attempt in range(6):
         try:
-            data = ask_gemini([h["topic"] for h in history])
+            data = ask_gemini([h["topic"] for h in history], learnings)
             break
         except Exception as e:  # bad JSON, rate limit, wrong slide count
             print(f"Gemini attempt {attempt + 1} failed: {e}")
@@ -193,18 +214,21 @@ def generate():
     folder = now.strftime("%Y-%m-%d_%H%M%S")
     outdir = POSTS / folder
     outdir.mkdir(parents=True, exist_ok=True)
-    template = pick_template(history)
+    template = chosen["template"]
     print("Template:", template)
+    tags = {d: chosen[d] for d in learning.DIMENSIONS}
+    tags["hook"] = data["slides"][0]["title"]
     names = render(data, outdir, template)
 
     repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
     base = f"https://raw.githubusercontent.com/{repo}/main/posts/{folder}"
     LATEST.write_text(json.dumps({
-        "day": day, "folder": folder, "topic": data["topic"], "template": template,
+        "day": day, "folder": folder, "topic": data["topic"], "template": template, **tags,
+        "plan_reasons": why,
         "caption": (data["caption"].strip() + "\n\n" + CFG.get("caption_footer", "")).strip(),
         "urls": [f"{base}/{n}" for n in names], "posted": False,
     }, indent=2))
-    history.append({"day": day, "topic": data["topic"], "template": template})
+    history.append({"day": day, "topic": data["topic"], "template": template, **tags})
     HISTORY.write_text(json.dumps(history, indent=2))
 
     # keep only the 14 newest post folders so the repo stays small
@@ -263,6 +287,7 @@ def publish():
     log.append({
         "day": day, "folder": post.get("folder", post["day"]), "topic": post["topic"],
         "template": post.get("template"),
+        **{k: post[k] for k in ("hook", *learning.DIMENSIONS) if post.get(k)},
         "media_id": media.get("id"), "forced": bool(done_today),
         "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
     })
@@ -298,5 +323,7 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd == "preview":
         preview(sys.argv[2:])
+    elif cmd == "learn":
+        learning.sync(classify=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     else:
         {"generate": generate, "publish": publish}[cmd]()
