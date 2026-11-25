@@ -1,4 +1,4 @@
-﻿"""Daily Instagram carousel bot.
+"""Daily Instagram carousel bot.
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
 """
@@ -18,6 +18,15 @@ CFG = json.loads((ROOT / "config.json").read_text())
 POSTS = ROOT / "posts"
 LATEST = POSTS / "latest.json"
 HISTORY = ROOT / "history.json"
+DEFAULT_CAPTION_STYLE = (
+    "Structure: (1) one hook line that restates the carousel's main idea; "
+    "(2) two or three short plain-language sentences adding useful context; "
+    "(3) one friendly question that invites readers to comment; "
+    "(4) the line 'Save this for later and share it with someone who needs it.'; "
+    "(5) on the last line, 6 to 8 relevant hashtags mixing broad and specific ones. "
+    "Keep it under 900 characters, use at most two emojis, no hype, and never promise "
+    "results or give personal advice."
+)
 GRAPH = os.environ.get("IG_GRAPH", "https://graph.facebook.com/v27.0")  # check Meta docs for the current version
 
 
@@ -35,17 +44,40 @@ Pick ONE fresh, specific, genuinely useful topic. Write a carousel with exactly 
 - slide 1: a scroll-stopping hook as the title (max 9 words); body is a short teaser (max 15 words)
 - slides 2 to {n - 1}: one idea each; title max 6 words, body max 25 words
 - slide {n}: call to action: {CFG['cta']}; keep it short
-Also write an Instagram caption (max 600 characters) ending with 5 relevant hashtags.
+Also write the Instagram caption. {CFG.get('caption_style', DEFAULT_CAPTION_STYLE)}
 Return ONLY JSON: {{"topic": "...", "slides": [{{"title": "...", "body": "..."}}], "caption": "..."}}"""
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    r = client.models.generate_content(
-        model=os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),  # check AI Studio for the current free model name
-        contents=prompt,
-        config={"response_mime_type": "application/json"},
-    )
-    data = json.loads(r.text)
-    assert len(data["slides"]) == n, "wrong slide count"
-    return data
+    last_error = None
+    for model in candidate_models(client):
+        try:
+            r = client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config={"response_mime_type": "application/json"},
+            )
+            data = json.loads(r.text)
+            assert len(data["slides"]) == n, "wrong slide count"
+            print("Used model:", model)
+            return data
+        except Exception as e:  # overloaded, retired model, bad JSON
+            print(f"Model {model} failed: {e}")
+            last_error = e
+    raise last_error
+
+
+def candidate_models(client):
+    """Preferred model first, then other available Gemini flash models as backups."""
+    names = [os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")]
+    try:
+        for m in client.models.list():
+            n = m.name.replace("models/", "")
+            can_generate = "generateContent" in (getattr(m, "supported_actions", None) or ["generateContent"])
+            if "flash" in n and can_generate and n not in names:
+                if not any(x in n for x in ("image", "tts", "live", "audio", "embedding")):
+                    names.append(n)
+    except Exception as e:
+        print("Could not list models:", e)
+    return names[:4]
 
 
 def render(data, outdir):
@@ -87,15 +119,20 @@ def render(data, outdir):
 
 
 def generate():
+    # backup scheduled runs: skip if today's carousel was already made
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists():
+        if json.loads(LATEST.read_text()).get("day") == dt.date.today().isoformat():
+            print("Today's carousel already exists, skipping")
+            return
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
     data = None
-    for attempt in range(3):
+    for attempt in range(6):
         try:
             data = ask_gemini([h["topic"] for h in history])
             break
         except Exception as e:  # bad JSON, rate limit, wrong slide count
             print(f"Gemini attempt {attempt + 1} failed: {e}")
-            time.sleep(15)
+            time.sleep(30 * (attempt + 1))
     if data is None:
         sys.exit("Could not generate a carousel")
 

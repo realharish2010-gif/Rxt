@@ -2,6 +2,8 @@ name: Daily carousel
 on:
   schedule:
     - cron: "30 3 * * *"   # UTC time, change to when you want it to run
+    - cron: "30 5 * * *"   # backup run if the first one failed
+    - cron: "30 7 * * *"   # second backup run
   workflow_dispatch:
 permissions:
   contents: write
