@@ -5,6 +5,7 @@
    python main.py preview [template ...] -> renders sample slides for each template into previews/
    python main.py learn      -> measures posts that are 3+ days old (see learning.py)
    python main.py trends     -> refreshes news, search trends and competitor patterns (see trends.py)
+   python main.py weekly     -> writes last week's recap and opens it as a GitHub issue (see weekly.py)
 """
 import datetime as dt
 import html
@@ -451,6 +452,9 @@ if __name__ == "__main__":
         learning.sync(classify=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     elif cmd == "due":
         slots.cli()
+    elif cmd == "weekly":
+        import weekly
+        weekly.run()
     elif cmd == "trends":
         if already_made():
             print("This slot's carousel already exists, skipping trends")
