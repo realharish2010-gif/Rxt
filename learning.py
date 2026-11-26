@@ -50,8 +50,10 @@ DEFAULTS = {
     ],
 }
 DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "topic_area": "topic_areas"}
+ANGLES = ["evergreen", "trend-tied"]  # trend-tied = prompted by news or a search trend (trends.py)
+TAGS = (*DIMENSIONS, "angle", "trend")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
-          "template": "Template"}
+          "template": "Template", "angle": "Angle"}
 
 
 def settings():
@@ -175,7 +177,7 @@ def sync(classify=None):
             rec.update({
                 "media_id": m["id"], "posted_at": posted.isoformat(), "permalink": m.get("permalink"),
                 "caption": (m.get("caption") or "")[:600],
-                **{k: meta[k] for k in ("topic", "template", "hook", "folder", *DIMENSIONS) if meta.get(k)},
+                **{k: meta[k] for k in ("topic", "template", "hook", "folder", *TAGS) if meta.get(k)},
                 "metrics": metrics, "measured_at": now().isoformat(timespec="seconds"),
                 "age_days": round(age.total_seconds() / 86400, 1),
             })
@@ -261,9 +263,11 @@ def ranking(posts, dim):
 
 # ---------------------------------------------------------------- planning the next post
 
-def choose(dim, options, history, posts, avoid=None, explore_pick=None):
+def choose(dim, options, history, posts, avoid=None, explore_pick=None, hints=None):
     """Mostly the best-scoring option so far; with probability explore_rate (or while there
-    is too little data) something less tested, so new ideas keep getting a fair trial."""
+    is too little data) something less tested, so new ideas keep getting a fair trial.
+    `hints` are options that are outperforming for similar accounts (trends.py): half of
+    the tests go to them, the other half to whatever we have tried least."""
     s = settings()
     ranked = [r for r in ranking(posts, dim) if r[2] >= s["min_per_option"] and r[0] in options]
     if avoid:  # e.g. not the same template or topic area two posts in a row
@@ -276,22 +280,56 @@ def choose(dim, options, history, posts, avoid=None, explore_pick=None):
         return explore_pick(), "testing (rotation)"
     counts = collections.Counter(h.get(dim) for h in history)
     pool = [o for o in options if o != avoid] or options
+    best = ranked[0][0] if enough and ranked else None
+    hinted = [o for o in (hints or []) if o in pool and o != best]
+    if hinted and random.random() < 0.5:
+        return hinted[0], "testing (working for similar accounts)"
     fewest = min(counts[o] for o in pool)
     return random.choice([o for o in pool if counts[o] == fewest]), "testing (least tried)"
 
 
-def plan(history, templates, explore_template):
-    """Content type, hook style, topic area and template for the next post, with reasons."""
+def choose_angle(posts, trend_share, have_trend):
+    """Tie this post to a news/search trend, or keep it evergreen. Starts at the configured
+    share; once both kinds have enough measured posts, the better one is used most days."""
+    if not have_trend:
+        return "evergreen", "no safe trend available today"
+    s = settings()
+    rows = {r[0]: r for r in ranking(posts, "angle") if r[2] >= s["min_per_option"]}
+    if len(rows) == 2:
+        best = max(rows.values(), key=lambda r: r[1])
+        if random.random() >= s["explore_rate"]:
+            return best[0], f"best so far ({best[1]:.2f}x typical over {best[2]} posts)"
+        other = next(a for a in ANGLES if a != best[0])
+        return other, "testing"
+    if random.random() < trend_share:
+        return "trend-tied", f"testing timely posts ({trend_share:.0%} of days until there is data)"
+    return "evergreen", "evergreen most days until there is data on timely posts"
+
+
+def plan(history, templates, explore_template, trend_info=None):
+    """Content type, hook style, topic area, template and angle for the next post, with
+    reasons. `trend_info` is trends.current(): today's safe trend picks and the patterns
+    that are working for similar accounts."""
     s = settings()
     posts = scored(measured_posts())
     last = history[-1] if history else {}
+    trend_info = trend_info or {}
+    hints = trend_info.get("patterns", {}).get("hints", {})
+    picks = trend_info.get("picks") or []
     out, why = {}, {}
+    out["angle"], why["angle"] = choose_angle(posts, trend_info.get("share", 0.3), bool(picks))
+    out["trend"] = None
     for dim, key in DIMENSIONS.items():
-        out[dim], why[dim] = choose(dim, s[key], history, posts,
+        out[dim], why[dim] = choose(dim, s[key], history, posts, hints=hints.get(dim),
                                     avoid=last.get(dim) if dim == "topic_area" else None)
+    if out["angle"] == "trend-tied":
+        # prefer a trend in the planned topic area, else the most relevant one
+        pick = next((p for p in picks if p["topic_area"] == out["topic_area"]), picks[0])
+        out["trend"], out["topic_area"] = pick, pick["topic_area"]
+        why["topic_area"] = f"from the trend: {pick['headline'][:80]}"
     out["template"], why["template"] = choose("template", templates, history, posts,
                                               avoid=last.get("template"), explore_pick=explore_template)
-    for k in out:
+    for k in why:
         print(f"Plan {k}: {out[k]} ({why[k]})")
     return out, why
 
@@ -373,7 +411,7 @@ def write_report(store, status="ok"):
         out += ["## Best performers", "", *head, *[row(p) for p in ranked[:k]], ""]
         if len(ranked) > 1:
             out += ["## Worst performers", "", *head, *[row(p) for p in ranked[::-1][:k]], ""]
-        for dim in [*DIMENSIONS, "template"]:
+        for dim in [*DIMENSIONS, "template", "angle"]:
             rows = ranking(posts, dim)
             if rows:
                 out += [f"## {LABELS[dim]}", "", "| Option | Posts | Avg reach | vs typical |", "|---|---|---|---|"]
