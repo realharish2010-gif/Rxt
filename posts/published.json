@@ -6,5 +6,31 @@
     "media_id": null,
     "forced": false,
     "at": "2026-11-25T12:49:41+00:00"
+  },
+  {
+    "day": "2026-11-26",
+    "folder": "2026-11-26_014218",
+    "topic": "Financial planning for wedding celebrations",
+    "template": "reel",
+    "hook": "Love the giant bubble entrance? Check budgets.",
+    "content_type": "general trends",
+    "hook_style": "direct question",
+    "topic_area": "financial goals and planning",
+    "angle": "general trends",
+    "trend": {
+      "id": "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
+      "headline": "Giant Bubble Wedding Entry",
+      "source": "India Today",
+      "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPUENrdkRLdEdrR3BjLWlmQWJwZThSX21QRWdERTJmNmV0UDBhTWJHM2pHdlJDenBIcVBvWjc4SFJJVE9sejBCcmVkLXBLV1cyal9VVWZ2R0E2Z3AzSERnQU9UbXc4RHU5R3NKUl9VMUJiazZwdjdDUFd0bm54M1hBZzZ3VG44ZzdWSWYycUdMY01nN000ekhKa0J6WFd2dGY5Yjl4a1ZoNDRaTWd1b291azhFdWVUSDN4NzBVOXNVT2laLWd3M2swR3RzVWNMVnpCZG1SVHlFMEFrbVFmTVhR0gHfAUFVX3lxTE9QQ2t2REt0R2tHcGMtaWZBYnBlOFJfbVBFZ0RFMmY2ZXRQMGFNYkczakd2UkN6cEhxUG9aNzhIUklUT2x6MEJyZWQtcEtXVzJqX1VVZnZHQTZncDNIRGdBT1RtdzhEdTlHc0pSX1UxQmJrNnB2N0NQV3RubngzWEFnNndUbjhnN1ZJZjJxR0xjTWc3TTR6SEprQnpYV3Z0ZjliOXhrVmg0NFpNZ3Vvb3VrOEV1ZVRIM3g3MFU5c1VPaVotZ3czazBHdHNVY0xWekJkbVJUeUUwQWttUWZNWFE?oc=5",
+      "published": "2026-11-25T07:00:49+00:00",
+      "format": "general trends"
+    },
+    "slot": "morning",
+    "post_time": "08:30",
+    "local_day": "2026-11-26",
+    "format": "reel",
+    "media_id": "18473441830184136",
+    "forced": false,
+    "at": "2026-11-26T01:49:18+00:00"
   }
 ]
