@@ -189,8 +189,8 @@ def write_carousel(history, chosen, notes):
     """Gemini writes the carousel. A news-tied post is fact-checked by a second Gemini pass
     and rewritten with the problems listed; if it still fails, the post becomes evergreen."""
     trend = chosen.get("trend")
-    if trend and trend.get("format") == "news explainer":
-        chosen["content_type"] = "news explainer"
+    if trend and trend.get("format") == "news content":
+        chosen["content_type"] = "news content"
     feedback = ""
     for check_round in range(3 if trend else 1):
         learnings = learning.prompt_block(chosen)
@@ -226,7 +226,7 @@ def write_carousel(history, chosen, notes):
     print("::warning::News post still failed the fact-check after two rewrites, writing an evergreen post instead")
     trends.mark_used(trend["id"])
     chosen.update(angle="evergreen", trend=None)
-    if chosen["content_type"] == "news explainer":
+    if chosen["content_type"] == "news content":
         chosen["content_type"] = "simple explainer"
     return write_carousel(history, chosen, notes)
 

@@ -68,7 +68,7 @@ DEFAULTS = {
         "https://www.sebi.gov.in/sebirss.xml",
         "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
     ],
-    # outlets whose reporting can be turned into a news explainer post (matched on the
+    # outlets whose reporting can be turned into a news content post (matched on the
     # Google News source name); other outlets' stories can only prompt an evergreen lesson
     "trusted_sources": [
         "Reserve Bank of India", "RBI", "SEBI", "PIB", "Press Information Bureau", "Mint", "Livemint",
@@ -231,7 +231,7 @@ change means in general". Most items should be rejected; returning an empty list
 Prefer official announcements and items marked trusted.
 
 For each pick give:
-- format: "news explainer" if the post should report the news itself (what happened, then
+- format: "news content" if the post should report the news itself (what happened, then
   what it means for everyday people). Only allowed for items with trusted = true that state
   a confirmed decision, rule change, deadline or official data release (not a rumour,
   forecast, opinion or market move). Otherwise "lesson" (the news only prompts a general lesson).
@@ -269,7 +269,7 @@ Return ONLY JSON: {{"picks": [{{"id": 0, "topic_area": "...", "angle": "...", "f
             "angle": p["angle"].strip(), "facts": [str(f)[:200] for f in p.get("facts", [])][:3],
             "avoid": str(p.get("avoid", ""))[:200], "relevance": int(p.get("relevance") or 1),
             "evergreen_ok": bool(p.get("evergreen_ok")),
-            "format": "news explainer" if (p.get("format") == "news explainer" and c["trusted"]
+            "format": "news content" if (p.get("format") == "news content" and c["trusted"]
                                            and p.get("facts")) else "lesson",
         })
     picks.sort(key=lambda p: (p["kind"] == "official", p["relevance"], p["evergreen_ok"]), reverse=True)
@@ -491,9 +491,9 @@ Teach this: {trend['angle']}
 Facts you may state (only these; add no other numbers, dates, names or details about the story):
 {facts}
 Must avoid: {trend['avoid']}"""
-    if trend.get("format") == "news explainer":
+    if trend.get("format") == "news content":
         return head + f"""
-FORMAT: NEWS EXPLAINER. This carousel reports the news, then explains it.
+FORMAT: NEWS CONTENT. This carousel reports the news, then explains it.
 - slide 1: a calm, clear hook naming what happened (no "breaking", no urgency, no hype)
 - slide 2: "What happened": state the facts above plainly and name the source ({trend['source']})
 - slides 3 to {slides - 1}: what it means for everyday people and one sensible, general action
