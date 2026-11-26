@@ -19,6 +19,8 @@ import statistics
 
 import requests
 
+import promo
+
 ROOT = pathlib.Path(__file__).parent
 CFG = json.loads((ROOT / "config.json").read_text())
 DIR = ROOT / "analytics"
@@ -51,12 +53,13 @@ DEFAULTS = {
 }
 DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "topic_area": "topic_areas"}
 # trend-tied = prompted by money news or a search trend; general trends = rides a popular
-# non-finance trend, meme or hook in a fun, casual tone (both from trends.py)
-ANGLES = ["educational", "trend-tied", "general trends"]
+# non-finance trend, meme or hook in a fun, casual tone (both from trends.py);
+# promotional = a creative post about RXT itself (promo.py), told through a promo_angle
+ANGLES = ["educational", "trend-tied", "general trends", "promotional"]
 OLD_ANGLES = {"evergreen": "educational"}  # earlier name, still found in older logs
-TAGS = (*DIMENSIONS, "angle", "trend")  # what each post is logged with, besides topic/template/hook
+TAGS = (*DIMENSIONS, "angle", "promo_angle", "trend")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
-          "template": "Template", "angle": "Angle"}
+          "template": "Template", "angle": "Angle", "promo_angle": "Promotional angle"}
 
 
 def settings():
@@ -293,9 +296,9 @@ def choose(dim, options, history, posts, avoid=None, explore_pick=None, hints=No
 
 
 def choose_angle(posts, shares, available):
-    """Educational (no trend), tied to a news/search trend ("trend-tied"), or riding a popular non-finance
-    trend ("general trends"). `shares` = {angle: share of days} for the trend angles;
-    `available` = the angles that have a safe trend today. Starts at the configured shares;
+    """Educational (no trend), tied to a news/search trend ("trend-tied"), riding a popular non-finance
+    trend ("general trends"), or about RXT itself ("promotional"). `shares` = {angle: share of
+    days} for the non-educational angles; `available` = the angles usable today. Starts at the configured shares;
     once every available angle has enough measured posts, the best one is used most days."""
     avail = ["educational"] + [a for a in ANGLES[1:] if a in available]
     if len(avail) == 1:
@@ -326,15 +329,22 @@ def plan(history, templates, explore_template, trend_info=None):
     hints = trend_info.get("patterns", {}).get("hints", {})
     picks = trend_info.get("picks") or []
     general = trend_info.get("general_picks") or []
-    shares = {"trend-tied": trend_info.get("share", 0.3), "general trends": trend_info.get("general_share", 0.2)}
-    available = [a for a, ok in (("trend-tied", picks), ("general trends", general)) if ok]
+    promo_share = promo.settings()["share"]
+    shares = {"trend-tied": trend_info.get("share", 0.3), "general trends": trend_info.get("general_share", 0.2),
+              "promotional": promo_share}
+    available = [a for a, ok in (("trend-tied", picks), ("general trends", general),
+                                 ("promotional", promo_share > 0)) if ok]
     out, why = {}, {}
     out["angle"], why["angle"] = choose_angle(posts, shares, available)
     out["trend"] = None
+    out["promo_angle"] = None
     for dim, key in DIMENSIONS.items():
         out[dim], why[dim] = choose(dim, s[key], history, posts, hints=hints.get(dim),
                                     avoid=last.get(dim) if dim == "topic_area" else None)
-    if out["angle"] != "educational":
+    if out["angle"] == "promotional":
+        out["promo_angle"], why["promo_angle"] = choose("promo_angle", list(promo.settings()["angles"]),
+                                                        history, posts)
+    elif out["angle"] != "educational":
         # prefer a trend in the planned topic area, else the most relevant one
         pool = picks if out["angle"] == "trend-tied" else general
         pick = next((p for p in pool if p["topic_area"] == out["topic_area"]), pool[0])
@@ -424,7 +434,7 @@ def write_report(store, status="ok"):
         out += ["## Best performers", "", *head, *[row(p) for p in ranked[:k]], ""]
         if len(ranked) > 1:
             out += ["## Worst performers", "", *head, *[row(p) for p in ranked[::-1][:k]], ""]
-        for dim in [*DIMENSIONS, "template", "angle"]:
+        for dim in [*DIMENSIONS, "template", "angle", "promo_angle"]:
             rows = ranking(posts, dim)
             if rows:
                 out += [f"## {LABELS[dim]}", "", "| Option | Posts | Avg reach | vs typical |", "|---|---|---|---|"]
