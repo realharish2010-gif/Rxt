@@ -10,7 +10,7 @@ A private website for the team to run the Instagram bot without touching GitHub:
 - **Reports**: the Monday weekly recap, "What works" and the trends report, as the bot writes them.
 - **Activity log**: who signed in, who started or published a post, and who changed the publishing mode.
 
-People sign in with Google (GitHub sign-in is optional). Only email addresses on your allowlist can get in.
+Signed-out visitors see a one-screen landing page (black, with a background video); every link on it opens the sign-in box. People sign in with Google (GitHub sign-in is optional). Only email addresses on your allowlist can get in.
 
 It lives entirely in this `dashboard/` folder. It does not change the bot's code or its workflows, and it adds no GitHub Actions workflows. It only does what a person could do by hand on GitHub: run the **Content calendar** and **Publish latest post** workflows, and change the `AUTO_PUBLISH` variable.
 
@@ -158,7 +158,7 @@ npm run dev                       # http://localhost:8788
 
 | Path | What it is |
 |---|---|
-| `public/` | The website: `index.html`, `app.js` (all pages), `style.css`, `markdown.js` (renders the bot's reports safely), `_headers` (security headers) |
+| `public/` | The website: `index.html` (landing page and app shell), `landing.js` (entrance animation fallback and phone menu), `app.js` (all dashboard pages), `style.css`, `markdown.js` (renders the bot's reports safely), `_headers` (security headers), self-hosted Inter and Instrument Serif fonts (SIL Open Font License, see `FONTS-LICENSE.txt`) |
 | `functions/api/[[path]].js` | The backend: every `/api/*` route |
 | `lib/auth.js` | Google and GitHub sign-in, sessions, roles |
 | `lib/github.js` | GitHub API calls (files, runs, starting workflows, the `AUTO_PUBLISH` variable) |

@@ -161,43 +161,91 @@
     } catch (e) {
       state.config = {};
     }
+    setupSignIn();
     const errMatch = /signin-error=([^&]+)/.exec(location.hash);
     if (errMatch) {
-      showSignIn(decodeURIComponent(errMatch[1]));
-      history.replaceState(null, "", "#/");
+      history.replaceState(null, "", "#top");
+      showLanding();
+      openSignIn(decodeURIComponent(errMatch[1]));
       return;
     }
     try {
       state.me = await api("/api/me", { allow401: true });
       startApp();
     } catch {
-      showSignIn();
+      showLanding();
     }
   }
 
-  function showSignIn(error) {
-    $("#app").hidden = true;
-    $("#signin").hidden = false;
+  // The landing page is the signed-out face of the site. Every link that needs data
+  // (the nav pills, the hero buttons) opens the sign-in sheet and goes there afterwards.
+  let wanted = null;
+
+  function showLanding() {
     clearTimers();
+    closeModal();
+    document.body.classList.remove("app", "menu-open");
+    document.body.classList.add("landing");
+    document.documentElement.classList.add("landing-lock");
+    page.innerHTML = "";
+    const h = location.hash;
+    if (h.startsWith("#/") && h.length > 2) wanted = h;
+  }
+
+  function openSignIn(error) {
+    $("#signin-error").hidden = !error;
+    if (error) $("#signin-error").textContent = error;
+    $("#signin").hidden = false;
+    loadGoogle();
+    setTimeout(() => $(".sheet-close").focus(), 0);
+  }
+
+  function closeSignIn() {
+    $("#signin").hidden = true;
+  }
+
+  function setupSignIn() {
     const c = state.config || {};
-    if (error) { $("#signin-error").textContent = error; $("#signin-error").hidden = false; }
     $("#github-btn").hidden = !c.github;
     $("#dev-btn").hidden = !c.devLogin;
     $("#signin-setup").hidden = !!c.googleClientId || c.github || c.devLogin;
     $("#dev-btn").onclick = async () => {
       try { state.me = await api("/api/auth/dev", { method: "POST", body: {} }); startApp(); } catch (e) { signInError(e.message); }
     };
-    if (c.googleClientId && !showSignIn.loaded) {
-      showSignIn.loaded = true;
-      const s = document.createElement("script");
-      s.src = "https://accounts.google.com/gsi/client";
-      s.async = true;
-      s.onload = () => {
-        google.accounts.id.initialize({ client_id: c.googleClientId, callback: onGoogle, ux_mode: "popup", auto_select: false });
-        google.accounts.id.renderButton($("#google-btn"), { theme: "outline", size: "large", text: "signin_with", shape: "pill", width: 280 });
-      };
-      document.head.appendChild(s);
-    }
+    $(".sheet-close").onclick = closeSignIn;
+    $("#signin").addEventListener("click", (e) => { if (e.target.id === "signin") closeSignIn(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#signin").hidden) closeSignIn(); });
+    document.addEventListener("click", (e) => {
+      if (state.me) return;
+      const a = e.target.closest("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (a.hasAttribute("data-signin") || href.startsWith("#/")) {
+        e.preventDefault();
+        if (href.startsWith("#/")) wanted = href;
+        openSignIn();
+      }
+    });
+  }
+
+  function loadGoogle() {
+    const c = state.config || {};
+    if (!c.googleClientId || loadGoogle.loaded) return;
+    loadGoogle.loaded = true;
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client";
+    s.async = true;
+    s.onload = () => {
+      google.accounts.id.initialize({ client_id: c.googleClientId, callback: onGoogle, ux_mode: "popup", auto_select: false });
+      google.accounts.id.renderButton($("#google-btn"), { theme: "filled_black", size: "large", text: "signin_with", shape: "rectangular", width: 280 });
+    };
+    s.onerror = () => signInError("Could not load Google sign-in. Check your connection and try again.");
+    document.head.appendChild(s);
+  }
+
+  function showSignIn(error) {
+    showLanding();
+    openSignIn(error);
   }
 
   function signInError(msg) {
@@ -215,19 +263,24 @@
   }
 
   function startApp() {
-    $("#signin").hidden = true;
-    $("#app").hidden = false;
+    closeSignIn();
+    document.body.classList.remove("landing");
+    document.body.classList.add("app");
+    document.documentElement.classList.remove("landing-lock");
+    if (wanted) { history.replaceState(null, "", wanted); wanted = null; }
+    else if (!location.hash.startsWith("#/")) history.replaceState(null, "", "#/");
     const me = state.me;
     $("#me").innerHTML = `<div class="who">${me.picture ? `<img src="${esc(me.picture)}" alt="" referrerpolicy="no-referrer">` : ""}
       <span class="name" title="${esc(me.email || me.github)}">${esc(me.name || me.email)}</span></div>
-      <span class="role"><span class="badge ${me.role === "admin" ? "brand" : ""}">${esc(cap(me.role))}</span></span>
-      <button class="linkish small" id="logout">Sign out</button>`;
+      <span class="badge ${me.role === "admin" ? "brand" : ""}">${esc(cap(me.role))}</span>
+      <button class="btn btn-ghost btn-sm" id="logout">Sign out</button>`;
     $("#logout").onclick = async () => {
       await api("/api/auth/logout", { method: "POST", body: {} }).catch(() => {});
       if (window.google?.accounts?.id) google.accounts.id.disableAutoSelect();
       state.me = null;
       bust();
-      showSignIn();
+      history.replaceState(null, "", "#top");
+      showLanding();
     };
     route();
   }
@@ -423,7 +476,7 @@
     const extras = t.posts.filter((x) => !(s.slots || {})[whereSlot(x, s)]);
 
     page.innerHTML = `
-      <div class="page-head"><div><h1>Overview</h1><p class="muted">${esc(o.brand || "RXT")} ${o.handle ? "· " + esc(o.handle) : ""} · times in ${tzLabel()}</p></div>
+      <div class="page-head"><div><h1>Today, <em>at a glance</em></h1><p class="muted">${esc(o.brand || "RXT")} ${o.handle ? "· " + esc(o.handle) : ""} · times in ${tzLabel()}</p></div>
         ${canPost() ? '<a class="btn" href="#/new">New post</a>' : ""}</div>
       ${failed.length ? `<div class="callout bad" style="margin-bottom:16px"><strong>${failed.length} run${failed.length > 1 ? "s" : ""} failed in the last 2 days</strong><span><a href="#/runs">See Runs</a> for details.</span></div>` : ""}
       <div class="tiles">
@@ -519,12 +572,12 @@
     const o = await cached("/api/overview", 15);
     setOffset(o.schedule.utc_offset);
     if (!canPost()) {
-      page.innerHTML = `<h1>New post</h1><div class="callout">Your role is <b>viewer</b>, so you can see everything but not make posts. Ask an admin to make you an editor.</div>`;
+      page.innerHTML = `<h1>Make a <em>new post</em></h1><div class="callout">Your role is <b>viewer</b>, so you can see everything but not make posts. Ask an admin to make you an editor.</div>`;
       return;
     }
     const slots = Object.entries(o.schedule.slots || {});
     page.innerHTML = `
-      <div class="page-head"><div><h1>New post</h1><p class="muted">Make a post right now instead of waiting for the calendar.</p></div></div>
+      <div class="page-head"><div><h1>Make a <em>new post</em></h1><p class="muted">Make a post right now instead of waiting for the calendar.</p></div></div>
       <div class="grid grid-2">
         <form class="card" id="new-form">
           <fieldset><legend>Slot</legend><div class="choices">
@@ -641,7 +694,7 @@
     const all = postList(files, o.schedule);
     const types = [...new Set(all.map((p) => p.content_type).filter(Boolean))];
     page.innerHTML = `
-      <div class="page-head"><div><h1>Posts</h1><p class="muted">${all.length} post${all.length === 1 ? "" : "s"}. Click one to see its slides or Reel, caption and numbers.</p></div></div>
+      <div class="page-head"><div><h1>Every <em>post</em></h1><p class="muted">${all.length} post${all.length === 1 ? "" : "s"}. Click one to see its slides or Reel, caption and numbers.</p></div></div>
       <div class="filters">
         <select id="f-format" aria-label="Format"><option value="">All formats</option><option value="carousel">Carousels</option><option value="reel">Reels</option></select>
         <select id="f-type" aria-label="Content type"><option value="">All content types</option>${types.map((t) => `<option>${esc(t)}</option>`).join("")}</select>
@@ -794,7 +847,7 @@
     const ui = { source: measured.length || !a.liveEnabled ? "measured" : "live", metric: "reach", dim: "content_type", live: null };
 
     page.innerHTML = `
-      <div class="page-head"><div><h1>Analytics</h1><p class="muted" id="an-sub"></p></div>
+      <div class="page-head"><div><h1>What's <em>working</em></h1><p class="muted" id="an-sub"></p></div>
         <div class="row">${a.liveEnabled ? `<div class="seg" id="src"><button data-v="measured">At 3 days</button><button data-v="live">Live now</button></div>` : ""}</div></div>
       <div id="an-body"></div>`;
 
@@ -929,7 +982,7 @@
     const since = params.get("since");
     let watchId = params.get("id");
     page.innerHTML = `
-      <div class="page-head"><div><h1>Runs</h1><p class="muted">What the bot has been doing on GitHub Actions.</p></div>
+      <div class="page-head"><div><h1>What the <em>bot</em> is doing</h1><p class="muted">What the bot has been doing on GitHub Actions.</p></div>
         <div class="row"><label class="check small"><input type="checkbox" id="show-quick"><span>Show quick checks with no post due</span></label></div></div>
       <div id="watch"></div>
       <div class="card"><div id="run-list"><div class="empty"><span class="spinner"></span></div></div></div>`;
@@ -1006,7 +1059,7 @@
     const docs = await cached("/api/docs", 60);
     const tab = params.get("doc") || (docs.weekly.length ? "weekly/" + docs.weekly[0] : "report");
     page.innerHTML = `
-      <div class="page-head"><div><h1>Reports</h1><p class="muted">Written by the bot: the Monday recap, what is working, and today's trends.</p></div></div>
+      <div class="page-head"><div><h1>The bot's <em>reports</em></h1><p class="muted">Written by the bot: the Monday recap, what is working, and today's trends.</p></div></div>
       <div class="filters">
         <div class="seg" id="doc-tabs">
           <button data-v="weekly">Weekly recap</button><button data-v="report">What works</button><button data-v="trends">Trends</button></div>
@@ -1039,7 +1092,7 @@
   // ---------------------------------------------------------------- Activity log
 
   pages.audit = async function () {
-    page.innerHTML = `<div class="page-head"><div><h1>Activity log</h1><p class="muted">Who signed in and what they did from this dashboard. Kept for a year.</p></div></div>
+    page.innerHTML = `<div class="page-head"><div><h1>Who did <em>what</em></h1><p class="muted">Who signed in and what they did from this dashboard. Kept for a year.</p></div></div>
       <div class="card"><div id="audit"><div class="empty"><span class="spinner"></span></div></div><div id="more" style="margin-top:10px"></div></div>`;
     const rows = [];
     const load = async (cursor) => {
