@@ -1,0 +1,62 @@
+name: Weekly recap
+# Every Monday morning India time: last week's reach, saves, best and worst post, results by
+# content type and slot, how the mix shifted, and anything that failed (see weekly.py).
+# The recap is committed to analytics/weekly/ and opened as a GitHub issue, which GitHub
+# emails to you. Last week's issue is closed so only the newest stays open.
+# Times are UTC: 00:17 = 05:47 IST, with a backup at 06:17 IST in case GitHub skips the first.
+# Both are before the morning slot's runs start (06:37 IST), so the two never push at once.
+on:
+  schedule:
+    - cron: "17 0 * * 1"
+    - cron: "47 0 * * 1"
+  workflow_dispatch:
+    inputs:
+      week_ending:
+        description: "Sunday the week ends on (YYYY-MM-DD). Empty = last week"
+        type: string
+        default: ""
+      force:
+        description: "Redo the recap even if it already exists"
+        type: boolean
+        default: false
+concurrency:
+  group: weekly-recap
+  cancel-in-progress: false
+permissions:
+  contents: write
+  issues: write
+  actions: read
+jobs:
+  recap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q -r requirements.txt
+      - name: Measure posts that turned 3 days old
+        continue-on-error: true  # the recap still runs with live numbers
+        run: python main.py learn
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Write the recap
+        run: python main.py weekly
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+          NOTIFY: ${{ github.repository_owner }}
+          WEEK_ENDING: ${{ inputs.week_ending }}
+          FORCE: ${{ inputs.force }}
+      - name: Commit the recap
+        run: |
+          git config user.name "carousel-bot"
+          git config user.email "carousel-bot@users.noreply.github.com"
+          git add analytics
+          git commit -m "Weekly recap $(date -u +%F)" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 15; done
+          exit 1
