@@ -77,5 +77,23 @@
     "media_id": "17875627185642802",
     "forced": true,
     "at": "2026-11-26T10:21:10+00:00"
+  },
+  {
+    "day": "2026-11-26",
+    "folder": "2026-11-26_131028",
+    "topic": "The Debt Avalanche vs. Debt Snowball methods",
+    "template": "ribbon",
+    "hook": "Two proven ways to pay down debt",
+    "content_type": "simple explainer",
+    "hook_style": "bold clear statement",
+    "topic_area": "debt",
+    "angle": "educational",
+    "slot": "extra",
+    "post_time": "18:34",
+    "local_day": "2026-11-26",
+    "format": "carousel",
+    "media_id": "17921411943463226",
+    "forced": true,
+    "at": "2026-11-26T13:11:22+00:00"
   }
 ]
