@@ -27,17 +27,17 @@
     "weights": {"reach": 1, "shares": 5, "saved": 3, "comments": 2, "likes": 1}
   },
   "trends": {
-    "share": 0.3,
+    "share": 0.25,
     "max_age_days": 3,
     "competitors": ["finshots", "economictimes", "moneycontrolcom", "labourlawadvisor", "zerodhaonline"],
     "hashtags": ["personalfinance", "moneytips", "financialliteracy", "budgeting", "savingmoney"]
   },
   "general_trends": {
-    "share": 0.2,
+    "share": 0.25,
     "voice": "fun, casual, playful and warm, like a friend who is good with money. Light humour and everyday Indian references, still clear, kind and accurate."
   },
   "promotional": {
-    "share": 0.15,
+    "share": 0.25,
     "cta": "",
     "facts": [
       "RXT is a financial health clinic for individuals.",
