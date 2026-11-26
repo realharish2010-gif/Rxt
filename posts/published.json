@@ -32,5 +32,31 @@
     "media_id": "18473441830184136",
     "forced": false,
     "at": "2026-11-26T01:49:18+00:00"
+  },
+  {
+    "day": "2026-11-26",
+    "folder": "2026-11-26_093821",
+    "topic": "Budgeting for hobbies and entertainment releases",
+    "template": "arches",
+    "hook": "Things that make sense: budgeting for your hobbies",
+    "content_type": "general trends",
+    "hook_style": "relatable everyday situation",
+    "topic_area": "budgeting",
+    "angle": "general trends",
+    "trend": {
+      "id": "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri",
+      "headline": "Grand Theft Auto VI release",
+      "source": "Mashable",
+      "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBnN1lhcDNoaHpBZUNTNTNTMnVfbnptakJ5bWRkX3BRSk5FNThhbUltZ09keVpNcmJqSnVZaXNOSVlPVy1xb1dDblNnU3h6V0wxTF9vMWtJX2VqbDRxRUZ4ZnhjdjlwV09O?oc=5",
+      "published": "2026-11-25T18:17:31+00:00",
+      "format": "general trends"
+    },
+    "slot": "midday",
+    "post_time": "13:00",
+    "local_day": "2026-11-26",
+    "format": "carousel",
+    "media_id": "17954307960055643",
+    "forced": false,
+    "at": "2026-11-26T09:39:03+00:00"
   }
 ]
