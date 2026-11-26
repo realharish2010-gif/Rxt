@@ -58,5 +58,24 @@
     "media_id": "17954307960055643",
     "forced": false,
     "at": "2026-11-26T09:39:03+00:00"
+  },
+  {
+    "day": "2026-11-26",
+    "folder": "2026-11-26_101958",
+    "topic": "The value of a regular financial health check-up",
+    "template": "collage",
+    "hook": "Money stress isn't a permanent condition",
+    "content_type": "promotional",
+    "hook_style": "myth-busting",
+    "topic_area": "financial goals and planning",
+    "angle": "promotional",
+    "promo_angle": "money check-up",
+    "slot": "evening",
+    "post_time": "20:00",
+    "local_day": "2026-11-26",
+    "format": "carousel",
+    "media_id": "17875627185642802",
+    "forced": true,
+    "at": "2026-11-26T10:21:10+00:00"
   }
 ]
