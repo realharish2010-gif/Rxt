@@ -85,6 +85,15 @@ button { font-family: inherit; }
 .grain { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay; }
 .grain svg { display: block; }
 
+/* Faint banknote-style engraving behind the app pages (the landing video covers it). */
+.money-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: url("/guilloche.svg") center / cover no-repeat;
+  opacity: 0.075;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.35), #000 100%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.35), #000 100%);
+}
+
 .hero-photo {
   position: fixed;
   inset: 0;
