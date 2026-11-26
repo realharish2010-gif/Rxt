@@ -121,5 +121,23 @@
     "media_id": "18095266871227491",
     "forced": true,
     "at": "2026-11-26T14:20:22+00:00"
+  },
+  {
+    "day": "2026-11-26",
+    "folder": "2026-11-26_142959",
+    "topic": "Automating your savings strategy",
+    "template": "spray",
+    "hook": "Stop relying on willpower to save money.",
+    "content_type": "simple explainer",
+    "hook_style": "bold clear statement",
+    "topic_area": "saving",
+    "angle": "educational",
+    "slot": "extra",
+    "post_time": "19:58",
+    "local_day": "2026-11-26",
+    "format": "carousel",
+    "media_id": "18122121443050168",
+    "forced": true,
+    "at": "2026-11-26T14:30:49+00:00"
   }
 ]
