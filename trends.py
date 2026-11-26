@@ -674,11 +674,14 @@ def refresh(ask=None):
             errors.append(f"Gemini general trend screen failed: {e}")
 
     patterns = store.get("patterns", {})
-    fresh = patterns.get("updated") and (now() - dt.datetime.fromisoformat(patterns["updated"])
-                                         < dt.timedelta(hours=s["patterns_every_hours"]))
+    # a failed or empty attempt counts too, so a blocked token is not retried on every run
+    last_try = max(filter(None, [patterns.get("updated"), store.get("patterns_tried")]), default=None)
+    fresh = last_try and (now() - dt.datetime.fromisoformat(last_try)
+                          < dt.timedelta(hours=s["patterns_every_hours"]))
     if fresh:
-        print(f"Competitor and hashtag patterns are from {patterns['updated'][:16]} UTC, reusing them")
+        print(f"Competitor and hashtag patterns were last fetched {last_try[:16]} UTC, not asking Instagram again yet")
     elif os.environ.get("IG_TOKEN") and os.environ.get("IG_USER_ID"):
+        store["patterns_tried"] = now().isoformat(timespec="seconds")
         posts = competitor_posts(s["competitors"], errors) if s["competitors"] else []
         cache = store.get("hashtag_ids", {})
         posts += hashtag_posts(s["hashtags"], cache, errors)

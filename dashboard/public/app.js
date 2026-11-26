@@ -724,10 +724,6 @@
     };
     ["#f-format", "#f-type", "#f-slot"].forEach((s) => $(s).addEventListener("change", draw));
     draw();
-    if (o.liveEnabled && !live) {
-      $("#live-note").innerHTML = '<span class="spinner"></span> loading live numbers';
-      cached("/api/live", 300).then((l) => { live = l; $("#live-note").textContent = ""; draw(); }).catch(() => { $("#live-note").textContent = ""; });
-    }
   };
 
   function openPost(p, files, onPublish) {
@@ -857,11 +853,12 @@
       at: r.posted_at, m: { ...r.metrics, score: score(r.metrics, weights) },
     }));
     const pubById = Object.fromEntries((a.published || []).filter((p) => p.media_id).map((p) => [p.media_id, p]));
-    const ui = { source: measured.length || !a.liveEnabled ? "measured" : "live", metric: "reach", dim: "content_type", live: null };
+    // live per-post numbers were dropped to keep Instagram calls down (Harish, 2026-11-27)
+    const ui = { source: "measured", metric: "reach", dim: "content_type", live: null };
 
     page.innerHTML = `
       <div class="page-head"><div><h1>What's <em>working</em></h1><p class="muted" id="an-sub"></p></div>
-        <div class="row">${a.liveEnabled ? `<div class="seg" id="src"><button data-v="measured">At 3 days</button><button data-v="live">Live now</button></div>` : ""}</div></div>
+        <div class="row"></div></div>
       <div id="an-body"></div>`;
 
     const rowsFor = () => {
@@ -882,7 +879,7 @@
         : `Live Instagram numbers for the latest 30 posts${ui.live?.fetched_at ? ", fetched " + ago(ui.live.fetched_at) : ""}. Recent posts are still growing.`;
       if (!rows.length) {
         $("#an-body").innerHTML = `<div class="card empty"><h2>No numbers yet</h2><p>${ui.source === "measured"
-          ? `The bot measures each post 3 days after it goes out, so the first results show up 3 days after the first post.${a.liveEnabled ? " Switch to <b>Live now</b> to see today's numbers." : ""}`
+          ? `The bot measures each post 3 days after it goes out, so the first results show up 3 days after the first post.`
           : "Instagram has no numbers for these posts yet."}</p>
           ${(ui.live?.errors || []).length ? `<p class="error small">${esc(ui.live.errors[0])}</p>` : ""}</div>`;
         return;
