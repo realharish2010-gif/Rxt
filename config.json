@@ -24,6 +24,18 @@
     "share": 0.2,
     "voice": "fun, casual, playful and warm, like a friend who is good with money. Light humour and everyday Indian references, still clear, kind and accurate."
   },
+  "promotional": {
+    "share": 0.15,
+    "cta": "",
+    "facts": [
+      "RXT is a financial health clinic for individuals.",
+      "RXT helps people build financial health through simple financial education and guidance.",
+      "RXT covers budgeting, saving, debt, credit, emergency funds, insurance basics and making informed money decisions.",
+      "RXT is for everyday people who feel unsure about money and want clear, practical steps.",
+      "RXT explains things in plain language, without jargon.",
+      "RXT does not sell or recommend specific financial products, and never promises returns."
+    ]
+  },
   "colors": {
     "bg": "#FFFFFF",
     "accent": "#F2C94C",

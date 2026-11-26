@@ -18,6 +18,7 @@ import time
 import requests
 
 import learning
+import promo
 import trends
 
 ROOT = pathlib.Path(__file__).parent
@@ -188,15 +189,21 @@ def published_log():
 def write_carousel(history, chosen, notes):
     """Gemini writes the carousel. A trend-tied post gets a second Gemini pass (a fact-check
     for news, a rules/taste/accuracy check for general trends) and is rewritten with the
-    problems listed; if it still fails, the post becomes a plain educational one."""
+    problems listed; if it still fails, the post becomes a plain educational one. A promotional
+    post gets the same treatment, with a check that it claims nothing about RXT beyond the facts."""
     trend = chosen.get("trend")
+    promo_angle = chosen.get("promo_angle")
+    if promo_angle:
+        chosen["content_type"] = "promotional"
     general = bool(trend) and trend.get("format") == "general trends"
     if trend and trend.get("format") in ("news content", "general trends"):
         chosen["content_type"] = trend["format"]
     feedback = ""
-    for check_round in range(3 if trend else 1):
+    for check_round in range(3 if trend or promo_angle else 1):
         learnings = learning.prompt_block(chosen)
-        if general:
+        if promo_angle:
+            learnings += "\n\n" + promo.prompt_block(promo_angle, CFG["slides"]) + feedback
+        elif general:
             learnings += "\n\n" + trends.general_prompt_block(trend, CFG["slides"]) + feedback
         elif trend:
             learnings += "\n\n" + trends.prompt_block(trend, CFG["slides"]) + feedback
@@ -204,7 +211,8 @@ def write_carousel(history, chosen, notes):
             learnings += ("\n\nOpening and format techniques working for similar finance accounts right now "
                           "(borrow the technique only, never their content or claims):\n"
                           + "\n".join(f"- {n}" for n in notes[:5]))
-        voice = trends.general_settings().get("voice") if general else None
+        voice = (promo.settings()["voice"] if promo_angle
+                 else trends.general_settings().get("voice") if general else None)
         data = None
         for attempt in range(6):
             try:
@@ -215,11 +223,14 @@ def write_carousel(history, chosen, notes):
                 time.sleep(30 * (attempt + 1))
         if data is None:
             sys.exit("Could not generate a carousel")
-        if not trend:
+        if not (trend or promo_angle):
             return data
-        check = trends.vibe_check if general else trends.fact_check
         try:
-            ok, problems = check(data, trend, gemini_json)
+            if promo_angle:
+                ok, problems = promo.check(data, gemini_json)
+            else:
+                check = trends.vibe_check if general else trends.fact_check
+                ok, problems = check(data, trend, gemini_json)
         except Exception as e:
             ok, problems = False, [f"review could not run: {e}"]
         if ok:
@@ -228,12 +239,14 @@ def write_carousel(history, chosen, notes):
         print("Review failed:", problems)
         feedback = ("\n\nA reviewer rejected the previous draft for these reasons; fix all of them:\n"
                     + "\n".join(f"- {x}" for x in problems))
-    # still failing: drop the trend and write an educational post in the same topic area
-    print(f"::warning::{trend.get('format', 'Trend')} post still failed review after two rewrites, "
+    # still failing: drop the trend / promo angle and write an educational post in the same topic area
+    kind = "Promotional" if promo_angle else trend.get("format", "Trend")
+    print(f"::warning::{kind} post still failed review after two rewrites, "
           "writing an educational post instead")
-    trends.mark_used(trend["id"])
-    chosen.update(angle="educational", trend=None)
-    if chosen["content_type"] in ("news content", "general trends"):
+    if trend:
+        trends.mark_used(trend["id"])
+    chosen.update(angle="educational", trend=None, promo_angle=None)
+    if chosen["content_type"] in ("news content", "general trends", "promotional"):
         chosen["content_type"] = "simple explainer"
     return write_carousel(history, chosen, notes)
 
@@ -269,6 +282,8 @@ def generate():
     print("Template:", template)
     tags = {d: chosen[d] for d in learning.DIMENSIONS}
     tags["angle"] = chosen["angle"]
+    if chosen.get("promo_angle"):
+        tags["promo_angle"] = chosen["promo_angle"]
     if chosen.get("trend"):
         t = chosen["trend"]
         tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published", "format")}
