@@ -1079,6 +1079,23 @@
     return { label: "Run failed", cls: "bad" };
   }
 
+  // When each token runs out. Reminders are emailed 14 days ahead by the nightly health check.
+  function tokenCard(tokens) {
+    const d = tokens.dashboard ? new Date(tokens.dashboard) : null;
+    const days = d ? Math.floor((d - Date.now()) / 86400e3) : null;
+    const badge = !d ? '<span class="badge">Not known yet</span>'
+      : days < 0 ? '<span class="badge bad">Expired</span>'
+      : days < 14 ? `<span class="badge bad">${days} day${days === 1 ? "" : "s"} left</span>`
+      : days < 45 ? `<span class="badge warn">${days} days left</span>`
+      : `<span class="badge good">${days} days left</span>`;
+    return `<div class="card" style="margin-bottom:16px"><div class="card-head"><h2>Token reminders</h2><span class="muted small">emailed 14 days before expiry</span></div>
+      <div class="token-row"><div class="token-what"><b>Dashboard GitHub token</b><div class="muted small">Lets this site show runs, start posts and switch the publishing mode.</div></div>
+        <div class="token-when">${d ? "Expires " + esc(fmtDate(d.toISOString(), false)) + " " + d.getUTCFullYear() : "Saved after the next page load"}</div>${badge}</div>
+      <div class="token-row"><div class="token-what"><b>Instagram token</b><div class="muted small">Used by the bot to post and measure.</div></div>
+        <div class="token-when">Checked every night at 22:57 ${tzLabel()}; an alert shows above if it is expiring or broken</div><span class="badge">Nightly check</span></div>
+    </div>`;
+  }
+
   pages.alerts = async function () {
     page.innerHTML = `
       <div class="page-head"><div><h1>Bot <em>alerts</em></h1><p class="muted">When a post, Reel or run fails, the Instagram token has a problem, or a slot passes without a post. Each alert is also emailed to you as a GitHub issue.</p></div>
@@ -1089,7 +1106,7 @@
       const box = $("#alerts");
       if (!a.enabled) {
         box.innerHTML = `<div class="callout warn"><strong>The dashboard cannot read alerts yet</strong>
-          <span>Edit the dashboard's GitHub token and set <b>Issues</b> to <b>Read and write</b> (step 1 of the setup guide in dashboard/README.md). The alert emails still reach you in the meantime.</span></div>`;
+          <span>Edit the dashboard's GitHub token and set <b>Issues</b> to <b>Read and write</b> (step 1 of the setup guide in dashboard/README.md). The alert emails still reach you in the meantime.</span></div>` + `<div style="margin-top:16px">${tokenCard(a.tokens || {})}</div>`;
         return;
       }
       const card = (i) => {
@@ -1105,6 +1122,7 @@
       };
       box.innerHTML = (a.open.length ? a.open.map(card).join("")
         : `<div class="callout good" style="margin-bottom:16px"><strong>All clear</strong><span>No open alerts. The daily health check runs at about 22:57 ${tzLabel()}.</span></div>`)
+        + tokenCard(a.tokens || {})
         + `<div class="card"><div class="card-head"><h2>Recently fixed</h2></div>${a.closed.length
           ? `<div class="table-wrap"><table><thead><tr><th>Alert</th><th>Started</th><th>Fixed</th><th></th></tr></thead><tbody>${a.closed.map((i) => `<tr>
             <td>${esc(alertName(i.title))}</td><td style="white-space:nowrap">${esc(fmtDate(i.created_at))}</td><td style="white-space:nowrap">${esc(fmtDate(i.closed_at))}</td>

@@ -3,6 +3,35 @@
 
 const cache = new Map(); // short-lived, per server instance, to stay far below GitHub's rate limit
 
+// GitHub tells us when the dashboard's own token expires (a header on every API answer).
+// It is copied into the repo variable DASHBOARD_TOKEN_EXPIRES so the bot's nightly health
+// check (alerts.py) can email a reminder before the dashboard stops working.
+export const EXPIRY_VAR = "DASHBOARD_TOKEN_EXPIRES";
+const expiry = { seen: null, synced: null };
+
+export function tokenExpiry() {
+  return expiry.seen;
+}
+
+function noteExpiry(r) {
+  const h = r.headers.get("github-authentication-token-expiration"); // e.g. "2027-11-26 13:00:00 UTC"
+  if (!h) return;
+  const d = new Date(h.replace(" UTC", "Z").replace(/ ([+-]\d{2})(\d{2})$/, "$1:$2").replace(" ", "T"));
+  if (!Number.isNaN(d.getTime())) expiry.seen = d.toISOString().replace(/\.\d{3}Z$/, "Z");
+}
+
+// Called after a request (in the background): save the expiry to the repo variable once
+// per server instance, and only when it changed (e.g. after the token was renewed).
+export async function syncTokenExpiry(env) {
+  if (!expiry.seen || expiry.seen === expiry.synced) return;
+  try {
+    if ((await variable(env, EXPIRY_VAR)) !== expiry.seen) await setVariable(env, EXPIRY_VAR, expiry.seen);
+    expiry.synced = expiry.seen;
+  } catch (e) {
+    console.error("could not save the token expiry", e);
+  }
+}
+
 export class GitHubError extends Error {
   constructor(status, message) {
     super(message);
@@ -39,6 +68,7 @@ export async function gh(env, path, { method = "GET", body, raw = false, ttl = 0
     },
     body: body ? JSON.stringify(body) : undefined,
   });
+  noteExpiry(r);
   if (!r.ok) {
     let msg = r.statusText;
     try { msg = (await r.json()).message || msg; } catch { /* not json */ }

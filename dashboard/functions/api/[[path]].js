@@ -4,7 +4,10 @@ import {
   COOKIE, can, cookieHeader, cookies, githubEnabled, githubIdentity, makeSession, randomState,
   readSession, roleFor, verifyGoogle,
 } from "../../lib/auth.js";
-import { GitHubError, alerts, branch, closeIssue, dispatch, file, gh, repo, runs, setVariable, tree, variable } from "../../lib/github.js";
+import {
+  EXPIRY_VAR, GitHubError, alerts, branch, closeIssue, dispatch, file, gh, repo, runs, setVariable, syncTokenExpiry, tokenExpiry,
+  tree, variable,
+} from "../../lib/github.js";
 import { clearTrigger, markTriggered, recent, record, recentlyTriggered } from "../../lib/audit.js";
 
 const SLOTS = ["next", "morning", "midday", "evening"]; // the choices calendar.yml accepts
@@ -216,8 +219,9 @@ const routes = {
 
   // The bot's failure alerts (GitHub issues labelled bot-alert). null = the token cannot read issues.
   "GET /api/alerts": async ({ env }) => {
-    const a = await alertsOrNull(env);
-    return json(a ? { ...a, enabled: true } : { enabled: false, open: [], closed: [] });
+    const [a, saved] = await Promise.all([alertsOrNull(env), variable(env, EXPIRY_VAR).catch(() => null)]);
+    const tokens = { dashboard: tokenExpiry() || saved || null };
+    return json(a ? { ...a, enabled: true, tokens } : { enabled: false, open: [], closed: [], tokens });
   },
 
   "GET /api/audit": async ({ env, url }) => json(await recent(env, 100, url.searchParams.get("cursor") || undefined)),
@@ -409,7 +413,16 @@ async function liveNumbers(env) {
 const PUBLIC = new Set(["GET /api/config", "POST /api/auth/google", "POST /api/auth/dev", "GET /api/auth/github",
   "GET /api/auth/github/callback", "POST /api/auth/logout"]);
 
-export async function onRequest({ request, env }) {
+export async function onRequest({ request, env, waitUntil }) {
+  const res = await handle(request, env);
+  if (env.GITHUB_TOKEN) {
+    const sync = syncTokenExpiry(env);
+    if (waitUntil) waitUntil(sync); else await sync;
+  }
+  return res;
+}
+
+async function handle(request, env) {
   const url = new URL(request.url);
   const key = `${request.method} ${url.pathname.replace(/\/+$/, "")}`;
   const handler = routes[key];
