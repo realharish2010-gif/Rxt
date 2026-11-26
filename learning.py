@@ -52,7 +52,8 @@ DEFAULTS = {
 DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "topic_area": "topic_areas"}
 # trend-tied = prompted by money news or a search trend; general trends = rides a popular
 # non-finance trend, meme or hook in a fun, casual tone (both from trends.py)
-ANGLES = ["evergreen", "trend-tied", "general trends"]
+ANGLES = ["educational", "trend-tied", "general trends"]
+OLD_ANGLES = {"evergreen": "educational"}  # earlier name, still found in older logs
 TAGS = (*DIMENSIONS, "angle", "trend")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
           "template": "Template", "angle": "Angle"}
@@ -73,7 +74,8 @@ def load_store():
 def measured_posts(store=None):
     """Measured posts, oldest first, limited to the newest `window`."""
     store = load_store() if store is None else store
-    posts = [r for r in store.values() if r.get("metrics", {}).get("reach") is not None]
+    posts = [{**r, "angle": OLD_ANGLES.get(r.get("angle"), r.get("angle"))}
+             for r in store.values() if r.get("metrics", {}).get("reach") is not None]
     posts.sort(key=lambda r: r["posted_at"])
     return posts[-settings()["window"]:]
 
@@ -291,13 +293,13 @@ def choose(dim, options, history, posts, avoid=None, explore_pick=None, hints=No
 
 
 def choose_angle(posts, shares, available):
-    """Evergreen, tied to a news/search trend ("trend-tied"), or riding a popular non-finance
-    trend ("general trends"). `shares` = {angle: share of days} for the non-evergreen angles;
+    """Educational (no trend), tied to a news/search trend ("trend-tied"), or riding a popular non-finance
+    trend ("general trends"). `shares` = {angle: share of days} for the trend angles;
     `available` = the angles that have a safe trend today. Starts at the configured shares;
     once every available angle has enough measured posts, the best one is used most days."""
-    avail = ["evergreen"] + [a for a in ANGLES[1:] if a in available]
+    avail = ["educational"] + [a for a in ANGLES[1:] if a in available]
     if len(avail) == 1:
-        return "evergreen", "no safe trend available today"
+        return "educational", "no safe trend available today"
     s = settings()
     rows = {r[0]: r for r in ranking(posts, "angle") if r[2] >= s["min_per_option"] and r[0] in avail}
     if len(rows) == len(avail):
@@ -310,7 +312,7 @@ def choose_angle(posts, shares, available):
         acc += shares.get(a, 0)
         if roll < acc:
             return a, f"testing {a} posts ({shares.get(a, 0):.0%} of days until there is data)"
-    return "evergreen", "evergreen most days until there is data on trend posts"
+    return "educational", "educational most days until there is data on trend posts"
 
 
 def plan(history, templates, explore_template, trend_info=None):
@@ -332,7 +334,7 @@ def plan(history, templates, explore_template, trend_info=None):
     for dim, key in DIMENSIONS.items():
         out[dim], why[dim] = choose(dim, s[key], history, posts, hints=hints.get(dim),
                                     avoid=last.get(dim) if dim == "topic_area" else None)
-    if out["angle"] != "evergreen":
+    if out["angle"] != "educational":
         # prefer a trend in the planned topic area, else the most relevant one
         pool = picks if out["angle"] == "trend-tied" else general
         pick = next((p for p in pool if p["topic_area"] == out["topic_area"]), pool[0])
