@@ -1,33 +1,41 @@
 {
   "day": "2026-11-26",
-  "folder": "2026-11-26_131028",
-  "topic": "The Debt Avalanche vs. Debt Snowball methods",
-  "template": "ribbon",
+  "folder": "2026-11-26_141936",
+  "topic": "Liquidity planning for major purchases",
+  "template": "brutal",
   "content_type": "simple explainer",
-  "hook_style": "bold clear statement",
-  "topic_area": "debt",
-  "angle": "educational",
-  "hook": "Two proven ways to pay down debt",
+  "hook_style": "common mistake",
+  "topic_area": "financial goals and planning",
+  "angle": "trend-tied",
+  "trend": {
+    "id": "2-years-to-sell-a-home-inventory-pile-up-raises-warning-sign",
+    "headline": "2 years to sell a home: Inventory pile-up raises warning signs in Delhi NCR - Business Standard",
+    "source": "Business Standard",
+    "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPeXB0TGlIRGJCU3pnMnhPWTl0WFBVMnBjOWcycW9Tdko2enVBRGE1VW9jclktT1RMN0J1R3dRUHpHUE11STdlT0w2Tm5VQTBRTWNCR29IVTJhaHg3VnZqNTJsVlJNQ0wyWkQ0R1l3S0N2RXpac3FrSXdnOWNQY21wSEVNN3ZzemV3b0gzeWRpWUg4WjZUSGZxeXgtelJlOUtfZjI5S2tfXzNjWG9wYlB0VzJWd2dYdGNIZHhDOTFkeTNoQ2dCaEhfSzZodk1FY25kMHRiME5VclNMLThsLS13NkMxZWY0UWkwREJGN2Rn0gHuAUFVX3lxTE95cHRMaUhEYkJTemcyeE9ZOXRYUFUycGM5ZzJxb1N2SjZ6dUFEYTVVb2NyWS1PVEw3QnVHd1FQekdQTXVJN2VPTDZOblVBMFFNY0JHb0hVMmFoeDdWdmo1MmxWUk1DTDJaRDRHWXdLQ3ZFelpzcWtJd2c5Y1BjbXBIRU03dnN6ZXdvSDN5ZGlZSDhaNlRIZnF5eC16UmU5S19mMjlLa19fM2NYb3BiUHRXMlZ3Z1h0Y0hkeEM5MWR5M2hDZ0JoSF9LNmh2TUVjbmQwdGIwTlVyU0wtOGwtLXc2QzFlZjRRaTBEQkY3ZGc?oc=5",
+    "published": "2026-11-26T06:48:01+00:00",
+    "format": "lesson"
+  },
+  "hook": "Why buying a home isn't like a savings account",
   "format": "carousel",
   "local_day": "2026-11-26",
   "slot": "extra",
-  "post_time": "18:34",
+  "post_time": "19:47",
   "plan_reasons": {
-    "angle": "no safe trend available right now (general trends, promotional already used enough today)",
+    "angle": "testing trend-tied posts (25% of posts until there is data) (general trends, promotional already used enough today)",
     "content_type": "testing (working for similar accounts)",
-    "hook_style": "testing (working for similar accounts)",
-    "topic_area": "testing (least tried)",
+    "hook_style": "testing (least tried)",
+    "topic_area": "from the trend: 2 years to sell a home: Inventory pile-up raises warning signs in Delhi NCR - Bu",
     "template": "testing (rotation)"
   },
-  "caption": "Choosing the right debt repayment strategy can make a big difference in how you manage your money. Whether you prefer the psychological boost of the Debt Snowball or the interest savings of the Debt Avalanche, both methods focus on consistency and organization. Look at your debts, note the balances and interest rates, and see which approach aligns with your personal goals. Which method do you find more motivating to stay consistent? Save this for later and share it with someone who needs it. #financialhealth #debtfreejourney #moneytips #personalfinance #budgeting #financialeducation #financialwellness\n\nEducational content only. This is not personalised financial advice.",
+  "caption": "Selling a home can take much longer than most people expect. Real estate is often an 'illiquid' asset, meaning you cannot convert it to cash quickly if your plans change. Before committing to a major purchase, ensure your money is aligned with your personal timeline and liquidity needs. Understanding these basics helps you avoid getting stuck in a tough spot. Context: Business Standard. What is one factor you consider before making a big purchase? Save this for later and share it with someone who needs it. #FinancialHealth #BudgetingTips #FinancialEducation #HomeBuying #SmartMoney #PersonalFinance #RXT\n\nEducational content only. This is not personalised financial advice.",
   "urls": [
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_1.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_2.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_3.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_4.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_5.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_6.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_131028/slide_7.jpg"
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_1.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_2.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_3.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_4.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_5.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_6.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_141936/slide_7.jpg"
   ],
-  "posted": true
+  "posted": false
 }

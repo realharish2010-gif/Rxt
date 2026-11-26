@@ -1,10 +1,92 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-26T13:05:23+00:00",
-  "candidates": 196,
-  "picks": [],
-  "general_candidates": 124,
-  "general_picks": [],
+  "updated": "2026-11-26T14:18:59+00:00",
+  "candidates": 194,
+  "picks": [
+    {
+      "id": "caution-to-investors-regarding-impersonation-of-sebi-registe",
+      "kind": "official",
+      "headline": "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms",
+      "source": "SEBI",
+      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html",
+      "published": null,
+      "topic_area": "money habits and mindset",
+      "angle": "Always verify the identity of any financial representative; official organizations will never reach out via private social media groups to manage your money.",
+      "facts": [
+        "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms"
+      ],
+      "avoid": "Do not name specific platforms or suggest that social media is inherently unsafe for general learning.",
+      "relevance": 5,
+      "evergreen_ok": true,
+      "format": "lesson"
+    },
+    {
+      "id": "credit-card-spending-surpasses-atm-cash-withdrawals-for-firs",
+      "kind": "news",
+      "headline": "Credit card spending surpasses ATM cash withdrawals for first time in India - CNBC TV18",
+      "source": "CNBC TV18",
+      "link": "https://news.google.com/rss/articles/CBMitgJBVV95cUxNbEUweVpWc1FVNE1BSVdYekZBaHBlb1plNUxxM1JheE16NXFyenlTaVJ0OTJRYUFfLU9BVnczU1NYdzc0UlNRRUNWZXBycW1xQlVMZnJWVUpKMmhPbTRNU2VzeEltamR0NDNLcEZnaHZDODc3bjhzb0xqTVBzbk9YZnJmTkNiYm04M0o2d0Q3MkdaY0RSamt0c2VqYTFJUi1rZTNKRTd0YXpTREctaXp3cUR5MTFGVjRTZzVLbFFhWElaYlNUcTlzd0ZJaFhIYmtEb010bzUyejYzQVhKVmhWNFR1LXlDRzIxa29VVDdxa3BCV3FEMUlvUll4Q0F2S3NDR3gxbmVhV1ZEM2RkaXNETFVQbWNJcnNsYWoxQUFwRnRDTGFtNGUycGFNRmk3ejJ3UHVDT0ZB0gG7AkFVX3lxTE9CS2c0dG1hN2FFNHZwQlZiN2ZJLVlia3E1eHlxcHZIV2ZCSTJGakpYNlY4NGJtNjVIR2t6bVA3SzlXRUdTZ2dCN2dGYVJ3ejRfTG5LckJ6SVVTdERoRjYxS3I0c1YzM3A4a1p2VldqbXpSOW5QSGswbU5ESXhKdzlTWHUtelQ3RUNCLWN4d0xKQ01QYWpESzN3a2xESmtnQ3IzR2tfODhHc1RsMENGOVlrQXBKWWxadVp0Z1lxbFptRmo0OGd3WjhNdUxDSTlKd3lnbGF2XzF4Z2IwV3lXMWVKR2lSdkkyQ2s5S3l1UnNCUDhsVXZ3ZFJXVUY5Z0ZEYlpTaHZiaWdUX0c5c1RfOEF4Ul9nTU9tUHlyWXhSV2xLVGg1OFgxelkwUk1GOEwyX1ppWVJYcVY1U19KQQ?oc=5",
+      "published": "2026-11-26T07:53:54+00:00",
+      "topic_area": "credit",
+      "angle": "With credit card spending rising, it is important to remember that credit cards are tools for convenience and building history, not an extension of your monthly income.",
+      "facts": [
+        "Credit card spending surpasses ATM cash withdrawals for first time in India"
+      ],
+      "avoid": "Do not imply that credit cards are better or worse than cash or encourage using them to overspend.",
+      "relevance": 5,
+      "evergreen_ok": true,
+      "format": "lesson"
+    }
+  ],
+  "general_candidates": 121,
+  "general_picks": [
+    {
+      "id": "gt-anirudh-ravichander-kavya-maran-host-lavish-biryani-feast",
+      "kind": "general",
+      "format": "general trends",
+      "headline": "Lavish office feasts",
+      "story": "Anirudh Ravichander-Kavya Maran host lavish biryani feast served on banana leaves for Sun Group employees - Moneycontrol.com",
+      "source": "Moneycontrol.com",
+      "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNRl8wTEJ2Z1pSc2M1RUV5Rnh6bHlXRzZoWUdIZmxDTE05OWItSlFEWmNzNjVPQkpFTXh2czdxRUgxSGdNVVVKYXpYZk5oZ3lJcTl6aGoyRVpUSEtMVHBNZEVfWnhEUC1sajA3OThZOUpYTUkxaWxiTVdzcnU5T3dVbEtnTlRkMlJacXZaVjBVQjE2ZVhSb3RiOHp1YmNQNzBITlV5ZmRHc2hxR0thVzFBaEhwTDlMRmpRb2RHRHI3c01xRUZ3X2FYSDlQR3Y4MmVfS0hYWU5oRGMwMkFOLWlpczNTVVFoLVNfN29QcTRRcExfWWltcm9FdDRyN3A2OHM?oc=5",
+      "published": "2026-11-26T05:15:27+00:00",
+      "traffic": "",
+      "topic_area": "budgeting",
+      "why_popular": "Anirudh Ravichander and Kavya Maran hosted a lavish biryani feast for Sun Group employees that went viral.",
+      "bridge": "Enjoying a treat at work is great, but don't let temporary 'feast' spending turn your monthly budget into a 'famine'.",
+      "hook": "Treat yourself, but don't eat your whole budget.",
+      "meme_format": "Expectation vs reality",
+      "facts": [
+        "The feast was served on banana leaves.",
+        "The event was hosted for Sun Group employees."
+      ],
+      "avoid": "Do not imply that employees should expect lavish feasts or discourage team bonding activities.",
+      "relevance": 4,
+      "fun": 4
+    },
+    {
+      "id": "gt-compact-enough-phone-gets-three-upgrades-without-a-price",
+      "kind": "general",
+      "format": "general trends",
+      "headline": "Tech upgrades without price hikes",
+      "story": "Compact Enough Phone gets three upgrades without a price increase - Notebookcheck",
+      "source": "Notebookcheck",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPS2YzaE14OUhKTWZkamJQWVBTSm5qVHlISy1yUFNvOWZSVnVzd1RLaGNPbmI3TTF6end3U3IzTTBvZm8tclNJdTJyNUtSNmpOX2k2TlBFRXhxZ3J3QUZLckFBaEF6Z3dKOFZUeWV0TXlmakZwbnlXemFVbjBUb19PUjktR3hWUFpOSmN4SGxpSi15c3NqNFZYdmVPd3VhdlZDcV8tdFFZQ2FVaVBBcFNz?oc=5",
+      "published": "2026-11-25T19:38:00+00:00",
+      "traffic": "",
+      "topic_area": "money habits and mindset",
+      "why_popular": "A new phone model gained a bigger battery, more RAM, and storage without increasing its original price.",
+      "bridge": "Just like the 'enough phone' upgrade, your financial plan can get a 'performance boost' by simply automating your savings instead of increasing your lifestyle costs.",
+      "hook": "Get more financial power without paying extra.",
+      "meme_format": "Things that just make sense",
+      "facts": [
+        "The phone received upgrades in battery, RAM, and storage.",
+        "There was no increase in the price of the device."
+      ],
+      "avoid": "Do not mention specific phone brands, models, or endorse buying any particular technology product.",
+      "relevance": 3,
+      "fun": 3
+    }
+  ],
   "patterns": {
     "hints": {
       "content_type": [
@@ -239,11 +321,9 @@
     "updated": "2026-11-26T01:42:17+00:00",
     "looked_at": 120
   },
-  "errors": [
-    "Gemini trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
-    "Gemini general trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
-  ],
+  "errors": [],
   "used": [
+    "2-years-to-sell-a-home-inventory-pile-up-raises-warning-sign",
     "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
     "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"
   ]

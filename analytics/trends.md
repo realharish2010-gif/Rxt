@@ -1,20 +1,23 @@
 # Trend intelligence
 
-Updated 2026-11-26 13:05 UTC. 196 fresh headlines and search trends were read; the ones below passed the safety screen (word blocklist + a Gemini check against the brand rules).
-
-> **Notes:**
-> - Gemini trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
-> - Gemini general trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+Updated 2026-11-26 14:18 UTC. 194 fresh headlines and search trends were read; the ones below passed the safety screen (word blocklist + a Gemini check against the brand rules).
 
 ## Usable timely topics
 
-None today.
+| Relevance | Post type | Topic area | Angle | Story |
+|---|---|---|---|---|
+| 5/5 | lesson | money habits and mindset | Always verify the identity of any financial representative; official organizations will never reach out via private social media groups to manage your money. | [Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms](https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html) |
+| 5/5 | lesson | credit | With credit card spending rising, it is important to remember that credit cards are tools for convenience and building history, not an extension of your monthly income. | [Credit card spending surpasses ATM cash withdrawals for first time in India - CNBC TV18](https://news.google.com/rss/articles/CBMitgJBVV95cUxNbEUweVpWc1FVNE1BSVdYekZBaHBlb1plNUxxM1JheE16NXFyenlTaVJ0OTJRYUFfLU9BVnczU1NYdzc0UlNRRUNWZXBycW1xQlVMZnJWVUpKMmhPbTRNU2VzeEltamR0NDNLcEZnaHZDODc3bjhzb0xqTVBzbk9YZnJmTkNiYm04M0o2d0Q3MkdaY0RSamt0c2VqYTFJUi1rZTNKRTd0YXpTREctaXp3cUR5MTFGVjRTZzVLbFFhWElaYlNUcTlzd0ZJaFhIYmtEb010bzUyejYzQVhKVmhWNFR1LXlDRzIxa29VVDdxa3BCV3FEMUlvUll4Q0F2S3NDR3gxbmVhV1ZEM2RkaXNETFVQbWNJcnNsYWoxQUFwRnRDTGFtNGUycGFNRmk3ejJ3UHVDT0ZB0gG7AkFVX3lxTE9CS2c0dG1hN2FFNHZwQlZiN2ZJLVlia3E1eHlxcHZIV2ZCSTJGakpYNlY4NGJtNjVIR2t6bVA3SzlXRUdTZ2dCN2dGYVJ3ejRfTG5LckJ6SVVTdERoRjYxS3I0c1YzM3A4a1p2VldqbXpSOW5QSGswbU5ESXhKdzlTWHUtelQ3RUNCLWN4d0xKQ01QYWpESzN3a2xESmtnQ3IzR2tfODhHc1RsMENGOVlrQXBKWWxadVp0Z1lxbFptRmo0OGd3WjhNdUxDSTlKd3lnbGF2XzF4Z2IwV3lXMWVKR2lSdkkyQ2s5S3l1UnNCUDhsVXZ3ZFJXVUY5Z0ZEYlpTaHZiaWdUX0c5c1RfOEF4Ul9nTU9tUHlyWXhSV2xLVGg1OFgxelkwUk1GOEwyX1ppWVJYcVY1U19KQQ?oc=5) |
+| 4/5 | lesson | financial goals and planning | When planning for a major purchase like a home, always account for market liquidity and your personal timeline, as real estate can take a long time to sell if you need cash unexpectedly. | [2 years to sell a home: Inventory pile-up raises warning signs in Delhi NCR - Business Standard](https://news.google.com/rss/articles/CBMi7gFBVV95cUxPeXB0TGlIRGJCU3pnMnhPWTl0WFBVMnBjOWcycW9Tdko2enVBRGE1VW9jclktT1RMN0J1R3dRUHpHUE11STdlT0w2Tm5VQTBRTWNCR29IVTJhaHg3VnZqNTJsVlJNQ0wyWkQ0R1l3S0N2RXpac3FrSXdnOWNQY21wSEVNN3ZzemV3b0gzeWRpWUg4WjZUSGZxeXgtelJlOUtfZjI5S2tfXzNjWG9wYlB0VzJWd2dYdGNIZHhDOTFkeTNoQ2dCaEhfSzZodk1FY25kMHRiME5VclNMLThsLS13NkMxZWY0UWkwREJGN2Rn0gHuAUFVX3lxTE95cHRMaUhEYkJTemcyeE9ZOXRYUFUycGM5ZzJxb1N2SjZ6dUFEYTVVb2NyWS1PVEw3QnVHd1FQekdQTXVJN2VPTDZOblVBMFFNY0JHb0hVMmFoeDdWdmo1MmxWUk1DTDJaRDRHWXdLQ3ZFelpzcWtJd2c5Y1BjbXBIRU03dnN6ZXdvSDN5ZGlZSDhaNlRIZnF5eC16UmU5S19mMjlLa19fM2NYb3BiUHRXMlZ3Z1h0Y0hkeEM5MWR5M2hDZ0JoSF9LNmh2TUVjbmQwdGIwTlVyU0wtOGwtLXc2QzFlZjRRaTBEQkY3ZGc?oc=5) |
 
 ## General trends
 
-124 popular non-finance trends were read (Google Trends, entertainment / sport / tech news, Wikipedia most-read); these passed the stricter screen (no tragedy, crime, illness, politics, religion or gossip) and fit RXT in a fun way.
+121 popular non-finance trends were read (Google Trends, entertainment / sport / tech news, Wikipedia most-read); these passed the stricter screen (no tragedy, crime, illness, politics, religion or gossip) and fit RXT in a fun way.
 
-None today.
+| Popular | Fun fit | Topic area | Trend | Link to money | Hook idea |
+|---|---|---|---|---|---|
+| 4/5 | 4/5 | budgeting | [Lavish office feasts](https://news.google.com/rss/articles/CBMi_wFBVV95cUxNRl8wTEJ2Z1pSc2M1RUV5Rnh6bHlXRzZoWUdIZmxDTE05OWItSlFEWmNzNjVPQkpFTXh2czdxRUgxSGdNVVVKYXpYZk5oZ3lJcTl6aGoyRVpUSEtMVHBNZEVfWnhEUC1sajA3OThZOUpYTUkxaWxiTVdzcnU5T3dVbEtnTlRkMlJacXZaVjBVQjE2ZVhSb3RiOHp1YmNQNzBITlV5ZmRHc2hxR0thVzFBaEhwTDlMRmpRb2RHRHI3c01xRUZ3X2FYSDlQR3Y4MmVfS0hYWU5oRGMwMkFOLWlpczNTVVFoLVNfN29QcTRRcExfWWltcm9FdDRyN3A2OHM?oc=5) | Enjoying a treat at work is great, but don't let temporary 'feast' spending turn your monthly budget into a 'famine'. | Treat yourself, but don't eat your whole budget. |
+| 3/5 | 3/5 | money habits and mindset | [Tech upgrades without price hikes](https://news.google.com/rss/articles/CBMirwFBVV95cUxPS2YzaE14OUhKTWZkamJQWVBTSm5qVHlISy1yUFNvOWZSVnVzd1RLaGNPbmI3TTF6end3U3IzTTBvZm8tclNJdTJyNUtSNmpOX2k2TlBFRXhxZ3J3QUZLckFBaEF6Z3dKOFZUeWV0TXlmakZwbnlXemFVbjBUb19PUjktR3hWUFpOSmN4SGxpSi15c3NqNFZYdmVPd3VhdlZDcV8tdFFZQ2FVaVBBcFNz?oc=5) | Just like the 'enough phone' upgrade, your financial plan can get a 'performance boost' by simply automating your savings instead of increasing your lifestyle costs. | Get more financial power without paying extra. |
 
 ## What is working for similar accounts
 
