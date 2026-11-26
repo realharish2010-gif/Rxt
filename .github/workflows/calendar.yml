@@ -30,6 +30,8 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  issues: write  # failure alerts (alerts.py)
+  actions: read  # to name the step that failed
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -117,3 +119,16 @@ jobs:
           git add -A
           git commit -m "Mark posted" || true
           git push
+      - name: Email an alert if this run failed (opens a GitHub issue, see alerts.py)
+        if: failure() || cancelled()
+        run: python alerts.py failed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTIFY: ${{ github.repository_owner }}
+          SLOT: ${{ steps.due.outputs.slot }}
+      - name: Close the alert once a run works again
+        if: success() && steps.due.outputs.slot != ''
+        continue-on-error: true  # never fail a run that worked
+        run: python alerts.py recovered
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

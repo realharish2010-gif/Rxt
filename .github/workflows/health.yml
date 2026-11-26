@@ -1,0 +1,36 @@
+name: Daily health check
+# Once a day, after the evening slot's window closes (22:57 India time): is the Instagram token
+# still valid, not about to expire, and does it have the permissions the bot needs? Did any of
+# today's slots pass without a post? Problems open a GitHub issue labelled bot-alert, which
+# GitHub emails to you (see alerts.py). Read-only: it never posts or commits anything.
+on:
+  schedule:
+    - cron: "27 17 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+  actions: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests
+      - name: Check the token and today's posts
+        run: python alerts.py health
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTIFY: ${{ github.repository_owner }}
+      - name: Email an alert if this check itself failed
+        if: failure() || cancelled()
+        run: python alerts.py failed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTIFY: ${{ github.repository_owner }}

@@ -7,6 +7,7 @@
    python main.py trends     -> refreshes news, search trends and competitor patterns (see trends.py)
    python main.py weekly     -> writes last week's recap and opens it as a GitHub issue (see weekly.py)
    python main.py reel-preview [n] -> renders the sample Reels into previews/reels/ (see reels.py)
+   python alerts.py failed|recovered|health -> failure alerts as GitHub issues (see alerts.py)
 
 The calendar's Reel slot (config.json "reels") posts a short video instead of a carousel;
 generate and publish handle both formats.
@@ -522,8 +523,7 @@ def preview(names=None):
         print("Rendered", t, "->", out)
 
 
-if __name__ == "__main__":
-    cmd = sys.argv[1]
+def main(cmd):
     if cmd == "preview":
         preview(sys.argv[2:])
     elif cmd == "reel-preview":
@@ -543,3 +543,24 @@ if __name__ == "__main__":
             trends.refresh(ask=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     else:
         {"generate": generate, "publish": publish}[cmd]()
+
+
+ALERTED = ("due", "generate", "publish", "weekly")  # steps that stop a run; learn/trends never do
+
+
+if __name__ == "__main__":
+    try:
+        main(sys.argv[1])
+    except SystemExit as e:
+        if e.code not in (None, 0) and sys.argv[1] in ALERTED:  # keep the message for the failure alert
+            import alerts
+            alerts.record_error(f"main.py {sys.argv[1]}: {e.code}")
+        raise
+    except BaseException as e:
+        if sys.argv[1] not in ALERTED:
+            raise
+        import alerts
+        import traceback
+        alerts.record_error(f"main.py {sys.argv[1]}: " + "".join(traceback.format_exception_only(type(e), e))
+                            + "".join(traceback.format_tb(e.__traceback__)[-2:]))
+        raise

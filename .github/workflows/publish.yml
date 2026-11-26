@@ -12,6 +12,7 @@ concurrency:
 permissions:
   contents: write
   actions: read  # to fetch a Reel's video from the run that made it
+  issues: write  # failure alerts (alerts.py)
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -48,3 +49,15 @@ jobs:
           git add -A
           git commit -m "Mark posted" || true
           git push
+      - name: Email an alert if this run failed (opens a GitHub issue, see alerts.py)
+        if: failure() || cancelled()
+        run: python alerts.py failed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTIFY: ${{ github.repository_owner }}
+      - name: Close the alert once a run works again
+        if: success()
+        continue-on-error: true  # never fail a run that worked
+        run: python alerts.py recovered
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
