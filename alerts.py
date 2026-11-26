@@ -6,8 +6,7 @@
     python alerts.py recovered  -> runs after a run that did real work succeeded: closes that
                                    workflow's open alert with a "working again" comment
     python alerts.py health     -> daily check (.github/workflows/health.yml, 22:57 India time):
-                                   Instagram token valid / expiring / missing permissions, the
-                                   dashboard's GitHub token expiring (repo variable
+                                   the dashboard's GitHub token expiring (repo variable
                                    DASHBOARD_TOKEN_EXPIRES, saved by the dashboard), and
                                    calendar slots that passed today without a post
 
@@ -32,9 +31,9 @@ ROOT = pathlib.Path(__file__).parent
 API = "https://api.github.com"
 LABEL = "bot-alert"
 QUIET_HOURS = 3  # a repeat of the same failure inside this window is logged but not emailed
-TOKEN_WARN_DAYS = 14  # warn this long before the Instagram token (or its data access) expires
-NEEDED_SCOPES = ("instagram_basic", "instagram_content_publish", "instagram_manage_insights")
-GRAPH = os.environ.get("IG_GRAPH", "https://graph.facebook.com/v27.0")
+TOKEN_WARN_DAYS = 14  # warn this long before the dashboard's GitHub token expires
+# (the Instagram token is not checked here: Harish asked to drop that check on 2026-11-26.
+# A failed post still raises a "Content calendar failed" alert with Instagram's error.)
 # a plain-language hint per workflow step, so the alert says where to look first
 HINTS = {
     "Is a post due?": "The calendar check itself broke, so no post was attempted.",
@@ -200,61 +199,6 @@ def recovered():
 
 # ---------------------------------------------------------------- daily health check
 
-def graph(path, **params):
-    params["access_token"] = os.environ["IG_TOKEN"]
-    url = f"{GRAPH}/{path}?" + urllib.parse.urlencode(params)
-    try:
-        with urllib.request.urlopen(url, timeout=30) as r:
-            return json.loads(r.read().decode())
-    except urllib.error.HTTPError as e:
-        try:
-            err = json.loads(e.read().decode()).get("error", {})
-        except ValueError:
-            err = {}
-        raise RuntimeError(err.get("message") or f"HTTP {e.code}") from None
-
-
-def when(ts):
-    return dt.datetime.fromtimestamp(ts, dt.timezone.utc)
-
-
-def token_problems(now=None):
-    """[problem text]; empty when the token works, has the permissions and is not expiring."""
-    now = now or dt.datetime.now(dt.timezone.utc)
-    if not (os.environ.get("IG_TOKEN") and os.environ.get("IG_USER_ID")):
-        return ["The IG_TOKEN or IG_USER_ID secret is missing, so nothing can be posted."]
-    out = []
-    try:
-        graph(os.environ["IG_USER_ID"], fields="username")
-    except RuntimeError as e:
-        return [f"Instagram refused a basic request with the token: {e}. Posting will fail until "
-                "IG_TOKEN is replaced (Meta Business Settings, System users, Generate new token)."]
-    try:
-        info = graph("debug_token", input_token=os.environ["IG_TOKEN"]).get("data", {})
-    except RuntimeError as e:
-        print("Could not inspect the token's expiry (it still works):", e)
-        return out
-    if info.get("is_valid") is False:
-        out.append("Meta says the token is no longer valid" + (f": {info['error'].get('message')}" if info.get("error") else "")
-                   + ". Generate a new one and update the IG_TOKEN secret.")
-    warn = dt.timedelta(days=TOKEN_WARN_DAYS)
-    for key, what in (("expires_at", "The Instagram token expires"),
-                      ("data_access_expires_at", "The token's data access (needed for insights and posting) expires")):
-        ts = info.get(key) or 0
-        if ts and when(ts) - now < warn:
-            left = (when(ts) - now).days
-            out.append(f"{what} on {when(ts):%d %b %Y} ({'already passed' if left < 0 else f'{left} days left'}). "
-                       "Generate a new token and update the IG_TOKEN secret before then.")
-    scopes = set(info.get("scopes") or [])
-    missing = [s for s in NEEDED_SCOPES if scopes and s not in scopes]
-    if missing:
-        out.append("The token is missing permissions: " + ", ".join(missing) + ". Generate a new token that includes them.")
-    if not out:
-        exp = info.get("expires_at") or 0
-        print("Token OK; expires", "never" if not exp else f"{when(exp):%d %b %Y}")
-    return out
-
-
 def dashboard_token_problem(now=None):
     """The dashboard's own GitHub token (a fine-grained token that expires). The dashboard copies
     its expiry date into the repo variable DASHBOARD_TOKEN_EXPIRES whenever someone uses it."""
@@ -298,13 +242,6 @@ def missed_slots():
 
 
 def health():
-    problems = token_problems()
-    title = "Bot alert: Instagram token"
-    if problems:
-        raise_alert(title, f"Daily check on {now_local()} found a problem with the Instagram token:\n\n"
-                    + "\n".join(f"- {p}" for p in problems) + f"\n\nCheck log: {run_url()}", quiet_hours=20)
-    else:
-        clear_alert(title, f"The token checks out again ({now_local()}).")
     dash = dashboard_token_problem()
     title = "Bot alert: dashboard GitHub token"
     if dash:
@@ -319,7 +256,7 @@ def health():
                     "failed (look for a separate alert). Content calendar runs: "
                     f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{os.environ.get('GITHUB_REPOSITORY')}"
                     "/actions/workflows/calendar.yml", quiet_hours=20)
-    print("Problems:", len(problems), "Instagram token,", int(bool(dash)), "dashboard token,", len(missed), "missed slots")
+    print("Problems:", int(bool(dash)), "dashboard token,", len(missed), "missed slots")
 
 
 if __name__ == "__main__":
