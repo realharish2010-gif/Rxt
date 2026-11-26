@@ -18,9 +18,17 @@ Sources (all free, official or public feeds, no scraping):
     cannot carry music. The report lists the Reels that are outperforming right now so a
     person can open them in the app and see which audio they use.
 
+General trends (config.json "general_trends"): popular trends that are NOT about money
+(films, shows, sport, tech launches, festivals, viral memes and hook formats) from Google
+Trends, Google News topic feeds and Wikipedia's most-read pages. Gemini keeps only the
+light-hearted ones that tie naturally to a money lesson, and the post rides the trend in a fun,
+casual tone while still teaching one real, general principle.
+
 Compliance always wins. Every news or search trend goes through a safety screen (a word
 blocklist and a Gemini review against the brand rules) and only becomes a post as a calm,
-educational explainer of a general principle, using only facts stated in the source.
+educational explainer of a general principle, using only facts stated in the source. General
+trends get a stricter blocklist (no tragedy, crime, illness, politics, religion or gossip) and
+a second Gemini review of the finished carousel before it can go out.
 """
 import datetime as dt
 import html
@@ -92,8 +100,46 @@ DEFAULTS = {
 }
 
 
+GENERAL_DEFAULTS = {
+    "share": 0.2,  # share of posts that ride a general (non-finance) trend until there is data
+    "max_age_days": 3,
+    "feeds": [
+        "https://trends.google.com/trending/rss?geo=IN",
+        "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-IN&gl=IN&ceid=IN:en",
+        "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=en-IN&gl=IN&ceid=IN:en",
+        "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-IN&gl=IN&ceid=IN:en",
+        gnews("viral trend OR meme OR trending reel India"),
+    ],
+    "wikipedia_top": True,  # Wikipedia's most-read English pages yesterday (a broad popularity signal)
+    # well-known meme and hook formats Gemini may use when a trend fits one
+    "formats": [
+        "POV: ...", "Nobody: / Me: ...", "Expectation vs reality", "Tell me you're ... without telling me",
+        "Things that just make sense", "Red flag / green flag", "Rating ... out of 10",
+        "If ... were a money habit", "Main character energy", "This or that", "Plot twist: ...",
+        "Starter pack", "Me explaining to my friends ...",
+    ],
+    # extra words, on top of the trends blocklist, that keep a general trend out
+    "blocked_words": [
+        "accident", "crash", "collapse", "flood", "earthquake", "cyclone", "landslide", "fire", "blast",
+        "bomb", "attack", "terror", "terrorist", "war", "army", "military", "missile", "shooting",
+        "dead", "died", "passes away", "passed away", "rip", "funeral", "tribute", "obituary",
+        "injured", "injury", "hospitalised", "hospitalized", "cancer", "illness", "virus", "outbreak",
+        "rape", "assault", "harassment", "molestation", "abuse", "riot", "protest", "stampede",
+        "missing", "kidnap", "custody", "court", "verdict", "police", "fir", "jail", "probe",
+        "divorce", "affair", "breakup", "dating", "leaked", "mms", "scandal", "controversy", "slams",
+        "trolled", "backlash", "religion", "religious", "temple", "mosque", "church", "hindu",
+        "muslim", "christian", "communal", "caste", "minister", "government", "parliament", "poll",
+        "fantasy", "dream11", "satta", "casino", "rummy", "alcohol", "liquor", "smoking", "drugs",
+    ],
+}
+
+
 def settings():
     return {**DEFAULTS, **CFG.get("trends", {})}
+
+
+def general_settings():
+    return {**GENERAL_DEFAULTS, **CFG.get("general_trends", {})}
 
 
 def now():
@@ -276,6 +322,196 @@ Return ONLY JSON: {{"picks": [{{"id": 0, "topic_area": "...", "angle": "...", "f
     return picks
 
 
+# ---------------------------------------------------------------- general (non-finance) trends
+
+def wikipedia_top(errors, limit=40):
+    """Yesterday's most-read English Wikipedia pages, minus the site's own pages."""
+    day = now() - dt.timedelta(days=1)
+    url = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/"
+           f"{day:%Y/%m/%d}")
+    try:
+        r = requests.get(url, headers=UA, timeout=30)
+        r.raise_for_status()
+        rows = r.json()["items"][0]["articles"]
+    except Exception as e:
+        errors.append(f"Wikipedia most-read failed: {e}")
+        return []
+    out = []
+    for a in rows:
+        name = a.get("article", "")
+        if name in ("Main_Page", "-") or ":" in name:
+            continue
+        out.append({"title": name.replace("_", " "), "link": "https://en.wikipedia.org/wiki/" + name,
+                    "source": "Wikipedia most-read", "published": day.isoformat(), "summary": "",
+                    "traffic": f"{a.get('views', 0):,} views yesterday", "related": []})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def collect_general(errors):
+    """Fresh, popular, non-finance trends that pass both blocklists."""
+    g, s = general_settings(), settings()
+    words = [*s["blocked_words"], *g["blocked_words"]]
+    cutoff = now() - dt.timedelta(days=g["max_age_days"])
+    items = []
+    for url in g["feeds"]:
+        try:
+            got = read_feed(url)
+        except Exception as e:
+            errors.append(f"General trend feed failed ({url[:80]}): {e}")
+            continue
+        src = "Google Trends" if "trends.google" in url else None
+        for it in got[:25]:
+            if it["published"] and it["published"] < cutoff:
+                continue
+            it["published"] = it["published"].isoformat() if it["published"] else None
+            it["source"] = it["source"] or src or "news"
+            items.append(it)
+    if g.get("wikipedia_top"):
+        items += wikipedia_top(errors)
+    seen, out, dropped = set(), [], 0
+    for it in items:
+        if not it["title"]:
+            continue
+        key = re.sub(r"[^a-z0-9]", "", it["title"].lower().rsplit(" - ", 1)[0])[:60]
+        if key in seen:
+            continue
+        seen.add(key)
+        if blocked(" ".join([it["title"], it["summary"], *it["related"]]), words):
+            dropped += 1
+            continue
+        out.append(it)
+    print(f"General trend candidates: {len(out)} kept, {dropped} blocked by word list")
+    return out
+
+
+def brief_general(candidates, ask, used_ids):
+    """Gemini keeps the light-hearted, genuinely popular trends RXT can have fun with."""
+    if not candidates:
+        return []
+    g = general_settings()
+    items = [{"id": i, "title": c["title"], "source": c["source"], "traffic": c["traffic"],
+              "summary": c["summary"], "related_headlines": c["related"]} for i, c in enumerate(candidates[:80])]
+    areas = learning.settings()["topic_areas"]
+    prompt = f"""You find pop-culture trends for {CFG['brand']}'s Instagram.
+Business and audience: {CFG['niche']}
+Rules (these always come first): {CFG.get('rules', '')}
+
+Below are today's popular searches, entertainment / sport / tech headlines and most-read
+pages. Pick at most 5 trends that are (a) genuinely popular right now with everyday people in
+India (lots of searches or views, several headlines, or a widely known meme), (b) light-hearted
+and fun to reference, and (c) easy to tie NATURALLY to one general money lesson in a playful
+way (for example: a blockbuster film everyone is booking tickets for -> "budgeting for fun
+without guilt"; a big cricket final -> "your savings need a long innings, not one big shot";
+a viral 'expectation vs reality' meme -> expectation vs reality of a first salary).
+
+Reject anything involving: death, illness, accidents, disasters, crime, court cases, war,
+politics, government, religion, caste, protests, relationships, gossip, scandals, controversy,
+body image, children, betting, fantasy sports, gambling, crypto, trading, alcohol, or anything
+a reader could find hurtful, divisive or in poor taste. Reject trends that are only popular in
+another country, or that need a specific product, brand, app or person to make sense. Most
+items should be rejected; an empty list is fine.
+
+For each pick give:
+- id: the item's id
+- trend: a short, neutral name for the trend (no real people's names)
+- why_popular: one sentence, only from what the item says
+- topic_area: one of {areas}
+- bridge: one sentence on the playful link from the trend to the money lesson
+- hook: a fun slide-1 hook idea, max 9 words
+- meme_format: one of {g['formats']}, or "none"
+- facts: up to 2 short facts about the trend copied from the item (never invent details)
+- avoid: one sentence on what the post must not say or imply
+- relevance: 1 to 5, how widely known the trend is this week
+- fun: 1 to 5, how naturally and playfully it fits RXT without feeling forced
+
+Items: {json.dumps(items, ensure_ascii=False)}
+Return ONLY JSON: {{"picks": [{{"id": 0, "trend": "...", "why_popular": "...", "topic_area": "...",
+"bridge": "...", "hook": "...", "meme_format": "...", "facts": ["..."], "avoid": "...",
+"relevance": 3, "fun": 3}}]}}"""
+    data = ask(prompt, lambda d: isinstance(d.get("picks"), list))
+    words = [*settings()["blocked_words"], *g["blocked_words"]]
+    picks = []
+    for p in data["picks"]:
+        try:
+            c = candidates[int(p["id"])]
+        except (KeyError, ValueError, IndexError, TypeError):
+            continue
+        if p.get("topic_area") not in areas or not p.get("bridge") or not p.get("trend"):
+            continue
+        text = " ".join(str(p.get(k, "")) for k in ("trend", "why_popular", "bridge", "hook", "facts"))
+        if blocked(text, words):  # second check on what Gemini wrote
+            continue
+        tid = "gt-" + re.sub(r"[^a-z0-9]+", "-", c["title"].lower())[:57].strip("-")
+        if tid in used_ids:
+            continue
+        fmt = p.get("meme_format") if p.get("meme_format") in g["formats"] else "none"
+        picks.append({
+            "id": tid, "kind": "general", "format": "general trends", "headline": str(p["trend"])[:120],
+            "story": c["title"], "source": c["source"], "link": c["link"], "published": c["published"],
+            "traffic": c["traffic"], "topic_area": p["topic_area"],
+            "why_popular": str(p.get("why_popular", ""))[:200], "bridge": str(p["bridge"])[:200],
+            "hook": str(p.get("hook", ""))[:80], "meme_format": fmt,
+            "facts": [str(f)[:200] for f in p.get("facts", [])][:2], "avoid": str(p.get("avoid", ""))[:200],
+            "relevance": int(p.get("relevance") or 1), "fun": int(p.get("fun") or 1),
+        })
+    picks.sort(key=lambda p: p["relevance"] + p["fun"], reverse=True)
+    return picks
+
+
+def general_prompt_block(trend, slides):
+    """Gemini instructions for a general trends post: ride the trend, teach one real lesson."""
+    facts = "\n".join(f"  - {f}" for f in trend["facts"]) or "  - (none: do not state any details of the trend)"
+    fmt = trend.get("meme_format") or "none"
+    return f"""GENERAL TRENDS POST (a fun, casual post that rides a popular non-finance trend):
+Trend: "{trend['headline']}" ({trend['source']}; {trend.get('why_popular', '')})
+The link to money: {trend['bridge']}
+Hook idea (improve it if you can): {trend.get('hook', '')}
+Meme or hook format to use: {fmt if fmt != 'none' else 'any that fits, or none'}
+Facts you may state about the trend (only these; invent nothing about it):
+{facts}
+Must avoid: {trend['avoid']}
+TONE FOR THIS POST (replaces the usual Voice): fun, casual, playful and warm, like a friend who
+is good with money. Light humour and everyday Indian context are welcome; still clear, kind
+and accurate. Never mock anyone or any group.
+FORMAT:
+- slide 1: a scroll-stopping hook that plays on the trend (max 9 words)
+- slide 2: the playful link from the trend to a money moment most people recognise
+- slides 3 to {slides - 1}: one real, practical, general money idea each, still riffing on the
+  trend where it fits naturally; every slide must teach something true and useful
+- slide {slides}: the call to action as usual
+Caption: a fun first line that references the trend, then the usual structure; up to four
+emojis are fine; you may add one hashtag for the trend only if it is a well-known, neutral one.
+The Rules above still come first: educational only, no products, no promises, no personal
+advice. Do not use any real person's name, likeness or quotes, do not quote song lyrics or film
+dialogue beyond three words, and never imply that any person, film, team, show or brand is
+linked to or endorses {CFG['brand']}. If the trend cannot be used without breaking any of this,
+write an evergreen post in the same topic area in this casual tone instead."""
+
+
+def vibe_check(data, trend, ask):
+    """Second Gemini pass on a general trends carousel: brand rules, taste and accuracy."""
+    prompt = f"""You review a playful Instagram carousel for {CFG['brand']} before it is posted.
+Rules: {CFG.get('rules', '')}
+It rides this popular trend: "{trend['headline']}" ({trend['source']}).
+The ONLY facts we have about the trend: {json.dumps(trend['facts'], ensure_ascii=False)}
+
+Flag a problem if the carousel:
+- breaks any of the Rules (product picks, promised returns, personal advice, hype or fear)
+- states details about the trend that are not in the facts
+- names a real person, quotes lyrics or film dialogue beyond three words, or implies that any
+  person, film, team, show or brand is linked to or endorses {CFG['brand']}
+- could be hurtful, mocking, divisive, insensitive or in poor taste
+- has a money lesson that is wrong, misleading, or missing (fun alone is not enough)
+Light humour, casual wording and clearly hypothetical examples are fine.
+
+Carousel: {json.dumps(data, ensure_ascii=False)}
+Return ONLY JSON: {{"ok": true, "problems": ["..."]}}"""
+    r = ask(prompt, lambda d: isinstance(d.get("ok"), bool))
+    return r["ok"], [str(x) for x in r.get("problems", [])][:5]
+
+
 # ---------------------------------------------------------------- Instagram research
 
 def ig_get(path, **params):
@@ -426,6 +662,14 @@ def refresh(ask=None):
     else:
         errors.append("GEMINI_API_KEY not set, so no trend passed the safety screen")
 
+    general = collect_general(errors)
+    general_picks = []
+    if ask:
+        try:
+            general_picks = brief_general(general, ask, used)
+        except Exception as e:
+            errors.append(f"Gemini general trend screen failed: {e}")
+
     patterns = store.get("patterns", {})
     if os.environ.get("IG_TOKEN") and os.environ.get("IG_USER_ID"):
         posts = competitor_posts(s["competitors"], errors) if s["competitors"] else []
@@ -452,6 +696,8 @@ def refresh(ask=None):
         "updated": now().isoformat(timespec="seconds"),
         "candidates": len(candidates),
         "picks": picks,
+        "general_candidates": len(general),
+        "general_picks": general_picks,
         "patterns": patterns,
         "errors": errors,
         "used": sorted(used)[-200:],
@@ -461,7 +707,7 @@ def refresh(ask=None):
     write_report(store)
     for e in errors:
         print("::warning::" + e)
-    print(f"Trends: {len(picks)} usable topics, patterns from {patterns.get('measured', 0)} outperforming posts")
+    print(f"Trends: {len(picks)} usable topics, {len(general_picks)} general trends, patterns from {patterns.get('measured', 0)} outperforming posts")
 
 
 def current():
@@ -478,6 +724,7 @@ def mark_used(trend_id):
     if store:
         store["used"] = sorted(set(store.get("used", [])) | {trend_id})[-200:]
         store["picks"] = [p for p in store.get("picks", []) if p["id"] != trend_id]
+        store["general_picks"] = [p for p in store.get("general_picks", []) if p["id"] != trend_id]
         STORE.write_text(json.dumps(store, indent=2, ensure_ascii=False))
 
 
@@ -547,7 +794,19 @@ def write_report(store):
             story = f"[{t['headline'].replace('|', '/')}]({t['link']})" if t.get("link") else t["headline"]
             out.append(f"| {t['relevance']}/5 | {t.get('format', 'lesson')} | {t['topic_area']} | {t['angle'].replace('|', '/')} | {story} |")
     else:
-        out.append("None today. The next post will be evergreen.")
+        out.append("None today.")
+    out += ["", "## General trends", "",
+            f"{store.get('general_candidates', 0)} popular non-finance trends were read (Google Trends, "
+            "entertainment / sport / tech news, Wikipedia most-read); these passed the stricter screen "
+            "(no tragedy, crime, illness, politics, religion or gossip) and fit RXT in a fun way.", ""]
+    if store.get("general_picks"):
+        out += ["| Popular | Fun fit | Topic area | Trend | Link to money | Hook idea |", "|---|---|---|---|---|---|"]
+        for t in store["general_picks"]:
+            name = f"[{t['headline'].replace('|', '/')}]({t['link']})" if t.get("link") else t["headline"]
+            out.append(f"| {t['relevance']}/5 | {t['fun']}/5 | {t['topic_area']} | {name} | "
+                       f"{t['bridge'].replace('|', '/')} | {t.get('hook', '').replace('|', '/')} |")
+    else:
+        out.append("None today.")
     out += ["", "## What is working for similar accounts", ""]
     if p.get("measured"):
         out.append(f"From {p.get('looked_at', '?')} public posts ({len(s['competitors'])} competitor accounts, "
