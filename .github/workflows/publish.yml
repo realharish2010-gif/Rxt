@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: "Publish even if a carousel already went out today"
+        description: "Publish even if this slot (or today's limit) is already used"
         type: boolean
         default: false
 concurrency:

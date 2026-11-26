@@ -63,6 +63,9 @@ DEFAULTS = {
     "share": 0.3,  # share of posts tied to a news/search trend while there is no data on how they do
     "max_age_days": 3,  # ignore news older than this
     "stale_after_hours": 36,  # generate ignores trends.json older than this
+    # news and trends are refreshed before every post; the slower competitor / hashtag research
+    # only this often, to save Instagram and Gemini quota at 3 posts a day
+    "patterns_every_hours": 20,
     "news_feeds": [
         gnews("personal finance India"),
         gnews("RBI repo rate OR RBI policy"),
@@ -671,7 +674,11 @@ def refresh(ask=None):
             errors.append(f"Gemini general trend screen failed: {e}")
 
     patterns = store.get("patterns", {})
-    if os.environ.get("IG_TOKEN") and os.environ.get("IG_USER_ID"):
+    fresh = patterns.get("updated") and (now() - dt.datetime.fromisoformat(patterns["updated"])
+                                         < dt.timedelta(hours=s["patterns_every_hours"]))
+    if fresh:
+        print(f"Competitor and hashtag patterns are from {patterns['updated'][:16]} UTC, reusing them")
+    elif os.environ.get("IG_TOKEN") and os.environ.get("IG_USER_ID"):
         posts = competitor_posts(s["competitors"], errors) if s["competitors"] else []
         cache = store.get("hashtag_ids", {})
         posts += hashtag_posts(s["hashtags"], cache, errors)
