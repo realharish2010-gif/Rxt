@@ -265,12 +265,14 @@ def current_slot():
 
 
 def already_made():
-    """True when latest.json is this slot's carousel for today (a rerun after a failed publish)."""
+    """True when latest.json is this slot's post for today and has not gone out yet (a rerun
+    after a failed publish, or a draft waiting for approval). Once it is posted, a forced run
+    for the same slot (e.g. a second "extra" post) makes a new one instead of reusing it."""
     slot, _ = current_slot()
     if not (slot and LATEST.exists()):
         return False
     last = json.loads(LATEST.read_text())
-    return last.get("slot") == slot and last.get("local_day") == slots.local_day()
+    return last.get("slot") == slot and last.get("local_day") == slots.local_day() and not last.get("posted")
 
 
 def generate():
