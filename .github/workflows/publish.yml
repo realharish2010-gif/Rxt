@@ -1,4 +1,4 @@
-name: Publish latest carousel (manual approval)
+name: Publish latest post (manual approval)
 on:
   workflow_dispatch:
     inputs:
@@ -11,6 +11,7 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  actions: read  # to fetch a Reel's video from the run that made it
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -22,6 +23,18 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests
+      - name: Is the latest post a Reel?
+        id: latest
+        run: |
+          python -c "import json; p = json.load(open('posts/latest.json')); print('run_id=' + (p.get('run_id') or '') if p.get('format') == 'reel' else 'run_id=')" >> "$GITHUB_OUTPUT"
+      - name: Fetch the Reel video
+        if: steps.latest.outputs.run_id != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: reel-${{ steps.latest.outputs.run_id }}
+          path: posts
+          run-id: ${{ steps.latest.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
         run: python main.py publish
         env:
