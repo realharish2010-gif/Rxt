@@ -4,6 +4,7 @@ A private website for the team to run the Instagram bot without touching GitHub:
 
 - **New post**: make a post now. Pick the slot (or "next open slot") and the format (carousel, Reel, or let the bot decide). The page shows what will happen before you press the button, including the daily limits (3 a day, 150 minutes apart, one per slot), and offers **Post anyway** to skip them.
 - **Publishing mode**: switch between **Auto-publish** (posts go out by themselves) and **Manual approval** (each post waits on the Overview page so someone can preview every slide, the Reel and the caption, then press **Approve and publish**).
+- **Alerts**: the bot's failure alerts (failed posts, Reels or runs, Instagram token problems, missed slots), the same ones emailed to you as GitHub issues labelled `bot-alert`. Overview shows a red banner and the menu a count while any are open. Editors can run the daily health check on demand and mark an alert fixed. Needs the token's Issues permission (step 1); an older token without it just shows a note.
 - **Analytics**: posts, reach, saves and shares, with averages by content type, slot, format, hook style, topic area and design, a per-post chart and a full table. Uses the bot's own 3-day measurements, plus live Instagram numbers if you add the optional Instagram token.
 - **Posts**: every post with its slides, Reel video, caption, tags, the bot's reasons for choosing it, and its numbers.
 - **Runs**: what the bot is doing on GitHub Actions, live step-by-step progress for a post you just started, and failures.
@@ -51,6 +52,7 @@ You need a free Cloudflare account and a Google account. Do the steps in order.
    - **Actions**: Read and write (to start posts and see runs)
    - **Contents**: Read-only (to read posts and reports)
    - **Variables**: Read and write (for the publishing-mode switch)
+   - **Issues**: Read and write (to show the bot's failure alerts and mark them fixed)
    - Metadata: Read-only is added automatically.
    Leave everything else as *No access*.
 5. Generate it and copy the token (`github_pat_...`). You will paste it into Cloudflare in step 3. Do not put it in the repo: the repo is public.

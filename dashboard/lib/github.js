@@ -71,7 +71,7 @@ export async function tree(env) {
   return t.tree || [];
 }
 
-export const WORKFLOWS = { calendar: "calendar.yml", publish: "publish.yml", weekly: "weekly.yml" };
+export const WORKFLOWS = { calendar: "calendar.yml", publish: "publish.yml", weekly: "weekly.yml", health: "health.yml" };
 
 export async function runs(env, workflow, perPage = 15) {
   const r = await gh(env, `/repos/${repo(env)}/actions/workflows/${WORKFLOWS[workflow]}/runs?per_page=${perPage}`, { ttl: 15 });
@@ -111,4 +111,33 @@ export async function setVariable(env, name, value) {
     if (e.status !== 404) throw e;
     await gh(env, `/repos/${repo(env)}/actions/variables`, { method: "POST", body: { name, value } });
   }
+}
+
+// Failure alerts the bot opens as GitHub issues labelled bot-alert (see alerts.py in the repo).
+// Open ones come with their latest comment, since a repeat failure is added as a comment.
+export async function alerts(env, { closed = 10 } = {}) {
+  const list = await gh(env, `/repos/${repo(env)}/issues?labels=bot-alert&state=all&sort=updated&direction=desc&per_page=${20 + closed}`, { ttl: 30 });
+  const slim = (i) => ({
+    number: i.number, title: i.title, state: i.state, url: i.html_url, comments: i.comments,
+    created_at: i.created_at, updated_at: i.updated_at, closed_at: i.closed_at, body: cleanBody(i.body),
+  });
+  const open = (list || []).filter((i) => i.state === "open" && !i.pull_request).map(slim);
+  await Promise.all(open.filter((i) => i.comments).map(async (i) => {
+    try {
+      const c = await gh(env, `/repos/${repo(env)}/issues/${i.number}/comments?per_page=100`, { ttl: 30 });
+      const last = (c || []).slice(-1)[0];
+      if (last) i.latest = { at: last.created_at, body: cleanBody(last.body) };
+    } catch { /* the issue text is enough */ }
+  }));
+  const recent = (list || []).filter((i) => i.state === "closed" && !i.pull_request).slice(0, closed).map(slim);
+  return { open, closed: recent };
+}
+
+function cleanBody(b) {
+  return String(b || "").replace(/\n*_cc @[\w-]+_\s*$/, "").trim();
+}
+
+export async function closeIssue(env, number, note) {
+  if (note) await gh(env, `/repos/${repo(env)}/issues/${number}/comments`, { method: "POST", body: { body: note } });
+  await gh(env, `/repos/${repo(env)}/issues/${number}`, { method: "PATCH", body: { state: "closed", state_reason: "completed" } });
 }
