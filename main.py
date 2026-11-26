@@ -1,4 +1,5 @@
-"""Daily Instagram carousel bot.
+"""Instagram carousel bot: a content calendar of up to 3 posts a day (see slots.py).
+   python main.py due        -> is a calendar slot due now? prints today's schedule
    python main.py generate   -> Gemini writes it, Playwright renders slides
    python main.py publish    -> posts the latest generated carousel to Instagram
    python main.py preview [template ...] -> renders sample slides for each template into previews/
@@ -19,6 +20,7 @@ import requests
 
 import learning
 import promo
+import slots
 import trends
 
 ROOT = pathlib.Path(__file__).parent
@@ -251,20 +253,39 @@ def write_carousel(history, chosen, notes):
     return write_carousel(history, chosen, notes)
 
 
+def current_slot():
+    """(slot, planned time) this run is for, from the calendar step; empty outside the calendar."""
+    return os.environ.get("SLOT", "").strip(), os.environ.get("POST_TIME", "").strip()
+
+
+def already_made():
+    """True when latest.json is this slot's carousel for today (a rerun after a failed publish)."""
+    slot, _ = current_slot()
+    if not (slot and LATEST.exists()):
+        return False
+    last = json.loads(LATEST.read_text())
+    return last.get("slot") == slot and last.get("local_day") == slots.local_day()
+
+
 def generate():
-    # backup scheduled runs: skip if today's carousel was already made
-    if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists():
-        if json.loads(LATEST.read_text()).get("day") == today():
-            print("Today's carousel already exists, skipping")
-            return
+    if already_made():
+        print("This slot's carousel already exists, skipping (publish will retry it)")
+        return
+    if LATEST.exists():
+        last = json.loads(LATEST.read_text())
+        if not last.get("posted"):
+            print(f"::warning::Replacing a carousel that was never posted: {last.get('topic')}")
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
+    slot, post_time = current_slot()
+    local = slots.local_day()
     # plan this post from what has worked so far (content type, hook, topic area, template)
     # and from today's safe news/search trends and what works for similar accounts
     trend_info = trends.current()
     if trend_info:
         trend_info["share"] = trends.settings()["share"]
         trend_info["general_share"] = trends.general_settings()["share"]
-    chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history), trend_info)
+    chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history), trend_info,
+                                slot=slot or None, today=slots.types_today(history, local))
     forced_tpl = os.environ.get("TEMPLATE", "").strip()
     if forced_tpl:
         chosen["template"] = pick_template(history)  # validates and returns the forced one
@@ -289,6 +310,9 @@ def generate():
         tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published", "format")}
         trends.mark_used(t["id"])
     tags["hook"] = data["slides"][0]["title"]
+    tags["local_day"] = local
+    if slot:
+        tags.update(slot=slot, post_time=post_time)
     names = render(data, outdir, template)
 
     repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo")
@@ -302,9 +326,9 @@ def generate():
     history.append({"day": day, "topic": data["topic"], "template": template, **tags})
     HISTORY.write_text(json.dumps(history, indent=2))
 
-    # keep only the 14 newest post folders so the repo stays small
+    # keep only the newest post folders (about a week at 3 a day) so the repo stays small
     folders = sorted(d for d in POSTS.iterdir() if d.is_dir())
-    for old in folders[:-14]:
+    for old in folders[:-21]:
         shutil.rmtree(old)
     print("Generated:", data["topic"])
 
@@ -331,13 +355,25 @@ def publish():
         print("Latest carousel was already posted")
         return
     day = today()
-    done_today = [p for p in published_log() if p["day"] == day]
-    if done_today and not forced():
-        print(f"Already published today ({done_today[-1]['topic']}). "
-              "Skipping. Run the publish workflow with 'force' ticked to post again.")
-        return
+    local = slots.local_day()
+    done_today = slots.posted_on(local)
+    slot = post.get("slot")
+    if not forced():
+        why = None
+        if slot and slot in {slots.where(p)[1] for p in done_today}:
+            why = f"the {slot} slot already posted today"
+        elif len(done_today) >= slots.settings()["max_per_day"]:
+            why = f"already {len(done_today)} posts today"
+        elif not slot and done_today:
+            why = "a post already went out today and this carousel has no calendar slot"
+        elif slot and post.get("local_day") != local and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+            why = f"this carousel was made for {post.get('local_day')}'s {slot} slot"
+        if why:
+            print(f"Skipping: {why}. Run the publish workflow with 'force' ticked to post anyway.")
+            return
     wait_for_urls(post["urls"])
     uid = os.environ["IG_USER_ID"]
+    check_publish_limit(uid)
     kids = [api(f"{uid}/media", image_url=u, is_carousel_item="true")["id"] for u in post["urls"]]
     parent = api(f"{uid}/media", media_type="CAROUSEL", children=",".join(kids), caption=post["caption"])["id"]
     for _ in range(20):
@@ -359,11 +395,28 @@ def publish():
         "day": day, "folder": post.get("folder", post["day"]), "topic": post["topic"],
         "template": post.get("template"),
         **{k: post[k] for k in ("hook", *learning.TAGS) if post.get(k)},
-        "media_id": media.get("id"), "forced": bool(done_today),
+        "local_day": local, "media_id": media.get("id"), "forced": forced() and bool(done_today),
         "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
     })
     PUBLISHED.write_text(json.dumps(log[-200:], indent=2))
     print("Published:", post["topic"])
+
+
+def check_publish_limit(uid):
+    """Instagram caps posts published through the API per 24 hours (100 at the time of
+    writing). We post far fewer, but stop cleanly if the account is ever at the cap."""
+    try:
+        r = requests.get(f"{GRAPH}/{uid}/content_publishing_limit",
+                         params={"fields": "quota_usage,config", "access_token": os.environ["IG_TOKEN"]},
+                         timeout=30).json()
+        row = (r.get("data") or [{}])[0]
+        used, total = row.get("quota_usage"), (row.get("config") or {}).get("quota_total")
+        if used is not None and total and used >= total:
+            sys.exit(f"Instagram publishing limit reached ({used}/{total} in 24 hours)")
+        if used is not None:
+            print(f"Instagram publishing quota: {used}/{total or '?'} used in the last 24 hours")
+    except (requests.RequestException, ValueError, IndexError) as e:
+        print("Could not check the publishing limit:", e)
 
 
 SAMPLE = {
@@ -396,10 +449,11 @@ if __name__ == "__main__":
         preview(sys.argv[2:])
     elif cmd == "learn":
         learning.sync(classify=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
+    elif cmd == "due":
+        slots.cli()
     elif cmd == "trends":
-        if (os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists()
-                and json.loads(LATEST.read_text()).get("day") == today()):
-            print("Today's carousel already exists, skipping trends")
+        if already_made():
+            print("This slot's carousel already exists, skipping trends")
         else:
             trends.refresh(ask=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     else:

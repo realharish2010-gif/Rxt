@@ -1,0 +1,96 @@
+name: Content calendar
+# Up to 3 posts a day (morning, midday, evening India time). This runs every 30 minutes inside
+# the slot windows; the first step decides in seconds whether a slot is due (see slots.py) and
+# the rest only runs when one is. Running often covers GitHub's late or skipped scheduled runs.
+# Times are UTC, at :07 and :37 because GitHub delays runs at the top of the hour the most.
+# If you change the windows in config.json "schedule", make sure these still cover them.
+on:
+  schedule:
+    - cron: "7,37 1-4 * * *"    # 06:37 to 10:07 IST, morning slot
+    - cron: "7,37 6-9 * * *"    # 11:37 to 15:07 IST, midday slot
+    - cron: "7,37 13-16 * * *"  # 18:37 to 22:07 IST, evening slot
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "Which slot to post (next = the slot due now, or the next open one early)"
+        type: choice
+        options: [next, morning, midday, evening]
+        default: next
+      force:
+        description: "Post even if that slot (or today's limit) is already used"
+        type: boolean
+        default: false
+concurrency:
+  group: carousel
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}  # branch tip, so a run queued behind another sees its commits
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Is a post due?
+        id: due
+        run: |
+          pip install -q requests
+          python main.py due
+        env:
+          SLOT_INPUT: ${{ inputs.slot }}
+          FORCE_PUBLISH: ${{ inputs.force }}
+          AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+      - name: Install
+        if: steps.due.outputs.slot != ''
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+      - name: Learn from posts that are 3+ days old
+        if: steps.due.outputs.slot != ''
+        continue-on-error: true  # never block a post if Instagram insights fail
+        run: python main.py learn
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Refresh news, search trends and similar accounts
+        if: steps.due.outputs.slot != ''
+        continue-on-error: true  # never block a post if a feed or Instagram fails
+        run: python main.py trends
+        env:
+          SLOT: ${{ steps.due.outputs.slot }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Generate
+        if: steps.due.outputs.slot != ''
+        run: python main.py generate
+        env:
+          SLOT: ${{ steps.due.outputs.slot }}
+          POST_TIME: ${{ steps.due.outputs.time }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Commit slides
+        if: steps.due.outputs.slot != ''
+        run: |
+          git config user.name "carousel-bot"
+          git config user.email "carousel-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "New carousel $(date -u +%F) ${{ steps.due.outputs.slot }}" || true
+          git push
+      - name: Publish (only when AUTO_PUBLISH is true)
+        if: steps.due.outputs.slot != '' && vars.AUTO_PUBLISH == 'true'
+        run: python main.py publish
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          FORCE_PUBLISH: ${{ inputs.force }}
+      - name: Save posted state
+        if: steps.due.outputs.slot != '' && vars.AUTO_PUBLISH == 'true'
+        run: |
+          git add -A
+          git commit -m "Mark posted" || true
+          git push

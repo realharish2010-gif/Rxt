@@ -57,9 +57,10 @@ DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "top
 # promotional = a creative post about RXT itself (promo.py), told through a promo_angle
 ANGLES = ["educational", "trend-tied", "general trends", "promotional"]
 OLD_ANGLES = {"evergreen": "educational"}  # earlier name, still found in older logs
-TAGS = (*DIMENSIONS, "angle", "promo_angle", "trend")  # what each post is logged with, besides topic/template/hook
+TAGS = (*DIMENSIONS, "angle", "promo_angle", "trend", "slot", "post_time", "local_day")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
-          "template": "Template", "angle": "Angle", "promo_angle": "Promotional angle"}
+          "template": "Template", "angle": "Angle", "promo_angle": "Promotional angle",
+          "slot": "Time slot", "post_time": "Posting time"}
 
 
 def settings():
@@ -77,7 +78,12 @@ def load_store():
 def measured_posts(store=None):
     """Measured posts, oldest first, limited to the newest `window`."""
     store = load_store() if store is None else store
-    posts = [{**r, "angle": OLD_ANGLES.get(r.get("angle"), r.get("angle"))}
+    import slots  # here, not at the top: slots imports this module
+
+    def slot(r):  # posts from before the calendar get their slot from when they went out
+        return r.get("slot") or slots.slot_of(dt.datetime.fromisoformat(r["posted_at"]))
+
+    posts = [{**r, "angle": OLD_ANGLES.get(r.get("angle"), r.get("angle")), "slot": slot(r)}
              for r in store.values() if r.get("metrics", {}).get("reach") is not None]
     posts.sort(key=lambda r: r["posted_at"])
     return posts[-settings()["window"]:]
@@ -295,33 +301,55 @@ def choose(dim, options, history, posts, avoid=None, explore_pick=None, hints=No
     return random.choice([o for o in pool if counts[o] == fewest]), "testing (least tried)"
 
 
-def choose_angle(posts, shares, available):
-    """Educational (no trend), tied to a news/search trend ("trend-tied"), riding a popular non-finance
-    trend ("general trends"), or about RXT itself ("promotional"). `shares` = {angle: share of
-    days} for the non-educational angles; `available` = the angles usable today. Starts at the configured shares;
-    once every available angle has enough measured posts, the best one is used most days."""
-    avail = ["educational"] + [a for a in ANGLES[1:] if a in available]
+def choose_angle(posts, shares, available, slot=None, today=()):
+    """Which of the 4 content types goes into this post: educational (no trend), tied to a
+    news/search trend ("trend-tied"), riding a popular non-finance trend ("general trends"),
+    or about RXT itself ("promotional"). `shares` = {angle: starting share} for the
+    non-educational ones; `available` = the ones usable right now; `today` = types already
+    used in today's earlier slots.
+    Order of evidence: how each type does in THIS time slot (once every type has enough
+    measured posts there), else how it does overall, else the starting shares. Daily caps
+    keep a day varied: no type in more than 2 slots, at most 1 promotional post."""
+    cfg = CFG.get("schedule", {})
+    caps = {a: cfg.get("max_same_type_per_day", 2) for a in ANGLES}
+    caps["promotional"] = min(caps["promotional"], cfg.get("max_promotional_per_day", 1))
+    today = list(today)
+    full = [a for a in ANGLES if today.count(a) >= caps[a]]
+    avail = [a for a in ["educational"] + [a for a in ANGLES[1:] if a in available] if a not in full]
+    note = f" ({', '.join(full)} already used enough today)" if full else ""
+    if not avail:
+        return "educational", "every type hit its daily cap" + note
     if len(avail) == 1:
-        return "educational", "no safe trend available today"
+        return avail[0], ("only type available right now" if avail[0] != "educational"
+                          else "no safe trend available right now") + note
     s = settings()
-    rows = {r[0]: r for r in ranking(posts, "angle") if r[2] >= s["min_per_option"] and r[0] in avail}
-    if len(rows) == len(avail):
-        best = max(rows.values(), key=lambda r: r[1])
-        if random.random() >= s["explore_rate"]:
-            return best[0], f"best so far ({best[1]:.2f}x typical over {best[2]} posts)"
-        return random.choice([a for a in avail if a != best[0]]), "testing"
+    scopes = [("overall", posts)]
+    if slot:
+        scopes.insert(0, (f"in the {slot} slot", [p for p in posts if p.get("slot") == slot]))
+    for scope, pool in scopes:
+        rows = {r[0]: r for r in ranking(pool, "angle") if r[2] >= s["min_per_option"] and r[0] in avail}
+        if len(rows) == len(avail):
+            best = max(rows.values(), key=lambda r: r[1])
+            if random.random() >= s["explore_rate"]:
+                return best[0], f"best {scope} ({best[1]:.2f}x typical over {best[2]} posts)" + note
+            return random.choice([a for a in avail if a != best[0]]), f"testing ({scope} best is {best[0]})" + note
     roll, acc = random.random(), 0.0
-    for a in avail[1:]:
+    for a in avail:
+        if a == "educational":
+            continue
         acc += shares.get(a, 0)
         if roll < acc:
-            return a, f"testing {a} posts ({shares.get(a, 0):.0%} of days until there is data)"
-    return "educational", "educational most days until there is data on trend posts"
+            return a, f"testing {a} posts ({shares.get(a, 0):.0%} of posts until there is data)" + note
+    if "educational" in avail:
+        return "educational", "educational until there is data on the other types" + note
+    return random.choice(avail), "testing" + note
 
 
-def plan(history, templates, explore_template, trend_info=None):
+def plan(history, templates, explore_template, trend_info=None, slot=None, today=()):
     """Content type, hook style, topic area, template and angle for the next post, with
     reasons. `trend_info` is trends.current(): today's safe trend picks and the patterns
-    that are working for similar accounts."""
+    that are working for similar accounts. `slot` is the calendar slot being filled and
+    `today` the content types already used in today's earlier slots."""
     s = settings()
     posts = scored(measured_posts())
     last = history[-1] if history else {}
@@ -335,7 +363,7 @@ def plan(history, templates, explore_template, trend_info=None):
     available = [a for a, ok in (("trend-tied", picks), ("general trends", general),
                                  ("promotional", promo_share > 0)) if ok]
     out, why = {}, {}
-    out["angle"], why["angle"] = choose_angle(posts, shares, available)
+    out["angle"], why["angle"] = choose_angle(posts, shares, available, slot, today)
     out["trend"] = None
     out["promo_angle"] = None
     for dim, key in DIMENSIONS.items():
@@ -434,11 +462,24 @@ def write_report(store, status="ok"):
         out += ["## Best performers", "", *head, *[row(p) for p in ranked[:k]], ""]
         if len(ranked) > 1:
             out += ["## Worst performers", "", *head, *[row(p) for p in ranked[::-1][:k]], ""]
-        for dim in [*DIMENSIONS, "template", "angle", "promo_angle"]:
+        for dim in ["slot", "post_time", *DIMENSIONS, "template", "angle", "promo_angle"]:
             rows = ranking(posts, dim)
             if rows:
                 out += [f"## {LABELS[dim]}", "", "| Option | Posts | Avg reach | vs typical |", "|---|---|---|---|"]
                 out += [f"| {o} | {n} | {reach:.0f} | {rel:.2f}x |" for o, rel, n, reach in rows]
                 out.append("")
+        cells = collections.defaultdict(list)  # which content type works in which slot
+        for p in posts:
+            if p.get("slot") and p.get("angle"):
+                cells[(p["slot"], p["angle"])].append(p["rel"])
+        if cells:
+            used = sorted({a for _, a in cells}, key=ANGLES.index if all(a in ANGLES for _, a in cells) else str)
+            out += ["## Content type by time slot (vs typical, posts)", "",
+                    "| Slot | " + " | ".join(used) + " |", "|---" * (len(used) + 1) + "|"]
+            for sl in sorted({sl for sl, _ in cells}):
+                out.append(f"| {sl} | " + " | ".join(
+                    f"{statistics.mean(cells[(sl, a)]):.2f}x ({len(cells[(sl, a)])})" if cells.get((sl, a)) else "-"
+                    for a in used) + " |")
+            out.append("")
     DIR.mkdir(exist_ok=True)
     REPORT.write_text("\n".join(out) + "\n")

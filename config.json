@@ -8,6 +8,18 @@
   "cta": "Follow RXT for better financial health",
   "slides": 7,
   "templates": ["spray", "arches", "collage", "brutal", "ribbon"],
+  "schedule": {
+    "utc_offset": "+05:30",
+    "max_per_day": 3,
+    "min_gap_minutes": 150,
+    "max_same_type_per_day": 2,
+    "max_promotional_per_day": 1,
+    "slots": {
+      "morning": {"window": ["07:00", "10:30"], "times": ["08:30", "07:30", "09:30"]},
+      "midday": {"window": ["12:00", "15:00"], "times": ["13:00", "12:30", "14:00"]},
+      "evening": {"window": ["18:30", "22:30"], "times": ["20:00", "19:00", "21:00"]}
+    }
+  },
   "learning": {
     "measure_after_days": 3,
     "explore_rate": 0.3,
