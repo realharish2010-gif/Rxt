@@ -5,8 +5,10 @@ override) the daily plan made in learning.py.
     python main.py trends   -> refresh analytics/trends.json and analytics/trends.md
 
 Sources (all free, official or public feeds, no scraping):
-  - finance and business news: RSS feeds listed in config.json "trends" -> "news_feeds"
-    (Google News search feeds and regulator press releases by default)
+  - official announcements: RSS feeds from RBI, SEBI and the Press Information Bureau
+    (config.json "trends" -> "official_feeds")
+  - finance and business news: Google News search feeds ("news_feeds"); only stories from
+    the outlets in "trusted_sources" can become a news post
   - what people are searching for: the Google Trends "trending now" RSS feed
   - competitor research: Instagram Graph API Business Discovery (public posts of the
     business/creator accounts listed in "competitors")
@@ -60,7 +62,20 @@ DEFAULTS = {
         gnews("inflation India OR EMI OR home loan rates"),
         gnews("credit score OR CIBIL OR credit card rules"),
         gnews("UPI OR digital payments fraud"),
+    ],
+    "official_feeds": [
         "https://www.rbi.org.in/pressreleases_rss.xml",
+        "https://www.sebi.gov.in/sebirss.xml",
+        "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
+    ],
+    # outlets whose reporting can be turned into a news explainer post (matched on the
+    # Google News source name); other outlets' stories can only prompt an evergreen lesson
+    "trusted_sources": [
+        "Reserve Bank of India", "RBI", "SEBI", "PIB", "Press Information Bureau", "Mint", "Livemint",
+        "The Economic Times", "Economic Times", "Business Standard", "The Hindu BusinessLine",
+        "BusinessLine", "Moneycontrol", "Reuters", "Press Trust of India", "PTI", "The Hindu",
+        "Financial Express", "The Financial Express", "Hindustan Times", "The Indian Express",
+        "NDTV Profit", "CNBC TV18", "Business Today",
     ],
     "search_trend_feeds": ["https://trends.google.com/trending/rss?geo=IN"],
     "hashtags": ["personalfinance", "moneytips", "financialliteracy", "budgeting", "savingmoney"],
@@ -154,7 +169,9 @@ def collect_candidates(s, errors):
     """Fresh, de-duplicated headlines and search trends that pass the word blocklist."""
     cutoff = now() - dt.timedelta(days=s["max_age_days"])
     seen, out, dropped = set(), [], 0
-    for kind, feeds in (("news", s["news_feeds"]), ("search", s["search_trend_feeds"])):
+    trusted = {t.lower() for t in s["trusted_sources"]}
+    for kind, feeds in (("official", s["official_feeds"]), ("news", s["news_feeds"]),
+                        ("search", s["search_trend_feeds"])):
         for url in feeds:
             try:
                 items = read_feed(url)
@@ -173,7 +190,11 @@ def collect_candidates(s, errors):
                 if blocked(" ".join([it["title"], it["summary"], *it["related"]]), s["blocked_words"]):
                     dropped += 1
                     continue
+                if kind == "official" and not it["source"]:
+                    it["source"] = ("RBI" if "rbi.org" in url else "SEBI" if "sebi.gov" in url
+                                    else "PIB" if "pib.gov" in url else "official release")
                 it["kind"] = kind
+                it["trusted"] = kind == "official" or (kind == "news" and it["source"].lower() in trusted)
                 it["published"] = it["published"].isoformat() if it["published"] else None
                 out.append(it)
     print(f"Trend candidates: {len(out)} kept, {dropped} blocked by word list")
@@ -186,7 +207,7 @@ def brief(candidates, ask, used_ids):
     """Gemini reads the candidates and keeps only the ones RXT can teach from safely."""
     if not candidates:
         return []
-    items = [{"id": i, "kind": c["kind"], "title": c["title"], "source": c["source"],
+    items = [{"id": i, "kind": c["kind"], "trusted": c["trusted"], "title": c["title"], "source": c["source"],
               "published": c["published"], "summary": c["summary"], "traffic": c["traffic"],
               "related_headlines": c["related"]} for i, c in enumerate(candidates[:60])]
     areas = learning.settings()["topic_areas"]
@@ -194,7 +215,8 @@ def brief(candidates, ask, used_ids):
 Business and audience: {CFG['niche']}
 Rules: {CFG.get('rules', '')}
 
-Below are today's headlines ("news") and Google search trends ("search"). Pick at most 5 that
+Below are today's official announcements ("official": RBI, SEBI, government press releases),
+headlines ("news") and Google search trends ("search"). Pick at most 5 that
 everyday people would genuinely benefit from understanding, where {CFG['brand']} can teach a
 GENERAL, evergreen money principle prompted by the story (for example: an interest rate
 change -> how loan EMIs and savings rates respond; a new tax deadline -> how to prepare
@@ -206,7 +228,13 @@ gossip, fear or hype, or facts that are not stated in the item itself. Reject ru
 opinion pieces and unconfirmed proposals unless the angle is purely "what this kind of
 change means in general". Most items should be rejected; returning an empty list is fine.
 
+Prefer official announcements and items marked trusted.
+
 For each pick give:
+- format: "news explainer" if the post should report the news itself (what happened, then
+  what it means for everyday people). Only allowed for items with trusted = true that state
+  a confirmed decision, rule change, deadline or official data release (not a rumour,
+  forecast, opinion or market move). Otherwise "lesson" (the news only prompts a general lesson).
 - id: the item's id
 - topic_area: one of {areas}
 - angle: the educational carousel idea in one sentence, calm and practical
@@ -241,8 +269,10 @@ Return ONLY JSON: {{"picks": [{{"id": 0, "topic_area": "...", "angle": "...", "f
             "angle": p["angle"].strip(), "facts": [str(f)[:200] for f in p.get("facts", [])][:3],
             "avoid": str(p.get("avoid", ""))[:200], "relevance": int(p.get("relevance") or 1),
             "evergreen_ok": bool(p.get("evergreen_ok")),
+            "format": "news explainer" if (p.get("format") == "news explainer" and c["trusted"]
+                                           and p.get("facts")) else "lesson",
         })
-    picks.sort(key=lambda p: (p["relevance"], p["evergreen_ok"]), reverse=True)
+    picks.sort(key=lambda p: (p["kind"] == "official", p["relevance"], p["evergreen_ok"]), reverse=True)
     return picks
 
 
@@ -451,21 +481,54 @@ def mark_used(trend_id):
         STORE.write_text(json.dumps(store, indent=2, ensure_ascii=False))
 
 
-def prompt_block(trend):
-    """Gemini instructions for a post tied to a trend."""
+def prompt_block(trend, slides):
+    """Gemini instructions for a post tied to a news story or search trend."""
     facts = "\n".join(f"  - {f}" for f in trend["facts"]) or "  - (none: do not state any details of the story)"
     when = (trend.get("published") or "")[:10]
-    return f"""TIMELY ANGLE FOR THIS POST:
+    head = f"""TIMELY ANGLE FOR THIS POST:
 In the news / search trends: "{trend['headline']}" ({trend['source']}{', ' + when if when else ''})
 Teach this: {trend['angle']}
-Facts you may state (only these, word for word in meaning; add no other numbers, dates or details):
+Facts you may state (only these; add no other numbers, dates, names or details about the story):
 {facts}
-Must avoid: {trend['avoid']}
+Must avoid: {trend['avoid']}"""
+    if trend.get("format") == "news explainer":
+        return head + f"""
+FORMAT: NEWS EXPLAINER. This carousel reports the news, then explains it.
+- slide 1: a calm, clear hook naming what happened (no "breaking", no urgency, no hype)
+- slide 2: "What happened": state the facts above plainly and name the source ({trend['source']})
+- slides 3 to {slides - 1}: what it means for everyday people and one sensible, general action
+  step; no predictions about markets, prices or what happens next
+- slide {slides}: the call to action as usual
+Caption: first line says what happened in plain words; include a line
+"Source: {trend['source']}{', ' + when if when else ''}". If the facts are not enough to explain
+the story accurately, write an evergreen post in the same topic area instead."""
+    return head + f"""
 Make the carousel useful even to someone who has not seen the news: explain the general
 principle and one practical step. Mention the news calmly in at most one slide, without hype,
 predictions or urgency. In the caption, add a line "Context: {trend['source']}" so readers can
 look it up. If following this angle would break the Rules, ignore it and write an evergreen post
 in the same topic area instead."""
+
+
+def fact_check(data, trend, ask):
+    """Second Gemini pass on a news-tied carousel: every claim about the story must come from
+    the source facts, and nothing may break the brand rules. Returns (ok, problems)."""
+    prompt = f"""You are a strict fact-checker for {CFG['brand']}'s Instagram.
+Rules: {CFG.get('rules', '')}
+The post is about this story: "{trend['headline']}" ({trend['source']})
+The ONLY confirmed facts about the story are: {json.dumps(trend['facts'], ensure_ascii=False)}
+
+Check the carousel below. Flag a problem if it:
+- states any number, date, name, amount or detail about the story that is not in the facts
+- predicts markets, prices, rates or what will happen next
+- recommends a specific product, stock, fund, lender or app, or gives personalised advice
+- uses hype, fear or urgency
+General educational principles and clearly hypothetical examples ("say your EMI is ...") are fine.
+
+Carousel: {json.dumps(data, ensure_ascii=False)}
+Return ONLY JSON: {{"ok": true, "problems": ["..."]}}"""
+    r = ask(prompt, lambda d: isinstance(d.get("ok"), bool))
+    return r["ok"], [str(x) for x in r.get("problems", [])][:5]
 
 
 def write_report(store):
@@ -479,10 +542,10 @@ def write_report(store):
         out += ["> **Notes:**", *[f"> - {e}" for e in store["errors"]], ""]
     out += ["## Usable timely topics", ""]
     if store.get("picks"):
-        out += ["| Relevance | Topic area | Angle | Story |", "|---|---|---|---|"]
+        out += ["| Relevance | Post type | Topic area | Angle | Story |", "|---|---|---|---|---|"]
         for t in store["picks"]:
             story = f"[{t['headline'].replace('|', '/')}]({t['link']})" if t.get("link") else t["headline"]
-            out.append(f"| {t['relevance']}/5 | {t['topic_area']} | {t['angle'].replace('|', '/')} | {story} |")
+            out.append(f"| {t['relevance']}/5 | {t.get('format', 'lesson')} | {t['topic_area']} | {t['angle'].replace('|', '/')} | {story} |")
     else:
         out.append("None today. The next post will be evergreen.")
     out += ["", "## What is working for similar accounts", ""]

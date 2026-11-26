@@ -185,6 +185,52 @@ def published_log():
     return json.loads(PUBLISHED.read_text()) if PUBLISHED.exists() else []
 
 
+def write_carousel(history, chosen, notes):
+    """Gemini writes the carousel. A news-tied post is fact-checked by a second Gemini pass
+    and rewritten with the problems listed; if it still fails, the post becomes evergreen."""
+    trend = chosen.get("trend")
+    if trend and trend.get("format") == "news explainer":
+        chosen["content_type"] = "news explainer"
+    feedback = ""
+    for check_round in range(3 if trend else 1):
+        learnings = learning.prompt_block(chosen)
+        if trend:
+            learnings += "\n\n" + trends.prompt_block(trend, CFG["slides"]) + feedback
+        if notes:
+            learnings += ("\n\nOpening and format techniques working for similar finance accounts right now "
+                          "(borrow the technique only, never their content or claims):\n"
+                          + "\n".join(f"- {n}" for n in notes[:5]))
+        data = None
+        for attempt in range(6):
+            try:
+                data = ask_gemini([h["topic"] for h in history], learnings)
+                break
+            except Exception as e:  # bad JSON, rate limit, wrong slide count
+                print(f"Gemini attempt {attempt + 1} failed: {e}")
+                time.sleep(30 * (attempt + 1))
+        if data is None:
+            sys.exit("Could not generate a carousel")
+        if not trend:
+            return data
+        try:
+            ok, problems = trends.fact_check(data, trend, gemini_json)
+        except Exception as e:
+            ok, problems = False, [f"fact-check could not run: {e}"]
+        if ok:
+            print("Fact-check passed")
+            return data
+        print("Fact-check failed:", problems)
+        feedback = ("\n\nA fact-checker rejected the previous draft for these reasons; fix all of them:\n"
+                    + "\n".join(f"- {x}" for x in problems))
+    # still failing: drop the news angle and write an evergreen post in the same topic area
+    print("::warning::News post still failed the fact-check after two rewrites, writing an evergreen post instead")
+    trends.mark_used(trend["id"])
+    chosen.update(angle="evergreen", trend=None)
+    if chosen["content_type"] == "news explainer":
+        chosen["content_type"] = "simple explainer"
+    return write_carousel(history, chosen, notes)
+
+
 def generate():
     # backup scheduled runs: skip if today's carousel was already made
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and LATEST.exists():
@@ -201,24 +247,8 @@ def generate():
     forced_tpl = os.environ.get("TEMPLATE", "").strip()
     if forced_tpl:
         chosen["template"] = pick_template(history)  # validates and returns the forced one
-    learnings = learning.prompt_block(chosen)
-    if chosen.get("trend"):
-        learnings += "\n\n" + trends.prompt_block(chosen["trend"])
     notes = (trend_info.get("patterns") or {}).get("notes") or []
-    if notes:
-        learnings += ("\n\nOpening and format techniques working for similar finance accounts right now "
-                      "(borrow the technique only, never their content or claims):\n"
-                      + "\n".join(f"- {n}" for n in notes[:5]))
-    data = None
-    for attempt in range(6):
-        try:
-            data = ask_gemini([h["topic"] for h in history], learnings)
-            break
-        except Exception as e:  # bad JSON, rate limit, wrong slide count
-            print(f"Gemini attempt {attempt + 1} failed: {e}")
-            time.sleep(30 * (attempt + 1))
-    if data is None:
-        sys.exit("Could not generate a carousel")
+    data = write_carousel(history, chosen, notes)
 
     now = dt.datetime.now(dt.timezone.utc)
     day = now.date().isoformat()
@@ -233,7 +263,7 @@ def generate():
     tags["angle"] = chosen["angle"]
     if chosen.get("trend"):
         t = chosen["trend"]
-        tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published")}
+        tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published", "format")}
         trends.mark_used(t["id"])
     tags["hook"] = data["slides"][0]["title"]
     names = render(data, outdir, template)
