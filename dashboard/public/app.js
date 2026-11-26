@@ -1074,7 +1074,7 @@
   }
 
   function alertKind(title) {
-    if (/token/i.test(title)) return { label: "Instagram token", cls: "bad" };
+    if (/token/i.test(title)) return { label: "Token", cls: "bad" };
     if (/missed/i.test(title)) return { label: "Missed post", cls: "warn" };
     return { label: "Run failed", cls: "bad" };
   }
@@ -1091,14 +1091,12 @@
     return `<div class="card" style="margin-bottom:16px"><div class="card-head"><h2>Token reminders</h2><span class="muted small">emailed 14 days before expiry</span></div>
       <div class="token-row"><div class="token-what"><b>Dashboard GitHub token</b><div class="muted small">Lets this site show runs, start posts and switch the publishing mode.</div></div>
         <div class="token-when">${d ? "Expires " + esc(fmtDate(d.toISOString(), false)) + " " + d.getUTCFullYear() : "Saved after the next page load"}</div>${badge}</div>
-      <div class="token-row"><div class="token-what"><b>Instagram token</b><div class="muted small">Used by the bot to post and measure.</div></div>
-        <div class="token-when">Checked every night at 22:57 ${tzLabel()}; an alert shows above if it is expiring or broken</div><span class="badge">Nightly check</span></div>
     </div>`;
   }
 
   pages.alerts = async function () {
     page.innerHTML = `
-      <div class="page-head"><div><h1>Bot <em>alerts</em></h1><p class="muted">When a post, Reel or run fails, the Instagram token has a problem, or a slot passes without a post. Each alert is also emailed to you as a GitHub issue.</p></div>
+      <div class="page-head"><div><h1>Bot <em>alerts</em></h1><p class="muted">When a post, Reel or run fails, the dashboard's token is about to expire, or a slot passes without a post. Each alert is also emailed to you as a GitHub issue.</p></div>
         ${canPost() ? '<button class="btn btn-ghost" id="run-health">Run health check now</button>' : ""}</div>
       <div id="alerts"><div class="empty"><span class="spinner"></span></div></div>`;
     const draw = async () => {

@@ -1,7 +1,6 @@
 name: Daily health check
-# Once a day, after the evening slot's window closes (22:57 India time): is the Instagram token
-# still valid, not about to expire, and does it have the permissions the bot needs? Is the
-# dashboard's GitHub token about to expire (warned 14 days ahead)? Did any of
+# Once a day, after the evening slot's window closes (22:57 India time): is the dashboard's
+# GitHub token about to expire (warned 14 days ahead)? Did any of
 # today's slots pass without a post? Problems open a GitHub issue labelled bot-alert, which
 # GitHub emails to you (see alerts.py). Read-only: it never posts or commits anything.
 on:
@@ -21,11 +20,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -q requests
-      - name: Check the token and today's posts
+      - name: Check the dashboard token and today's posts
         run: python alerts.py health
         env:
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
           AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
           DASHBOARD_TOKEN_EXPIRES: ${{ vars.DASHBOARD_TOKEN_EXPIRES }}  # saved by the dashboard
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
