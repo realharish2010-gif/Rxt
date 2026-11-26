@@ -158,7 +158,7 @@ npm run dev                       # http://localhost:8788
 
 | Path | What it is |
 |---|---|
-| `public/` | The website: `index.html` (landing page and app shell), `landing.js` (entrance animation fallback and phone menu), `app.js` (all dashboard pages), `style.css`, `markdown.js` (renders the bot's reports safely), `_headers` (security headers), self-hosted Inter and Instrument Serif fonts (SIL Open Font License, see `FONTS-LICENSE.txt`) |
+| `public/` | The website: `index.html` (landing page and app shell), `landing.js` (entrance animation fallback and phone menu), `app.js` (all dashboard pages), `style.css`, `markdown.js` (renders the bot's reports safely), `hero.mp4` and `hero-poster.jpg` (landing background video, H.264 so every browser plays it), `_headers` (security headers), self-hosted Inter and Instrument Serif fonts (SIL Open Font License, see `FONTS-LICENSE.txt`) |
 | `functions/api/[[path]].js` | The backend: every `/api/*` route |
 | `lib/auth.js` | Google and GitHub sign-in, sessions, roles |
 | `lib/github.js` | GitHub API calls (files, runs, starting workflows, the `AUTO_PUBLISH` variable) |
