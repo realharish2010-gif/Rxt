@@ -1,0 +1,11 @@
+# Copy to .dev.vars for local testing with `npx wrangler pages dev public --kv AUDIT`.
+# Never commit .dev.vars (it is gitignored).
+GITHUB_TOKEN=github_pat_...
+GITHUB_REPO=realharish2010-gif/Rxt
+SESSION_SECRET=any-long-random-string-of-32-or-more-characters
+ADMINS=you@example.com
+EDITORS=
+VIEWERS=
+GOOGLE_CLIENT_ID=
+# Local only: shows a "Local test sign-in" button on localhost, signed in as this email.
+DEV_LOGIN=you@example.com

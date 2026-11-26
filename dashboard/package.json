@@ -1,0 +1,12 @@
+{
+  "name": "rxt-dashboard",
+  "private": true,
+  "description": "Team dashboard for the RXT Instagram bot (Cloudflare Pages + Functions)",
+  "scripts": {
+    "dev": "wrangler pages dev public --kv AUDIT",
+    "deploy": "wrangler pages deploy public --project-name rxt-dashboard"
+  },
+  "devDependencies": {
+    "wrangler": "4.168.0"
+  }
+}
