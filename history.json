@@ -54,5 +54,20 @@
     "local_day": "2026-11-26",
     "slot": "midday",
     "post_time": "13:00"
+  },
+  {
+    "day": "2026-11-26",
+    "topic": "The value of a regular financial health check-up",
+    "template": "collage",
+    "content_type": "promotional",
+    "hook_style": "myth-busting",
+    "topic_area": "financial goals and planning",
+    "angle": "promotional",
+    "promo_angle": "money check-up",
+    "hook": "Money stress isn't a permanent condition",
+    "format": "carousel",
+    "local_day": "2026-11-26",
+    "slot": "evening",
+    "post_time": "20:00"
   }
 ]

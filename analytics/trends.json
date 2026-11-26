@@ -1,32 +1,87 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-26T09:29:59+00:00",
-  "candidates": 198,
-  "picks": [],
-  "general_candidates": 123,
+  "updated": "2026-11-26T10:19:30+00:00",
+  "candidates": 196,
+  "picks": [
+    {
+      "id": "caution-to-investors-regarding-impersonation-of-sebi-registe",
+      "kind": "official",
+      "headline": "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms",
+      "source": "SEBI",
+      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html",
+      "published": null,
+      "topic_area": "money habits and mindset",
+      "angle": "When dealing with financial services online, always verify that the entity is officially registered to protect yourself from impersonation scams.",
+      "facts": [
+        "Caution to investors regarding impersonation of SEBI registered intermediaries",
+        "Impersonation on closed user groups of social media platforms"
+      ],
+      "avoid": "Do not mention specific social media platforms or name specific individuals or companies.",
+      "relevance": 5,
+      "evergreen_ok": true,
+      "format": "lesson"
+    },
+    {
+      "id": "advisory-regarding-unregulated-pre-listing-premium-often-cal",
+      "kind": "official",
+      "headline": "Advisory Regarding Unregulated Pre-listing Premium often called as Grey Market Premium (GMP) for Upcoming Initial Public Offers (IPOs)",
+      "source": "SEBI",
+      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/advisory-regarding-unregulated-pre-listing-premium-often-called-as-grey-market-premium-gmp-for-upcoming-initial-public-offers-ipos-_105942.html",
+      "published": null,
+      "topic_area": "financial goals and planning",
+      "angle": "Grey Market Premium (GMP) for IPOs is unregulated and carries risks; focus on understanding a company's fundamentals rather than unofficial pre-listing prices.",
+      "facts": [
+        "Advisory regarding unregulated pre-listing premium",
+        "Commonly known as Grey Market Premium for upcoming IPOs"
+      ],
+      "avoid": "Do not suggest that IPOs are good or bad investments or provide any market predictions.",
+      "relevance": 4,
+      "evergreen_ok": true,
+      "format": "lesson"
+    },
+    {
+      "id": "fixed-deposit-rates-suryoday-small-finance-bank-offers-8-25",
+      "kind": "news",
+      "headline": "Fixed deposit rates: Suryoday Small Finance Bank offers 8.25% on 5-year FDs; compare rates at SBI, HDFC Bank and others - Livemint",
+      "source": "Livemint",
+      "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxQRE82VlRHSlZtNjZiTVd6bjhpTkJXUDd1MUxEVUhxOFhxUkxmWktDV1pjSmFGRGVXdVpqcjZuUzdSN3hZYjd1MnVQbjg4QUxPa2RLbXZfaFg5T0lUNHB1MUVtaXA2bV9mc2dReER6cnQtTkpSVUUwNWtCYmtpT216MHhCZ2xBQjdmZ0lzaHpyZml6eW04dlJlaVVFMDVTbkV3dUdNVGxINFVsNXp5RFM0c3phY3EzR3laVUpmVDFmd2ZJY2RNaGJvUXpCdU8tWEkycGtPSy01YTdkVUMwQi1Ib2dLUks1eFRKV3hueHNfaFlObk9rU1lOZUZsMUU4UHgzbTAyYVBkQUhQSFFSOUJhdNIBlgJBVV95cUxNX0lTNGxtUWxLSU1ibDA2YklabEZyOXFEWm1qYUVocjItMk9xYmtvMmNDSFFET1ZLbWZnSkRiN2xXU3FaSUxZM2p0NGpuTWRWdGZoVkRlVmhWSkdQZ0pmajhMNk9ubEJVbWFaTzlySGI3TG1uZ3VZTzlhNFJZcE02NG1lUlN1RjlwcWVmU2FhWUozTF9IUlZMeFVDcHBUbFRETDZNcldHTkVnTnlSTXQxZlNudHBTWjNZa2V5ekhKYUFNck9EUDNlSi1OM19HUjVYOTBFWVJrd3FTMWZJOEM0eGdrWDBLb0YtekJTRlJXVTd0UENveUZxM0ZsalVmeGtQRG50WUIwMmhTVlY3SUhmZS0xd0poUQ?oc=5",
+      "published": "2026-11-25T18:10:11+00:00",
+      "topic_area": "saving",
+      "angle": "When comparing fixed deposit rates across different banks, consider your own liquidity needs and the safety of the institution rather than just chasing the highest advertised percentage.",
+      "facts": [
+        "Fixed deposit rates vary by institution",
+        "Different banks offer different interest rates on 5-year fixed deposits"
+      ],
+      "avoid": "Do not recommend specific banks or specific interest rate products.",
+      "relevance": 4,
+      "evergreen_ok": true,
+      "format": "lesson"
+    }
+  ],
+  "general_candidates": 125,
   "general_picks": [
     {
-      "id": "gt-sbi-clerk-mains-exam",
+      "id": "gt-who-is-the-man-behind-the-viral-saajan-saajan-batman-tren",
       "kind": "general",
       "format": "general trends",
-      "headline": "SBI Clerk exam preparation",
-      "story": "sbi clerk mains exam",
-      "source": "Google Trends",
-      "link": "https://trends.google.com/trending/rss?geo=IN",
-      "published": "2026-11-26T00:20:00-08:00",
-      "traffic": "1000+",
-      "topic_area": "financial goals and planning",
-      "why_popular": "Thousands of aspirants are searching for last-minute tips and strategies for the upcoming banking recruitment exam.",
-      "bridge": "A successful exam strategy is like a financial plan—break your long-term goal into small, manageable study sections to stay on track.",
-      "hook": "Exam prep or financial planning? It’s all strategy.",
-      "meme_format": "If ... were a money habit",
+      "headline": "Desi Batman meme",
+      "story": "Who is the man behind the viral Saajan Saajan Batman trend taking over Instagram - India Today",
+      "source": "India Today",
+      "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPMndGU1o0YXhKdy1BdC1QM29kU3RlYVhJTzhOdy1LOGRNTGRUWE5fcnhCZGhsVG5kQ2xNcE8tWFFHejZzZ05VbWozYWs3eFJsbDltNGRZZnNFMU00akxuV2ZFRW5aeTZtbTAtSnlISXZ1U1hLcVV4MjZjNHkzSllrbzhpb282Wk1HV214bzMxWWlPc21jWUR0UTdoSldPS2h5c0J6MEFiaEE1QlNLa19NY2JhaEtrTDgwWXVsZHMzQkN0Wkh0OEdkaVRibWFTQVdtRDBoOHRUZWpEREFwalHSAeMBQVVfeXFMTzJFM1RVcEdKV2ZrcjBFUzA3Sks5bjdWOEpKSVhubWJFbFNnLTRHSS1xT0FTUW1xWHZDVjlnZW13R0Q0UHZ1c2FKelJ6YTlvM3VPc3ZFcDRpZnViaXgxZUgtUXBNSVFaUVFUZ2lWeHUyNkJDcXdsLWZ6emZfZEhjNFpSaVFWcWplT0V3NjRHQ1ZPbTViZGhjcDZ2MHBpU2pZZF8zTnBZWUZRQlRFQWlmbWFvcm1LQ3IxWDYwWTBNdHdzeG1kdjBYdmc5Tk4wa0t4alAxMm1oZXUtRDIzQjFXcVQtalE?oc=5",
+      "published": "2026-11-24T07:45:57+00:00",
+      "traffic": "",
+      "topic_area": "money habits and mindset",
+      "why_popular": "The 'Saajan Saajan Batman' trend has gone viral on Instagram, with creators remixing the character into everyday Indian contexts.",
+      "bridge": "Just like the creative editing in these reels, your financial plan needs a 'director's cut'—taking control of your spending habits rather than letting them edit your bank balance.",
+      "hook": "POV: Batman trying to fix your monthly budget",
+      "meme_format": "POV: ...",
       "facts": [
-        "SBI is hiring 1,540 junior associates.",
-        "Candidates are currently looking for section-wise study strategies."
+        "The trend features creative AI-generated visuals of Batman.",
+        "It is currently one of the most trending sounds and concepts on Instagram."
       ],
-      "avoid": "Do not imply that passing an exam is a guaranteed path to wealth or comment on bank jobs as a career choice.",
-      "relevance": 4,
-      "fun": 3
+      "avoid": "Do not imply that impulsive spending is 'cool' or that viewers should spend money on trendy gadgets to join the trend.",
+      "relevance": 5,
+      "fun": 5
     }
   ],
   "patterns": {
@@ -263,9 +318,7 @@
     "updated": "2026-11-26T01:42:17+00:00",
     "looked_at": 120
   },
-  "errors": [
-    "Gemini trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
-  ],
+  "errors": [],
   "used": [
     "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
     "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"

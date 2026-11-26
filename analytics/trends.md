@@ -1,22 +1,22 @@
 # Trend intelligence
 
-Updated 2026-11-26 09:29 UTC. 198 fresh headlines and search trends were read; the ones below passed the safety screen (word blocklist + a Gemini check against the brand rules).
-
-> **Notes:**
-> - Gemini trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+Updated 2026-11-26 10:19 UTC. 196 fresh headlines and search trends were read; the ones below passed the safety screen (word blocklist + a Gemini check against the brand rules).
 
 ## Usable timely topics
 
-None today.
+| Relevance | Post type | Topic area | Angle | Story |
+|---|---|---|---|---|
+| 5/5 | lesson | money habits and mindset | When dealing with financial services online, always verify that the entity is officially registered to protect yourself from impersonation scams. | [Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms](https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html) |
+| 4/5 | lesson | financial goals and planning | Grey Market Premium (GMP) for IPOs is unregulated and carries risks; focus on understanding a company's fundamentals rather than unofficial pre-listing prices. | [Advisory Regarding Unregulated Pre-listing Premium often called as Grey Market Premium (GMP) for Upcoming Initial Public Offers (IPOs)](https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/advisory-regarding-unregulated-pre-listing-premium-often-called-as-grey-market-premium-gmp-for-upcoming-initial-public-offers-ipos-_105942.html) |
+| 4/5 | lesson | saving | When comparing fixed deposit rates across different banks, consider your own liquidity needs and the safety of the institution rather than just chasing the highest advertised percentage. | [Fixed deposit rates: Suryoday Small Finance Bank offers 8.25% on 5-year FDs; compare rates at SBI, HDFC Bank and others - Livemint](https://news.google.com/rss/articles/CBMikAJBVV95cUxQRE82VlRHSlZtNjZiTVd6bjhpTkJXUDd1MUxEVUhxOFhxUkxmWktDV1pjSmFGRGVXdVpqcjZuUzdSN3hZYjd1MnVQbjg4QUxPa2RLbXZfaFg5T0lUNHB1MUVtaXA2bV9mc2dReER6cnQtTkpSVUUwNWtCYmtpT216MHhCZ2xBQjdmZ0lzaHpyZml6eW04dlJlaVVFMDVTbkV3dUdNVGxINFVsNXp5RFM0c3phY3EzR3laVUpmVDFmd2ZJY2RNaGJvUXpCdU8tWEkycGtPSy01YTdkVUMwQi1Ib2dLUks1eFRKV3hueHNfaFlObk9rU1lOZUZsMUU4UHgzbTAyYVBkQUhQSFFSOUJhdNIBlgJBVV95cUxNX0lTNGxtUWxLSU1ibDA2YklabEZyOXFEWm1qYUVocjItMk9xYmtvMmNDSFFET1ZLbWZnSkRiN2xXU3FaSUxZM2p0NGpuTWRWdGZoVkRlVmhWSkdQZ0pmajhMNk9ubEJVbWFaTzlySGI3TG1uZ3VZTzlhNFJZcE02NG1lUlN1RjlwcWVmU2FhWUozTF9IUlZMeFVDcHBUbFRETDZNcldHTkVnTnlSTXQxZlNudHBTWjNZa2V5ekhKYUFNck9EUDNlSi1OM19HUjVYOTBFWVJrd3FTMWZJOEM0eGdrWDBLb0YtekJTRlJXVTd0UENveUZxM0ZsalVmeGtQRG50WUIwMmhTVlY3SUhmZS0xd0poUQ?oc=5) |
 
 ## General trends
 
-123 popular non-finance trends were read (Google Trends, entertainment / sport / tech news, Wikipedia most-read); these passed the stricter screen (no tragedy, crime, illness, politics, religion or gossip) and fit RXT in a fun way.
+125 popular non-finance trends were read (Google Trends, entertainment / sport / tech news, Wikipedia most-read); these passed the stricter screen (no tragedy, crime, illness, politics, religion or gossip) and fit RXT in a fun way.
 
 | Popular | Fun fit | Topic area | Trend | Link to money | Hook idea |
 |---|---|---|---|---|---|
-| 5/5 | 4/5 | budgeting | [Grand Theft Auto VI release](https://news.google.com/rss/articles/CBMiaEFVX3lxTFBnN1lhcDNoaHpBZUNTNTNTMnVfbnptakJ5bWRkX3BRSk5FNThhbUltZ09keVpNcmJqSnVZaXNOSVlPVy1xb1dDblNnU3h6V0wxTF9vMWtJX2VqbDRxRUZ4ZnhjdjlwV09O?oc=5) | Just like preparing for a massive game launch, budgeting requires mapping out your 'resources' so you can enjoy your hobbies without stress. | Ready for the next big release? Budget first! |
-| 4/5 | 3/5 | financial goals and planning | [SBI Clerk exam preparation](https://trends.google.com/trending/rss?geo=IN) | A successful exam strategy is like a financial plan—break your long-term goal into small, manageable study sections to stay on track. | Exam prep or financial planning? It’s all strategy. |
+| 5/5 | 5/5 | money habits and mindset | [Desi Batman meme](https://news.google.com/rss/articles/CBMi3gFBVV95cUxPMndGU1o0YXhKdy1BdC1QM29kU3RlYVhJTzhOdy1LOGRNTGRUWE5fcnhCZGhsVG5kQ2xNcE8tWFFHejZzZ05VbWozYWs3eFJsbDltNGRZZnNFMU00akxuV2ZFRW5aeTZtbTAtSnlISXZ1U1hLcVV4MjZjNHkzSllrbzhpb282Wk1HV214bzMxWWlPc21jWUR0UTdoSldPS2h5c0J6MEFiaEE1QlNLa19NY2JhaEtrTDgwWXVsZHMzQkN0Wkh0OEdkaVRibWFTQVdtRDBoOHRUZWpEREFwalHSAeMBQVVfeXFMTzJFM1RVcEdKV2ZrcjBFUzA3Sks5bjdWOEpKSVhubWJFbFNnLTRHSS1xT0FTUW1xWHZDVjlnZW13R0Q0UHZ1c2FKelJ6YTlvM3VPc3ZFcDRpZnViaXgxZUgtUXBNSVFaUVFUZ2lWeHUyNkJDcXdsLWZ6emZfZEhjNFpSaVFWcWplT0V3NjRHQ1ZPbTViZGhjcDZ2MHBpU2pZZF8zTnBZWUZRQlRFQWlmbWFvcm1LQ3IxWDYwWTBNdHdzeG1kdjBYdmc5Tk4wa0t4alAxMm1oZXUtRDIzQjFXcVQtalE?oc=5) | Just like the creative editing in these reels, your financial plan needs a 'director's cut'—taking control of your spending habits rather than letting them edit your bank balance. | POV: Batman trying to fix your monthly budget |
 
 ## What is working for similar accounts
 
