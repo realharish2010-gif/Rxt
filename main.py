@@ -188,7 +188,7 @@ def published_log():
 def write_carousel(history, chosen, notes):
     """Gemini writes the carousel. A trend-tied post gets a second Gemini pass (a fact-check
     for news, a rules/taste/accuracy check for general trends) and is rewritten with the
-    problems listed; if it still fails, the post becomes evergreen."""
+    problems listed; if it still fails, the post becomes a plain educational one."""
     trend = chosen.get("trend")
     general = bool(trend) and trend.get("format") == "general trends"
     if trend and trend.get("format") in ("news content", "general trends"):
@@ -228,11 +228,11 @@ def write_carousel(history, chosen, notes):
         print("Review failed:", problems)
         feedback = ("\n\nA reviewer rejected the previous draft for these reasons; fix all of them:\n"
                     + "\n".join(f"- {x}" for x in problems))
-    # still failing: drop the trend and write an evergreen post in the same topic area
+    # still failing: drop the trend and write an educational post in the same topic area
     print(f"::warning::{trend.get('format', 'Trend')} post still failed review after two rewrites, "
-          "writing an evergreen post instead")
+          "writing an educational post instead")
     trends.mark_used(trend["id"])
-    chosen.update(angle="evergreen", trend=None)
+    chosen.update(angle="educational", trend=None)
     if chosen["content_type"] in ("news content", "general trends"):
         chosen["content_type"] = "simple explainer"
     return write_carousel(history, chosen, notes)

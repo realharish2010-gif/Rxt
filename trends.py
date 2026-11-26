@@ -487,7 +487,7 @@ The Rules above still come first: educational only, no products, no promises, no
 advice. Do not use any real person's name, likeness or quotes, do not quote song lyrics or film
 dialogue beyond three words, and never imply that any person, film, team, show or brand is
 linked to or endorses {CFG['brand']}. If the trend cannot be used without breaking any of this,
-write an evergreen post in the same topic area in this casual tone instead."""
+write an educational post in the same topic area in this casual tone instead."""
 
 
 def vibe_check(data, trend, ask):
@@ -748,12 +748,12 @@ FORMAT: NEWS CONTENT. This carousel reports the news, then explains it.
 - slide {slides}: the call to action as usual
 Caption: first line says what happened in plain words; include a line
 "Source: {trend['source']}{', ' + when if when else ''}". If the facts are not enough to explain
-the story accurately, write an evergreen post in the same topic area instead."""
+the story accurately, write an educational post in the same topic area instead."""
     return head + f"""
 Make the carousel useful even to someone who has not seen the news: explain the general
 principle and one practical step. Mention the news calmly in at most one slide, without hype,
 predictions or urgency. In the caption, add a line "Context: {trend['source']}" so readers can
-look it up. If following this angle would break the Rules, ignore it and write an evergreen post
+look it up. If following this angle would break the Rules, ignore it and write an educational post
 in the same topic area instead."""
 
 
