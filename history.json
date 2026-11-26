@@ -105,5 +105,19 @@
     "local_day": "2026-11-26",
     "slot": "extra",
     "post_time": "19:47"
+  },
+  {
+    "day": "2026-11-26",
+    "topic": "Automating your savings strategy",
+    "template": "spray",
+    "content_type": "simple explainer",
+    "hook_style": "bold clear statement",
+    "topic_area": "saving",
+    "angle": "educational",
+    "hook": "Stop relying on willpower to save money.",
+    "format": "carousel",
+    "local_day": "2026-11-26",
+    "slot": "extra",
+    "post_time": "19:58"
   }
 ]
