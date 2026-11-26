@@ -774,3 +774,6 @@ dl.kv dt { color: var(--muted); }
 .nav-count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 6px; border-radius: 9px; background: var(--bad); color: #160200; font-size: 0.7rem; font-weight: 700; line-height: 1; }
 .nav-count[hidden] { display: none; }
 .alert-card .md pre { white-space: pre-wrap; word-break: break-word; }
+.token-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 0; border-top: 1px solid var(--border-soft); }
+.token-row .token-what { flex: 1 1 260px; min-width: 0; }
+.token-row .token-when { flex: 1 1 220px; min-width: 0; color: #e6e6e6; }

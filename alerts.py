@@ -6,7 +6,9 @@
     python alerts.py recovered  -> runs after a run that did real work succeeded: closes that
                                    workflow's open alert with a "working again" comment
     python alerts.py health     -> daily check (.github/workflows/health.yml, 22:57 India time):
-                                   Instagram token valid / expiring / missing permissions, and
+                                   Instagram token valid / expiring / missing permissions, the
+                                   dashboard's GitHub token expiring (repo variable
+                                   DASHBOARD_TOKEN_EXPIRES, saved by the dashboard), and
                                    calendar slots that passed today without a post
 
 One open issue per problem, labelled bot-alert. A problem that keeps happening adds a comment
@@ -253,6 +255,31 @@ def token_problems(now=None):
     return out
 
 
+def dashboard_token_problem(now=None):
+    """The dashboard's own GitHub token (a fine-grained token that expires). The dashboard copies
+    its expiry date into the repo variable DASHBOARD_TOKEN_EXPIRES whenever someone uses it."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    raw = os.environ.get("DASHBOARD_TOKEN_EXPIRES", "").strip()
+    if not raw:
+        print("Dashboard token expiry not known yet (it is saved the first time someone opens the dashboard)")
+        return None
+    try:
+        when_ = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        print("Could not read DASHBOARD_TOKEN_EXPIRES:", raw)
+        return None
+    left = when_ - now
+    if left >= dt.timedelta(days=TOKEN_WARN_DAYS):
+        print(f"Dashboard token OK; expires {when_:%d %b %Y}")
+        return None
+    status = "has expired" if left.total_seconds() <= 0 else f"expires on {when_:%d %b %Y} ({left.days} days left)"
+    return (f"The dashboard's GitHub token {status}. Without a working token the dashboard cannot show runs, "
+            "start posts or switch the publishing mode (the bot itself keeps posting). Renew it: GitHub, "
+            "Settings, Developer settings, Fine-grained tokens, rxt-dashboard, Regenerate token, then paste the "
+            "new token into Cloudflare (Pages project rxt, Settings, Variables and secrets, GITHUB_TOKEN). "
+            "Opening the dashboard once afterwards records the new date and closes this alert at the next check.")
+
+
 def missed_slots():
     """Today's slots (India time) whose window has closed without a post, when posting is automatic."""
     sys.path.insert(0, str(ROOT))
@@ -278,6 +305,12 @@ def health():
                     + "\n".join(f"- {p}" for p in problems) + f"\n\nCheck log: {run_url()}", quiet_hours=20)
     else:
         clear_alert(title, f"The token checks out again ({now_local()}).")
+    dash = dashboard_token_problem()
+    title = "Bot alert: dashboard GitHub token"
+    if dash:
+        raise_alert(title, f"Daily check on {now_local()}:\n\n- {dash}\n\nCheck log: {run_url()}", quiet_hours=20)
+    elif os.environ.get("DASHBOARD_TOKEN_EXPIRES", "").strip():
+        clear_alert(title, f"The dashboard token was renewed ({now_local()}).")
     missed = missed_slots()
     if missed:
         raise_alert("Bot alert: missed posts",
@@ -286,7 +319,7 @@ def health():
                     "failed (look for a separate alert). Content calendar runs: "
                     f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{os.environ.get('GITHUB_REPOSITORY')}"
                     "/actions/workflows/calendar.yml", quiet_hours=20)
-    print("Problems:", len(problems), "token,", len(missed), "missed slots")
+    print("Problems:", len(problems), "Instagram token,", int(bool(dash)), "dashboard token,", len(missed), "missed slots")
 
 
 if __name__ == "__main__":
