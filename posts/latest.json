@@ -1,99 +1,41 @@
 {
   "day": "2026-11-26",
-  "folder": "2026-11-26_014218",
-  "topic": "Financial planning for wedding celebrations",
-  "template": "reel",
+  "folder": "2026-11-26_093821",
+  "topic": "Budgeting for hobbies and entertainment releases",
+  "template": "arches",
   "content_type": "general trends",
-  "hook_style": "direct question",
-  "topic_area": "financial goals and planning",
+  "hook_style": "relatable everyday situation",
+  "topic_area": "budgeting",
   "angle": "general trends",
-  "format": "reel",
-  "hook": "Love the giant bubble entrance? Check budgets.",
-  "local_day": "2026-11-26",
   "trend": {
-    "id": "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
-    "headline": "Giant Bubble Wedding Entry",
-    "source": "India Today",
-    "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPUENrdkRLdEdrR3BjLWlmQWJwZThSX21QRWdERTJmNmV0UDBhTWJHM2pHdlJDenBIcVBvWjc4SFJJVE9sejBCcmVkLXBLV1cyal9VVWZ2R0E2Z3AzSERnQU9UbXc4RHU5R3NKUl9VMUJiazZwdjdDUFd0bm54M1hBZzZ3VG44ZzdWSWYycUdMY01nN000ekhKa0J6WFd2dGY5Yjl4a1ZoNDRaTWd1b291azhFdWVUSDN4NzBVOXNVT2laLWd3M2swR3RzVWNMVnpCZG1SVHlFMEFrbVFmTVhR0gHfAUFVX3lxTE9QQ2t2REt0R2tHcGMtaWZBYnBlOFJfbVBFZ0RFMmY2ZXRQMGFNYkczakd2UkN6cEhxUG9aNzhIUklUT2x6MEJyZWQtcEtXVzJqX1VVZnZHQTZncDNIRGdBT1RtdzhEdTlHc0pSX1UxQmJrNnB2N0NQV3RubngzWEFnNndUbjhnN1ZJZjJxR0xjTWc3TTR6SEprQnpYV3Z0ZjliOXhrVmg0NFpNZ3Vvb3VrOEV1ZVRIM3g3MFU5c1VPaVotZ3czazBHdHNVY0xWekJkbVJUeUUwQWttUWZNWFE?oc=5",
-    "published": "2026-11-25T07:00:49+00:00",
+    "id": "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri",
+    "headline": "Grand Theft Auto VI release",
+    "source": "Mashable",
+    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBnN1lhcDNoaHpBZUNTNTNTMnVfbnptakJ5bWRkX3BRSk5FNThhbUltZ09keVpNcmJqSnVZaXNOSVlPVy1xb1dDblNnU3h6V0wxTF9vMWtJX2VqbDRxRUZ4ZnhjdjlwV09O?oc=5",
+    "published": "2026-11-25T18:17:31+00:00",
     "format": "general trends"
   },
-  "slot": "morning",
-  "post_time": "08:30",
+  "hook": "Things that make sense: budgeting for your hobbies",
+  "format": "carousel",
+  "local_day": "2026-11-26",
+  "slot": "midday",
+  "post_time": "13:00",
   "plan_reasons": {
     "angle": "testing general trends posts (25% of posts until there is data)",
     "content_type": "testing (working for similar accounts)",
     "hook_style": "testing (least tried)",
-    "topic_area": "from the trend: Giant Bubble Wedding Entry",
-    "template": "testing (rotation)",
-    "format": "chosen by hand"
+    "topic_area": "from the trend: Grand Theft Auto VI release",
+    "template": "testing (rotation)"
   },
-  "caption": "Grand wedding entrances are fun, but your post-wedding finances deserve the spotlight. Use these steps to align your celebration with your financial goals: \n\n1. Set a total, realistic budget. \n2. Prioritize what matters most to you.\n3. Research actual costs before booking.\n4. Stick to your category limits.\n\nBuilding a plan keeps your future goals on solid ground. Follow RXT for better financial health. \n\n#RXTFinancial #WeddingBudget #MoneyTips #FinancialPlanning #SmartSpending #PersonalFinanceIndia\n\nEducational content only. This is not personalised financial advice.",
-  "cover_ms": 1200,
-  "render": {
-    "duration": 31.4,
-    "tts": "edge",
-    "music": "generated",
-    "cover_ms": 1200,
-    "broll": [],
-    "seed": 1002746471,
-    "timeline": [
-      {
-        "type": "hook",
-        "start": 0.0,
-        "end": 3.563,
-        "theme": "dark"
-      },
-      {
-        "type": "statement",
-        "start": 3.563,
-        "end": 7.435,
-        "theme": "light"
-      },
-      {
-        "type": "compare",
-        "start": 7.435,
-        "end": 11.096,
-        "theme": "dark"
-      },
-      {
-        "type": "list",
-        "start": 11.096,
-        "end": 15.783,
-        "theme": "light"
-      },
-      {
-        "type": "counter",
-        "start": 15.783,
-        "end": 21.023,
-        "theme": "accent"
-      },
-      {
-        "type": "statement",
-        "start": 21.023,
-        "end": 25.587,
-        "theme": "dark"
-      },
-      {
-        "type": "cta",
-        "start": 25.587,
-        "end": 31.435,
-        "theme": "dark"
-      }
-    ]
-  },
-  "quality": {
-    "scores": {
-      "hook": 8.0,
-      "readability": 9.0,
-      "pacing": 9.0,
-      "audio": 9.0,
-      "value": 9.0,
-      "polish": 9.0,
-      "average": 8.8
-    },
-    "problems": []
-  },
-  "run_id": "45737052568",
-  "posted": true
+  "caption": "Big entertainment releases break records, but they do not have to break your monthly budget. \ud83c\udfae\n\nWith GTA 6 drawing 39 million players as the biggest launch in PlayStation history, hype can easily lead to surprise expenses. Setting up a dedicated sinking fund for your personal hobbies lets you enjoy the things you love without draining your essential savings. \ud83d\udca1\n\nWhat is one hobby you love setting aside money for each month?\n\nSave this for later and share it with someone who needs it.\n#FinancialHealth #BudgetingTips #SmartMoneyHabits #SinkingFunds #MoneyManagement #PersonalFinanceBasics #GTA6\n\nEducational content only. This is not personalised financial advice.",
+  "urls": [
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_1.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_2.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_3.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_4.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_5.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_6.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_093821/slide_7.jpg"
+  ],
+  "posted": false
 }

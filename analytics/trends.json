@@ -1,128 +1,31 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-26T01:42:17+00:00",
-  "candidates": 168,
-  "picks": [
-    {
-      "id": "retail-inflation-likely-to-stay-elevated-in-november-as-food",
-      "kind": "news",
-      "headline": "Retail inflation likely to stay elevated in November as food prices remain high: RBI bulletin - The Indian Express",
-      "source": "The Indian Express",
-      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNN2hUelFjV0x1ZVY4ejFQSF9RV3lqSV9kUDJ2YTdmOGpRR2YyRHBycm5vUkllWDl0R3RwUmJxOFB4RUlLTzVjU256MzNJcTdxd05KWkpMeXhpbnF2dWdwaTNDeFEwMFZWdGdsV0RxenhsU2Zpckp2dUVMX2E5ZXFzVlNvUW5qZEp2ZDNadGN4MG5RSU0tREVSWmVDQ0tjQlhtSmfSAagBQVVfeXFMTURxLWJZNGJ3bGdfU1NMOU1Edmg1UVlRU2JFSjZ1TjNNdWltTW1MVnViSER3QmJ2dmk1SGlxU0h0OS1HTk9CWC1kSkxwRENUU1dTYzNfNnlsdW1wNU9zVE5vdzlmaWZRbl9aTHdVeF8wQU1IY1hkczBtWUcwdjFkU3FVamsxcUN1bmtXdVZLVHZfZlFIM0JPXy1WU2NrNUYyV21QVGNoLS1J?oc=5",
-      "published": "2026-11-25T16:43:18+00:00",
-      "topic_area": "budgeting",
-      "angle": "When general retail inflation stays high, focus on reviewing your fixed monthly expenses to see where you can trim non-essential spending.",
-      "facts": [
-        "Retail inflation likely to stay elevated in November",
-        "Food prices remain high"
-      ],
-      "avoid": "Do not predict future inflation rates or suggest specific investments to beat inflation.",
-      "relevance": 5,
-      "evergreen_ok": true,
-      "format": "lesson"
-    },
-    {
-      "id": "fixed-deposit-rates-suryoday-small-finance-bank-offers-8-25",
-      "kind": "news",
-      "headline": "Fixed deposit rates: Suryoday Small Finance Bank offers 8.25% on 5-year FDs; compare rates at SBI, HDFC Bank and others - Livemint",
-      "source": "Livemint",
-      "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxQRE82VlRHSlZtNjZiTVd6bjhpTkJXUDd1MUxEVUhxOFhxUkxmWktDV1pjSmFGRGVXdVpqcjZuUzdSN3hZYjd1MnVQbjg4QUxPa2RLbXZfaFg5T0lUNHB1MUVtaXA2bV9mc2dReER6cnQtTkpSVUUwNWtCYmtpT216MHhCZ2xBQjdmZ0lzaHpyZml6eW04dlJlaVVFMDVTbkV3dUdNVGxINFVsNXp5RFM0c3phY3EzR3laVUpmVDFmd2ZJY2RNaGJvUXpCdU8tWEkycGtPSy01YTdkVUMwQi1Ib2dLUks1eFRKV3hueHNfaFlObk9rU1lOZUZsMUU4UHgzbTAyYVBkQUhQSFFSOUJhdNIBlgJBVV95cUxNX0lTNGxtUWxLSU1ibDA2YklabEZyOXFEWm1qYUVocjItMk9xYmtvMmNDSFFET1ZLbWZnSkRiN2xXU3FaSUxZM2p0NGpuTWRWdGZoVkRlVmhWSkdQZ0pmajhMNk9ubEJVbWFaTzlySGI3TG1uZ3VZTzlhNFJZcE02NG1lUlN1RjlwcWVmU2FhWUozTF9IUlZMeFVDcHBUbFRETDZNcldHTkVnTnlSTXQxZlNudHBTWjNZa2V5ekhKYUFNck9EUDNlSi1OM19HUjVYOTBFWVJrd3FTMWZJOEM0eGdrWDBLb0YtekJTRlJXVTd0UENveUZxM0ZsalVmeGtQRG50WUIwMmhTVlY3SUhmZS0xd0poUQ?oc=5",
-      "published": "2026-11-25T18:10:11+00:00",
-      "topic_area": "saving",
-      "angle": "When comparing different savings options, always look at the interest rate offered for the specific duration you intend to keep your money locked.",
-      "facts": [
-        "Fixed deposit rates: Suryoday Small Finance Bank offers 8.25% on 5-year FDs",
-        "Compare rates at SBI, HDFC Bank and others"
-      ],
-      "avoid": "Do not suggest that higher rates are always better or name specific banks as a recommendation to open an account.",
-      "relevance": 4,
-      "evergreen_ok": true,
-      "format": "lesson"
-    },
-    {
-      "id": "uttarakhand-motorists-can-now-pay-traffic-e-challans-via-bha",
-      "kind": "news",
-      "headline": "Uttarakhand motorists can now pay traffic e-challans via Bharat Connect - CNBC TV18",
-      "source": "CNBC TV18",
-      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOVlVZUWFjR3ZCRWdyLUVBcWpxR0oyY1hKaW16UVc2UFpBTlk1UFR6c0tqNWxkZmxUb1JNT0ZWMmNMZTlRNVZCTDNfRTVmblpoOWZTamNwbmF0QS1JUE9Rc1FwQi1qSnJ2Zk5zQXFtTC1EWW9TUkJWT0JKWG9yaHNIX1E5WXNiMXNMWGlvOE9zQ2g1NlV5UWRaNno0Zm1ZbzNDQTBJaElqZHNYWnRzQnRTUjVmVXpmMW5ZZFJnemg1RzZkOFox0gHKAUFVX3lxTE9QOUtCLUFHUXpUdi1NVFpqZ0x1enlCcEhhYXlUbDVqNVFESGF0a2VLZVhuNEhEMUZldHFNZElpczBHa0pGYXdCTGR2ZUNUYmNoTmVqaVRHU1hsWW5fTms2ODRWdnpnV21tY1MxVDRrNEZqTlpyaGVscUVJQjlwbjFORkx5djRINlZ4a0VfSTl1Ni1PaUk1UWFRZE5WV3Y3X29sYkJpTHFaWGg4bkxTTVdUYjJZajByNkNVVFB3cnhkbVBWejZhVUVSWHc?oc=5",
-      "published": "2026-11-25T10:00:32+00:00",
-      "topic_area": "money habits and mindset",
-      "angle": "Utilizing digital payment platforms for official dues helps maintain a clean, traceable record of your financial transactions.",
-      "facts": [
-        "Uttarakhand motorists can now pay traffic e-challans via Bharat Connect"
-      ],
-      "avoid": "Do not recommend specific payment apps or imply that digital payments are immune to fraud.",
-      "relevance": 3,
-      "evergreen_ok": true,
-      "format": "lesson"
-    }
-  ],
-  "general_candidates": 71,
+  "updated": "2026-11-26T09:29:59+00:00",
+  "candidates": 198,
+  "picks": [],
+  "general_candidates": 123,
   "general_picks": [
     {
-      "id": "gt-pinkvilla-predicts-first-day-box-office-forecast-for-aven",
+      "id": "gt-sbi-clerk-mains-exam",
       "kind": "general",
       "format": "general trends",
-      "headline": "Blockbuster Movie Advance Bookings",
-      "story": "Pinkvilla Predicts: First day box office forecast for Avengers Doomsday, final update for Yeh Prem Mol Liya and Gunmaaster G9 - Pinkvilla",
-      "source": "Pinkvilla",
-      "link": "https://news.google.com/rss/articles/CBMijwJBVV95cUxOZVNNbUYzUDVrYWxvUndqTmozeDAzM0dBQ3pzMndBcVJXVEFiVlBGY2podl9QcHNVbUtaeHByQmpka00xM3BVcERJdjh1MVBUVDZRZTBiaWJwN1ZtWmFFR3E5SHhYNklEaVpLbWhnZzE5LTZnRXZfY1F1ZlAxd1hfODhmYWEycmh2cUNuRHVXTmY2RFN0TWhFRzlGQVYxWkZPYzNvWEo5TTctUVViQi1GbHIxdWg5VkFnaW9sUl9iRGFEN1Vqai1zZ1pmaGp5c3ZHMHphNDQzSllHajNfMFZwUzhqbU5UcUtLUllXN2hBcWFJdFRyeHB0NXllUkZtbWNzaHhJZ2J0dlBLV1BDalp30gGUAkFVX3lxTE9adzZobVFrMzk3YUhPSjd5bndXWTctalE4VUF3b3hNRDFJNW9tVWlVQnNKelhBRjRjMWQzb2ZJMGszaTY1SWxiRkw1TXVYRmRGSTJUTDBoQ0Q2c05yRFh6WjR6NU5LVldENGI0VUFOTWNSd05DWk5TMnY5a2RVNlJsVHZnN2NuNVotSWU1N2dtVGktN0sweURZbExwQnVva2p3Q05taG0wc1Y1bVdsOWh0QURUWEZlOGlMRjlOdXZKaHN6M2JMcmZjdmdmR25rTmFnMGVoQ2FyeUE1X0tCZE50N1l5a2ZyWC1RcmZjVWh5cFFSYkxPU3Q3T1hnd0lDRENJVXlNMldJalhYWHJoU2dGeVpCbw?oc=5",
-      "published": "2026-11-24T14:31:22+00:00",
-      "traffic": "",
-      "topic_area": "budgeting",
-      "why_popular": "Advance bookings surged across India with over 9.5 lakh tickets sold ahead of the release.",
-      "bridge": "Just like reserving your movie ticket ahead of time, planning a fun fund in your monthly budget lets you enjoy blockbusters without guilt.",
-      "hook": "Booking blockbuster tickets without wrecking your monthly budget",
-      "meme_format": "POV: ...",
+      "headline": "SBI Clerk exam preparation",
+      "story": "sbi clerk mains exam",
+      "source": "Google Trends",
+      "link": "https://trends.google.com/trending/rss?geo=IN",
+      "published": "2026-11-26T00:20:00-08:00",
+      "traffic": "1000+",
+      "topic_area": "financial goals and planning",
+      "why_popular": "Thousands of aspirants are searching for last-minute tips and strategies for the upcoming banking recruitment exam.",
+      "bridge": "A successful exam strategy is like a financial plan—break your long-term goal into small, manageable study sections to stay on track.",
+      "hook": "Exam prep or financial planning? It’s all strategy.",
+      "meme_format": "If ... were a money habit",
       "facts": [
-        "Avengers: Doomsday sold over 9.5 lakh tickets in India in advance bookings."
+        "SBI is hiring 1,540 junior associates.",
+        "Candidates are currently looking for section-wise study strategies."
       ],
-      "avoid": "Do not endorse the film, criticize ticket prices, or suggest eliminating entertainment spending entirely.",
+      "avoid": "Do not imply that passing an exam is a guaranteed path to wealth or comment on bank jobs as a career choice.",
       "relevance": 4,
-      "fun": 4
-    },
-    {
-      "id": "gt-desi-batman-trend-goes-viral-how-to-create-the-instagram",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Desi Batman Viral Reels",
-      "story": "Desi Batman Trend Goes Viral: How to Create the Instagram Reel Using AI - News18",
-      "source": "News18",
-      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNcGszYlltYVVMV3M3OVc3TE4zNFVnVVhWOGxLVWhmSjBuTUlWMmJrYVBlYjJfeWgyYWdRcVlpczI1NnNoWFlhWnNoa3RMUTdSd0Jpbm5ySGctZXczRTVQT1RHbWxnZXdjOG5pcFNTc3BCbDNpWS1kbHZtSWVHMzNmZ2V4RXotRnlSTzFRNkJPVVd5SkNDaE85emJnSHJ4MmJFSDFPNkRYUHlZSk1INDVmSk1n0gG3AUFVX3lxTE8xWmJpTDFfWFk3VVV5clJNSXF2d0VnUzZxeXVHLWhVRVltXzc4VFBkaU5RV2swM3h1SGNVdnpvb3BrcS1icGs2TmVKNjJ3NVA5bmFhelVLaUgtWDg2cUdHSjNHMWxnaEhBdGFtaWVXU2J4RmZKNzdFTHpyUm5nY21HNTlHdGlJd1dUdW9KYVFRQ2lfQWc4b0o2T2h5RnhITXZNbDVKWUFTVWlqNmZrdGItT2JVMXFJYw?oc=5",
-      "published": "2026-11-23T12:42:58+00:00",
-      "traffic": "",
-      "topic_area": "money habits and mindset",
-      "why_popular": "The AI-assisted 'Saajan Saajan Desi Batman' reel trend has gone viral across Indian social media feeds.",
-      "bridge": "Strutting like a superhero is fun online, but becoming financially secure comes from the unglamorous habit of tracking your monthly expenses.",
-      "hook": "When you feel like a financial superhero on payday",
-      "meme_format": "Main character energy",
-      "facts": [
-        "The Desi Batman trend went viral as an Instagram reel created using AI."
-      ],
-      "avoid": "Do not mock content creators, promote AI editing apps, or mention individual names.",
-      "relevance": 4,
-      "fun": 4
-    },
-    {
-      "id": "gt-women-s-asian-champions-trophy-2026-hockey-india-blank-ja",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Hockey Team Clean-Sheet Win",
-      "story": "Women's Asian Champions Trophy 2026 hockey: India blank Japan to set up semi-final against Malaysia - Olympics",
-      "source": "Olympics",
-      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOMzdHMUYyQ051b1kzMlY4NUk4NXNnOE0wMGxJVTJNVHpBYmg3bkhEd3lLbnJjMGc1Rm9qWXlDNHY3cnJTamZxTHFzYmdBX3lMTDRVbF84RGUwbzdNaWhEZWI0emk3S2hpdmR5V0F3ampZM2JZNDZsdjU3R1ZXTzFzWk1CN2lPamo3ejRmb3hEb095M0U2amtFSjBYS29iM0ZmXzFOUlJQdld2RGpa?oc=5",
-      "published": "2026-11-25T17:40:00+00:00",
-      "traffic": "",
-      "topic_area": "emergency fund",
-      "why_popular": "The Indian women's hockey team shut out Japan 4-0 to reach the tournament semi-finals.",
-      "bridge": "Just like maintaining a strong defence line keeps the opposition scoreless, a 3-month emergency fund shields your life from unexpected curveballs.",
-      "hook": "Why your finances need an unbeatable defence line",
-      "meme_format": "Things that just make sense",
-      "facts": [
-        "India blanked Japan to set up a semi-final against Malaysia in the Women's Asian Champions Trophy."
-      ],
-      "avoid": "Do not shame people who lack savings or make aggressive sports commentary.",
-      "relevance": 3,
       "fun": 3
     }
   ],
@@ -361,15 +264,10 @@
     "looked_at": 120
   },
   "errors": [
-    "Wikipedia most-read failed: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/2026/11/25",
-    "Competitor @finshots: Invalid user id",
-    "Hashtag #personalfinance: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #moneytips: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #financialliteracy: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #budgeting: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #savingmoney: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)"
+    "Gemini trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
   ],
   "used": [
-    "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi"
+    "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
+    "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"
   ]
 }

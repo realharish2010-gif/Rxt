@@ -32,5 +32,27 @@
     },
     "slot": "morning",
     "post_time": "08:30"
+  },
+  {
+    "day": "2026-11-26",
+    "topic": "Budgeting for hobbies and entertainment releases",
+    "template": "arches",
+    "content_type": "general trends",
+    "hook_style": "relatable everyday situation",
+    "topic_area": "budgeting",
+    "angle": "general trends",
+    "trend": {
+      "id": "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri",
+      "headline": "Grand Theft Auto VI release",
+      "source": "Mashable",
+      "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBnN1lhcDNoaHpBZUNTNTNTMnVfbnptakJ5bWRkX3BRSk5FNThhbUltZ09keVpNcmJqSnVZaXNOSVlPVy1xb1dDblNnU3h6V0wxTF9vMWtJX2VqbDRxRUZ4ZnhjdjlwV09O?oc=5",
+      "published": "2026-11-25T18:17:31+00:00",
+      "format": "general trends"
+    },
+    "hook": "Things that make sense: budgeting for your hobbies",
+    "format": "carousel",
+    "local_day": "2026-11-26",
+    "slot": "midday",
+    "post_time": "13:00"
   }
 ]
