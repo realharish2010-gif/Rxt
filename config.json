@@ -17,7 +17,7 @@
   "trends": {
     "share": 0.3,
     "max_age_days": 3,
-    "competitors": [],
+    "competitors": ["finshots", "economictimes", "moneycontrolcom", "labourlawadvisor", "zerodhaonline"],
     "hashtags": ["personalfinance", "moneytips", "financialliteracy", "budgeting", "savingmoney"]
   },
   "colors": {
