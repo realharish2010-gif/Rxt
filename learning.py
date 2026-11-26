@@ -50,7 +50,9 @@ DEFAULTS = {
     ],
 }
 DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "topic_area": "topic_areas"}
-ANGLES = ["evergreen", "trend-tied"]  # trend-tied = prompted by news or a search trend (trends.py)
+# trend-tied = prompted by money news or a search trend; general trends = rides a popular
+# non-finance trend, meme or hook in a fun, casual tone (both from trends.py)
+ANGLES = ["evergreen", "trend-tied", "general trends"]
 TAGS = (*DIMENSIONS, "angle", "trend")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
           "template": "Template", "angle": "Angle"}
@@ -288,22 +290,27 @@ def choose(dim, options, history, posts, avoid=None, explore_pick=None, hints=No
     return random.choice([o for o in pool if counts[o] == fewest]), "testing (least tried)"
 
 
-def choose_angle(posts, trend_share, have_trend):
-    """Tie this post to a news/search trend, or keep it evergreen. Starts at the configured
-    share; once both kinds have enough measured posts, the better one is used most days."""
-    if not have_trend:
+def choose_angle(posts, shares, available):
+    """Evergreen, tied to a news/search trend ("trend-tied"), or riding a popular non-finance
+    trend ("general trends"). `shares` = {angle: share of days} for the non-evergreen angles;
+    `available` = the angles that have a safe trend today. Starts at the configured shares;
+    once every available angle has enough measured posts, the best one is used most days."""
+    avail = ["evergreen"] + [a for a in ANGLES[1:] if a in available]
+    if len(avail) == 1:
         return "evergreen", "no safe trend available today"
     s = settings()
-    rows = {r[0]: r for r in ranking(posts, "angle") if r[2] >= s["min_per_option"]}
-    if len(rows) == 2:
+    rows = {r[0]: r for r in ranking(posts, "angle") if r[2] >= s["min_per_option"] and r[0] in avail}
+    if len(rows) == len(avail):
         best = max(rows.values(), key=lambda r: r[1])
         if random.random() >= s["explore_rate"]:
             return best[0], f"best so far ({best[1]:.2f}x typical over {best[2]} posts)"
-        other = next(a for a in ANGLES if a != best[0])
-        return other, "testing"
-    if random.random() < trend_share:
-        return "trend-tied", f"testing timely posts ({trend_share:.0%} of days until there is data)"
-    return "evergreen", "evergreen most days until there is data on timely posts"
+        return random.choice([a for a in avail if a != best[0]]), "testing"
+    roll, acc = random.random(), 0.0
+    for a in avail[1:]:
+        acc += shares.get(a, 0)
+        if roll < acc:
+            return a, f"testing {a} posts ({shares.get(a, 0):.0%} of days until there is data)"
+    return "evergreen", "evergreen most days until there is data on trend posts"
 
 
 def plan(history, templates, explore_template, trend_info=None):
@@ -316,15 +323,19 @@ def plan(history, templates, explore_template, trend_info=None):
     trend_info = trend_info or {}
     hints = trend_info.get("patterns", {}).get("hints", {})
     picks = trend_info.get("picks") or []
+    general = trend_info.get("general_picks") or []
+    shares = {"trend-tied": trend_info.get("share", 0.3), "general trends": trend_info.get("general_share", 0.2)}
+    available = [a for a, ok in (("trend-tied", picks), ("general trends", general)) if ok]
     out, why = {}, {}
-    out["angle"], why["angle"] = choose_angle(posts, trend_info.get("share", 0.3), bool(picks))
+    out["angle"], why["angle"] = choose_angle(posts, shares, available)
     out["trend"] = None
     for dim, key in DIMENSIONS.items():
         out[dim], why[dim] = choose(dim, s[key], history, posts, hints=hints.get(dim),
                                     avoid=last.get(dim) if dim == "topic_area" else None)
-    if out["angle"] == "trend-tied":
+    if out["angle"] != "evergreen":
         # prefer a trend in the planned topic area, else the most relevant one
-        pick = next((p for p in picks if p["topic_area"] == out["topic_area"]), picks[0])
+        pool = picks if out["angle"] == "trend-tied" else general
+        pick = next((p for p in pool if p["topic_area"] == out["topic_area"]), pool[0])
         out["trend"], out["topic_area"] = pick, pick["topic_area"]
         why["topic_area"] = f"from the trend: {pick['headline'][:80]}"
     out["template"], why["template"] = choose("template", templates, history, posts,

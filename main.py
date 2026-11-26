@@ -39,11 +39,11 @@ DEFAULT_CAPTION_STYLE = (
 GRAPH = os.environ.get("IG_GRAPH", "https://graph.facebook.com/v27.0")  # check Meta docs for the current version
 
 
-def ask_gemini(past, learnings=""):
+def ask_gemini(past, learnings="", voice=None):
     n = CFG["slides"]
     prompt = f"""You write Instagram carousels for {CFG['brand']}.
 Business and audience: {CFG['niche']}
-Voice: {CFG['voice']}
+Voice: {voice or CFG['voice']}
 Rules: {CFG.get('rules', '')}
 Topics already covered (do not repeat): {past[-40:]}
 
@@ -186,24 +186,29 @@ def published_log():
 
 
 def write_carousel(history, chosen, notes):
-    """Gemini writes the carousel. A news-tied post is fact-checked by a second Gemini pass
-    and rewritten with the problems listed; if it still fails, the post becomes evergreen."""
+    """Gemini writes the carousel. A trend-tied post gets a second Gemini pass (a fact-check
+    for news, a rules/taste/accuracy check for general trends) and is rewritten with the
+    problems listed; if it still fails, the post becomes evergreen."""
     trend = chosen.get("trend")
-    if trend and trend.get("format") == "news content":
-        chosen["content_type"] = "news content"
+    general = bool(trend) and trend.get("format") == "general trends"
+    if trend and trend.get("format") in ("news content", "general trends"):
+        chosen["content_type"] = trend["format"]
     feedback = ""
     for check_round in range(3 if trend else 1):
         learnings = learning.prompt_block(chosen)
-        if trend:
+        if general:
+            learnings += "\n\n" + trends.general_prompt_block(trend, CFG["slides"]) + feedback
+        elif trend:
             learnings += "\n\n" + trends.prompt_block(trend, CFG["slides"]) + feedback
         if notes:
             learnings += ("\n\nOpening and format techniques working for similar finance accounts right now "
                           "(borrow the technique only, never their content or claims):\n"
                           + "\n".join(f"- {n}" for n in notes[:5]))
+        voice = trends.general_settings().get("voice") if general else None
         data = None
         for attempt in range(6):
             try:
-                data = ask_gemini([h["topic"] for h in history], learnings)
+                data = ask_gemini([h["topic"] for h in history], learnings, voice)
                 break
             except Exception as e:  # bad JSON, rate limit, wrong slide count
                 print(f"Gemini attempt {attempt + 1} failed: {e}")
@@ -212,21 +217,23 @@ def write_carousel(history, chosen, notes):
             sys.exit("Could not generate a carousel")
         if not trend:
             return data
+        check = trends.vibe_check if general else trends.fact_check
         try:
-            ok, problems = trends.fact_check(data, trend, gemini_json)
+            ok, problems = check(data, trend, gemini_json)
         except Exception as e:
-            ok, problems = False, [f"fact-check could not run: {e}"]
+            ok, problems = False, [f"review could not run: {e}"]
         if ok:
-            print("Fact-check passed")
+            print("Review passed")
             return data
-        print("Fact-check failed:", problems)
-        feedback = ("\n\nA fact-checker rejected the previous draft for these reasons; fix all of them:\n"
+        print("Review failed:", problems)
+        feedback = ("\n\nA reviewer rejected the previous draft for these reasons; fix all of them:\n"
                     + "\n".join(f"- {x}" for x in problems))
-    # still failing: drop the news angle and write an evergreen post in the same topic area
-    print("::warning::News post still failed the fact-check after two rewrites, writing an evergreen post instead")
+    # still failing: drop the trend and write an evergreen post in the same topic area
+    print(f"::warning::{trend.get('format', 'Trend')} post still failed review after two rewrites, "
+          "writing an evergreen post instead")
     trends.mark_used(trend["id"])
     chosen.update(angle="evergreen", trend=None)
-    if chosen["content_type"] == "news content":
+    if chosen["content_type"] in ("news content", "general trends"):
         chosen["content_type"] = "simple explainer"
     return write_carousel(history, chosen, notes)
 
@@ -243,6 +250,7 @@ def generate():
     trend_info = trends.current()
     if trend_info:
         trend_info["share"] = trends.settings()["share"]
+        trend_info["general_share"] = trends.general_settings()["share"]
     chosen, why = learning.plan(history, available_templates(), lambda: pick_template(history), trend_info)
     forced_tpl = os.environ.get("TEMPLATE", "").strip()
     if forced_tpl:
