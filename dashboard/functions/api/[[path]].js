@@ -159,7 +159,9 @@ const routes = {
     return json({ insights, published, learning: config.learning || {}, schedule: config.schedule || {}, liveEnabled: liveEnabled(env) });
   },
 
-  // Live Instagram numbers for recent posts (only if IG_TOKEN and IG_USER_ID are set).
+  // Live follower count (only if IG_TOKEN and IG_USER_ID are set). One Instagram call at most every
+  // 30 minutes per server instance; per-post numbers come from the bot's 3-day measurements instead,
+  // to keep Instagram traffic low (Harish asked, 2026-11-27).
   "GET /api/live": async ({ env }) => {
     if (!liveEnabled(env)) return json({ enabled: false, posts: {} });
     return json(await liveNumbers(env));
@@ -364,7 +366,7 @@ async function findReelArtifact(env, runId, folder) {
 const liveCache = { at: 0, value: null };
 
 async function liveNumbers(env) {
-  if (liveCache.value && Date.now() - liveCache.at < 10 * 60e3) return liveCache.value;
+  if (liveCache.value && Date.now() - liveCache.at < 30 * 60e3) return liveCache.value;
   const graph = env.IG_GRAPH || "https://graph.facebook.com/v27.0";
   const get = async (path, params) => {
     const u = new URL(`${graph}/${path}`);
@@ -381,26 +383,6 @@ async function liveNumbers(env) {
   } catch (e) {
     out.errors.push(`account: ${e.message}`);
   }
-  let media = [];
-  try {
-    media = (await get(`${env.IG_USER_ID}/media`, { fields: "id,timestamp,media_type,permalink,like_count,comments_count", limit: "30" })).data || [];
-  } catch (e) {
-    out.errors.push(`media: ${e.message}`);
-  }
-  await Promise.all(media.map(async (m) => {
-    const row = { timestamp: m.timestamp, permalink: m.permalink, media_type: m.media_type, likes: m.like_count, comments: m.comments_count };
-    for (const metrics of ["reach,saved,shares,views", "reach,saved,shares"]) {
-      try {
-        for (const x of (await get(`${m.id}/insights`, { metric: metrics })).data || []) {
-          row[x.name] = x.values ? (x.values[0] || {}).value : x.total_value?.value;
-        }
-        break;
-      } catch (e) {
-        if (metrics === "reach,saved,shares") out.errors.push(`${m.id}: ${e.message}`);
-      }
-    }
-    out.posts[m.id] = row;
-  }));
   out.errors = out.errors.slice(0, 5);
   out.fetched_at = new Date().toISOString();
   liveCache.at = Date.now();

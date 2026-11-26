@@ -97,24 +97,15 @@ def account_reach(start, end):
 
 
 def token_check(problems):
-    """Is the token alive and does it have the permissions the bot uses?"""
+    """Is the token alive? One ordinary account read, which the recap needs anyway for the
+    follower count. (The token's permission list is not looked up: Harish asked on 2026-11-27
+    to keep token-inspection calls out of monitoring.)"""
     try:
-        me = learning.graph_get(os.environ["IG_USER_ID"], fields="username,followers_count")
+        return learning.graph_get(os.environ["IG_USER_ID"], fields="username,followers_count")
     except learning.GraphError as e:
         problems.append(f"**Instagram token problem:** Instagram refused a basic request ({e}). "
                         "Posting and measuring will fail until IG_TOKEN is replaced.")
         return None
-    try:
-        perms = learning.graph_get("me/permissions").get("data", [])
-        granted = {p["permission"] for p in perms if p.get("status") == "granted"}
-        missing = [p for p in ("instagram_basic", "instagram_content_publish", "instagram_manage_insights")
-                   if granted and p not in granted]
-        if missing:
-            problems.append("**Instagram token is missing permissions:** " + ", ".join(missing)
-                            + ". Generate a new token that includes them.")
-    except learning.GraphError:
-        pass  # some token types cannot list their permissions; the calls above still prove it works
-    return me
 
 
 def week_posts(start, end, log, problems):
