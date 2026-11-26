@@ -119,5 +119,27 @@
     "local_day": "2026-11-26",
     "slot": "extra",
     "post_time": "19:58"
+  },
+  {
+    "day": "2026-11-26",
+    "topic": "Protecting yourself from financial impersonation",
+    "template": "arches",
+    "content_type": "step-by-step how-to",
+    "hook_style": "surprising but true fact",
+    "topic_area": "money habits and mindset",
+    "angle": "trend-tied",
+    "trend": {
+      "id": "caution-to-investors-regarding-impersonation-of-sebi-registe",
+      "headline": "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms",
+      "source": "SEBI",
+      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html",
+      "published": null,
+      "format": "lesson"
+    },
+    "hook": "Most financial scams rely on one simple trick",
+    "format": "carousel",
+    "local_day": "2026-11-26",
+    "slot": "extra",
+    "post_time": "20:01"
   }
 ]

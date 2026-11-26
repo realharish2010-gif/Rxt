@@ -1,42 +1,8 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-26T14:29:42+00:00",
-  "candidates": 194,
+  "updated": "2026-11-26T14:35:26+00:00",
+  "candidates": 137,
   "picks": [
-    {
-      "id": "caution-to-investors-regarding-impersonation-of-sebi-registe",
-      "kind": "official",
-      "headline": "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms",
-      "source": "SEBI",
-      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html",
-      "published": null,
-      "topic_area": "money habits and mindset",
-      "angle": "Protect your money by verifying the identity of anyone offering financial services; never share personal documents or transfer funds through unofficial social media groups.",
-      "facts": [
-        "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms"
-      ],
-      "avoid": "Do not name specific platforms or people, and avoid creating fear-based content.",
-      "relevance": 5,
-      "evergreen_ok": true,
-      "format": "lesson"
-    },
-    {
-      "id": "advisory-regarding-unregulated-pre-listing-premium-often-cal",
-      "kind": "official",
-      "headline": "Advisory Regarding Unregulated Pre-listing Premium often called as Grey Market Premium (GMP) for Upcoming Initial Public Offers (IPOs)",
-      "source": "SEBI",
-      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/advisory-regarding-unregulated-pre-listing-premium-often-called-as-grey-market-premium-gmp-for-upcoming-initial-public-offers-ipos-_105942.html",
-      "published": null,
-      "topic_area": "money habits and mindset",
-      "angle": "Understand that 'Grey Market Premium' or pre-listing activity is unregulated and carries risks; base your financial decisions on official information, not informal market buzz.",
-      "facts": [
-        "Advisory Regarding Unregulated Pre-listing Premium often called as Grey Market Premium (GMP) for Upcoming Initial Public Offers (IPOs)"
-      ],
-      "avoid": "Do not give any advice on whether to participate in IPOs or trade in the grey market.",
-      "relevance": 4,
-      "evergreen_ok": true,
-      "format": "lesson"
-    },
     {
       "id": "credit-card-spending-surpasses-atm-cash-withdrawals-for-firs",
       "kind": "news",
@@ -44,42 +10,36 @@
       "source": "CNBC TV18",
       "link": "https://news.google.com/rss/articles/CBMitgJBVV95cUxNbEUweVpWc1FVNE1BSVdYekZBaHBlb1plNUxxM1JheE16NXFyenlTaVJ0OTJRYUFfLU9BVnczU1NYdzc0UlNRRUNWZXBycW1xQlVMZnJWVUpKMmhPbTRNU2VzeEltamR0NDNLcEZnaHZDODc3bjhzb0xqTVBzbk9YZnJmTkNiYm04M0o2d0Q3MkdaY0RSamt0c2VqYTFJUi1rZTNKRTd0YXpTREctaXp3cUR5MTFGVjRTZzVLbFFhWElaYlNUcTlzd0ZJaFhIYmtEb010bzUyejYzQVhKVmhWNFR1LXlDRzIxa29VVDdxa3BCV3FEMUlvUll4Q0F2S3NDR3gxbmVhV1ZEM2RkaXNETFVQbWNJcnNsYWoxQUFwRnRDTGFtNGUycGFNRmk3ejJ3UHVDT0ZB0gG7AkFVX3lxTE9CS2c0dG1hN2FFNHZwQlZiN2ZJLVlia3E1eHlxcHZIV2ZCSTJGakpYNlY4NGJtNjVIR2t6bVA3SzlXRUdTZ2dCN2dGYVJ3ejRfTG5LckJ6SVVTdERoRjYxS3I0c1YzM3A4a1p2VldqbXpSOW5QSGswbU5ESXhKdzlTWHUtelQ3RUNCLWN4d0xKQ01QYWpESzN3a2xESmtnQ3IzR2tfODhHc1RsMENGOVlrQXBKWWxadVp0Z1lxbFptRmo0OGd3WjhNdUxDSTlKd3lnbGF2XzF4Z2IwV3lXMWVKR2lSdkkyQ2s5S3l1UnNCUDhsVXZ3ZFJXVUY5Z0ZEYlpTaHZiaWdUX0c5c1RfOEF4Ul9nTU9tUHlyWXhSV2xLVGg1OFgxelkwUk1GOEwyX1ppWVJYcVY1U19KQQ?oc=5",
       "published": "2026-11-26T07:53:54+00:00",
-      "topic_area": "money habits and mindset",
-      "angle": "With credit card usage rising, remember that a card is a payment tool, not an extension of your income; always track your spending against your budget to avoid carrying debt.",
+      "topic_area": "credit",
+      "angle": "With credit card spending now exceeding cash withdrawals, it is a reminder to treat every card swipe like spending actual cash from your bank account.",
       "facts": [
         "Credit card spending surpasses ATM cash withdrawals for first time in India"
       ],
-      "avoid": "Do not imply that using credit cards is inherently bad or good, and do not provide advice on specific credit card products.",
-      "relevance": 5,
+      "avoid": "Do not imply that credit cards are inherently good or bad, and do not recommend specific cards.",
+      "relevance": 4,
+      "evergreen_ok": true,
+      "format": "news content"
+    },
+    {
+      "id": "fd-rates-up-to-8-25-which-banks-offer-the-highest-returns-in",
+      "kind": "news",
+      "headline": "FD rates up to 8.25%: Which banks offer the highest returns in India now? - Business Standard",
+      "source": "Business Standard",
+      "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNUXAtaVdVMjlYa0h1WV9kcWl1T2NZQldfd0VYTUo5TDFPS3lmWmRmREk4aHVERHVnNVN5djBFb3F1YmxHNzRjd2trd3o2dndueXhYWHdPejIwVnFRaEdtVUNuVDV1Yi1OdFpBOElicmhINHBWYW56WFhFeW9yalVIZERRYVlkc2EtdFRrbVo2X1FIWXZCdzNlb21DT2hPaFdxcmF3UVBTazZ4UHF2cXo4Y21Nd3B3c0t5b1JqN2hvUW5GdlpVYWhiRE9kNjhfNXpCYV8tdmMtMlBRQkVUczd6dE1Qb9IB6AFBVV95cUxPc1dIZ3J2M01RRmRoRDFVTFVHQzRXNlFSMGF1Wjg4d1FkTWlHckIxb2FPODFhdVU5RFVwMnB0NF8zcW16aFhETEp3MV9wU3ljSEI1b2trNGsxd09pNnBJWUJxVnI2N2w3WEpzVmlRcF91YkpQcC0zeENPQkM2UDNfaEQtMV9OSTcwcXFMc3A0UWcxa2NDY2ZUWmVfZjJ1TTFrMEpOM2NyQlQya1ZteFJKX2tGUXJLMkpMWFpmc0V0TWlOVzNBdGxNS3ZCMW5wNWd2NnlqOUVPZEg4WDR6X2FFZDJuM0JiWDVL?oc=5",
+      "published": "2026-11-26T10:12:37+00:00",
+      "topic_area": "saving",
+      "angle": "When interest rates for fixed deposits vary, focus on building an emergency fund that keeps your money accessible rather than chasing the highest return.",
+      "facts": [
+        "FD rates up to 8.25%"
+      ],
+      "avoid": "Do not name specific banks or promise specific investment returns.",
+      "relevance": 3,
       "evergreen_ok": true,
       "format": "lesson"
     }
   ],
-  "general_candidates": 120,
+  "general_candidates": 125,
   "general_picks": [
-    {
-      "id": "gt-gta-vi-sends-uk-games-retail-sales-soaring-99-to-142m-in",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Gaming Launch Hype",
-      "story": "​​​GTA VI sends UK games retail sales soaring 99% to £142m in launch week - NIQ",
-      "source": "NIQ",
-      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNWHl6eWRNbk50aDlONTVZTXZsaTFiTU03bjBPM2hfQndwakw0QjBjVGVBbDktckFsTmp3LXpMNUtIbFc3Z0NoZXJ1cTJKdUtpaklEYjg1RlNNekJLLWFEZ3htNndGa0NuaG5DUTlVbVNlQkVtMlIteGp2WjJSbFpLajlXdHZaRE8telJiVW02dWk1Q2pXWU9ONS1lbTQwd1h6LXhlMklfNGN3Q3hYY1RjYzdUaWtvRGlKN1E?oc=5",
-      "published": "2026-11-26T12:45:10+00:00",
-      "traffic": "",
-      "topic_area": "financial goals and planning",
-      "why_popular": "The highly anticipated release of a major video game has caused a massive spike in retail sales and social media engagement.",
-      "bridge": "Big releases are exciting, but planning for large purchases months in advance keeps your bank account as strong as your character's stats.",
-      "hook": "Main character energy, but make it financial.",
-      "meme_format": "Main character energy",
-      "facts": [
-        "The game launch led to a 99% surge in retail sales in its debut week.",
-        "It has reached millions of players, becoming a significant cultural phenomenon."
-      ],
-      "avoid": "Do not encourage overspending on entertainment or justify skipping essentials for luxury hobbies.",
-      "relevance": 5,
-      "fun": 5
-    },
     {
       "id": "gt-croma-black-friday-sale-iphone-16-iphone-17-pro-max-macbo",
       "kind": "general",
@@ -91,17 +51,40 @@
       "published": "2026-11-26T12:14:19+00:00",
       "traffic": "",
       "topic_area": "budgeting",
-      "why_popular": "Major retail platforms are running widespread discount campaigns on premium electronics like smartphones and MacBooks.",
-      "bridge": "Just because something is on sale doesn't mean it's in your budget; always check your savings before clicking 'buy'.",
-      "hook": "Is that sale price actually a budget win?",
+      "why_popular": "Major retail platforms are running significant discount events on popular electronics like smartphones and MacBooks.",
+      "bridge": "Just because something is on sale doesn't mean it fits your budget; always check if you have the funds before chasing a discount.",
+      "hook": "Seeing a 50% discount but your bank balance cries.",
       "meme_format": "Expectation vs reality",
       "facts": [
-        "Major retailers are offering significant discounts on iPhone and MacBook models.",
-        "Sales events are currently trending across multiple e-commerce platforms."
+        "Major retail platforms are offering discounts on premium smartphone models.",
+        "Sales events often include high-end electronics like MacBooks and iPhones."
       ],
-      "avoid": "Do not imply that people should use credit cards or loans to take advantage of these sales.",
+      "avoid": "Do not imply that people should use credit cards or loans to afford these discounted items.",
       "relevance": 5,
       "fun": 4
+    },
+    {
+      "id": "gt-employees-provident-fund-organisation",
+      "kind": "general",
+      "format": "general trends",
+      "headline": "EPFO Withdrawal Rules",
+      "story": "employees' provident fund organisation",
+      "source": "Google Trends",
+      "link": "https://trends.google.com/trending/rss?geo=IN",
+      "published": "2026-11-26T05:50:00-08:00",
+      "traffic": "1000+",
+      "topic_area": "saving",
+      "why_popular": "There is significant public interest in upcoming changes to PF withdrawal percentages and systematic withdrawal plans for retirees.",
+      "bridge": "Your retirement savings are like a long-term investment; withdrawing early can cost you the 'magic' of compounding later.",
+      "hook": "Thinking about withdrawing your PF early for shopping?",
+      "meme_format": "Red flag / green flag",
+      "facts": [
+        "Discussions are ongoing about potential changes to PF withdrawal percentages.",
+        "Systematic Withdrawal Plans (SWP) are being explored for retirees."
+      ],
+      "avoid": "Do not give specific financial advice on whether a user should or should not withdraw their own specific funds.",
+      "relevance": 4,
+      "fun": 3
     }
   ],
   "patterns": {
@@ -338,9 +321,13 @@
     "updated": "2026-11-26T01:42:17+00:00",
     "looked_at": 120
   },
-  "errors": [],
+  "errors": [
+    "Feed failed (https://news.google.com/rss/search?q=credit%20score%20OR%20CIBIL%20OR%20credit%2): 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=credit%20score%20OR%20CIBIL%20OR%20credit%20card%20rules%20when%3A3d&hl=en-IN&gl=IN&ceid=IN:en",
+    "Feed failed (https://news.google.com/rss/search?q=UPI%20OR%20digital%20payments%20fraud%20whe): 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=UPI%20OR%20digital%20payments%20fraud%20when%3A3d&hl=en-IN&gl=IN&ceid=IN:en"
+  ],
   "used": [
     "2-years-to-sell-a-home-inventory-pile-up-raises-warning-sign",
+    "caution-to-investors-regarding-impersonation-of-sebi-registe",
     "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
     "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"
   ]

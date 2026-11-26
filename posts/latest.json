@@ -1,33 +1,41 @@
 {
   "day": "2026-11-26",
-  "folder": "2026-11-26_142959",
-  "topic": "Automating your savings strategy",
-  "template": "spray",
-  "content_type": "simple explainer",
-  "hook_style": "bold clear statement",
-  "topic_area": "saving",
-  "angle": "educational",
-  "hook": "Stop relying on willpower to save money.",
+  "folder": "2026-11-26_143625",
+  "topic": "Protecting yourself from financial impersonation",
+  "template": "arches",
+  "content_type": "step-by-step how-to",
+  "hook_style": "surprising but true fact",
+  "topic_area": "money habits and mindset",
+  "angle": "trend-tied",
+  "trend": {
+    "id": "caution-to-investors-regarding-impersonation-of-sebi-registe",
+    "headline": "Caution to investors regarding impersonation of SEBI registered intermediaries on closed user groups of social media platforms",
+    "source": "SEBI",
+    "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/caution-to-investors-regarding-impersonation-of-sebi-registered-intermediaries-on-closed-user-groups-of-social-media-platforms_105944.html",
+    "published": null,
+    "format": "lesson"
+  },
+  "hook": "Most financial scams rely on one simple trick",
   "format": "carousel",
   "local_day": "2026-11-26",
   "slot": "extra",
-  "post_time": "19:58",
+  "post_time": "20:01",
   "plan_reasons": {
-    "angle": "educational until there is data on the other types (general trends, promotional already used enough today)",
-    "content_type": "testing (working for similar accounts)",
-    "hook_style": "testing (working for similar accounts)",
-    "topic_area": "testing (working for similar accounts)",
+    "angle": "only type available right now (educational, general trends, promotional already used enough today)",
+    "content_type": "testing (least tried)",
+    "hook_style": "testing (least tried)",
+    "topic_area": "from the trend: Caution to investors regarding impersonation of SEBI registered intermediaries o",
     "template": "testing (rotation)"
   },
-  "caption": "Saving money is easier when you stop relying on willpower and start using automation. By setting up automatic transfers, you ensure your savings goals are prioritized as soon as you get paid. This simple habit keeps your finances organized and helps you build consistency over time. Do you currently automate your transfers or do you prefer to move money manually? Save this for later and share it with someone who needs it. #financialhealth #savingmoney #budgetingtips #personalfinance #moneyhabits #financialliteracy #RXT\n\nEducational content only. This is not personalised financial advice.",
+  "caption": "Protect your assets by verifying the identity of anyone offering financial services. Impersonators often use closed social media groups to build false trust. Always check official regulatory databases before engaging with someone claiming to be a financial professional. Context: SEBI. Have you ever double-checked a professional's credentials before taking advice? Save this for later and share it with someone who needs it. #FinancialHealth #MoneyTips #ConsumerProtection #FinancialLiteracy #RXT #SmartInvesting #MoneyManagement\n\nEducational content only. This is not personalised financial advice.",
   "urls": [
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_1.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_2.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_3.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_4.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_5.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_6.jpg",
-    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_142959/slide_7.jpg"
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_1.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_2.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_3.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_4.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_5.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_6.jpg",
+    "https://raw.githubusercontent.com/realharish2010-gif/Rxt/main/posts/2026-11-26_143625/slide_7.jpg"
   ],
-  "posted": true
+  "posted": false
 }
