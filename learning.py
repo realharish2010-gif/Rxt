@@ -57,10 +57,11 @@ DIMENSIONS = {"content_type": "content_types", "hook_style": "hook_styles", "top
 # promotional = a creative post about RXT itself (promo.py), told through a promo_angle
 ANGLES = ["educational", "trend-tied", "general trends", "promotional"]
 OLD_ANGLES = {"evergreen": "educational"}  # earlier name, still found in older logs
-TAGS = (*DIMENSIONS, "angle", "promo_angle", "trend", "slot", "post_time", "local_day")  # what each post is logged with, besides topic/template/hook
+TAGS = (*DIMENSIONS, "angle", "promo_angle", "trend", "slot", "post_time", "local_day", "format", "remake_of")  # what each post is logged with, besides topic/template/hook
 LABELS = {"content_type": "Content type", "hook_style": "Hook style", "topic_area": "Topic area",
           "template": "Template", "angle": "Angle", "promo_angle": "Promotional angle",
-          "slot": "Time slot", "post_time": "Posting time"}
+          "slot": "Time slot", "post_time": "Posting time", "format": "Format (carousel or Reel)"}
+REEL_METRICS = ["views", "ig_reels_avg_watch_time"]  # extra numbers kept for Reels (not scored)
 
 
 def settings():
@@ -83,7 +84,8 @@ def measured_posts(store=None):
     def slot(r):  # posts from before the calendar get their slot from when they went out
         return r.get("slot") or slots.slot_of(dt.datetime.fromisoformat(r["posted_at"]))
 
-    posts = [{**r, "angle": OLD_ANGLES.get(r.get("angle"), r.get("angle")), "slot": slot(r)}
+    posts = [{**r, "angle": OLD_ANGLES.get(r.get("angle"), r.get("angle")), "slot": slot(r),
+              "format": r.get("format") or "carousel"}
              for r in store.values() if r.get("metrics", {}).get("reach") is not None]
     posts.sort(key=lambda r: r["posted_at"])
     return posts[-settings()["window"]:]
@@ -173,7 +175,7 @@ def sync(classify=None):
         media = graph_get(f"{os.environ['IG_USER_ID']}/media",
                           fields="id,caption,media_type,timestamp,permalink", limit=50)["data"]
         for m in media:
-            if m.get("media_type") != "CAROUSEL_ALBUM":
+            if m.get("media_type") not in ("CAROUSEL_ALBUM", "VIDEO"):  # carousels and Reels
                 continue
             rec = store.get(m["id"], {})
             if rec.get("metrics"):
@@ -187,11 +189,20 @@ def sync(classify=None):
             if metrics is None:
                 print(f"No reach reported yet for {m['id']}, will retry next run")
                 continue
+            fmt = meta.get("format") or ("reel" if m["media_type"] == "VIDEO" else "carousel")
+            if fmt == "reel":
+                for extra in REEL_METRICS:
+                    try:
+                        row = graph_get(f"{m['id']}/insights", metric=extra)["data"][0]
+                        v = (row.get("values") or [{}])[0].get("value") if "values" in row else row.get("total_value", {}).get("value")
+                        metrics[extra] = int(v or 0)
+                    except (GraphError, IndexError, KeyError) as e:
+                        print(f"Reel metric {extra} unavailable for {m['id']}: {e}")
             rec.update({
                 "media_id": m["id"], "posted_at": posted.isoformat(), "permalink": m.get("permalink"),
                 "caption": (m.get("caption") or "")[:600],
                 **{k: meta[k] for k in ("topic", "template", "hook", "folder", *TAGS) if meta.get(k)},
-                "metrics": metrics, "measured_at": now().isoformat(timespec="seconds"),
+                "format": fmt, "metrics": metrics, "measured_at": now().isoformat(timespec="seconds"),
                 "age_days": round(age.total_seconds() / 86400, 1),
             })
             store[m["id"]] = rec
@@ -462,7 +473,7 @@ def write_report(store, status="ok"):
         out += ["## Best performers", "", *head, *[row(p) for p in ranked[:k]], ""]
         if len(ranked) > 1:
             out += ["## Worst performers", "", *head, *[row(p) for p in ranked[::-1][:k]], ""]
-        for dim in ["slot", "post_time", *DIMENSIONS, "template", "angle", "promo_angle"]:
+        for dim in ["format", "slot", "post_time", *DIMENSIONS, "template", "angle", "promo_angle"]:
             rows = ranking(posts, dim)
             if rows:
                 out += [f"## {LABELS[dim]}", "", "| Option | Posts | Avg reach | vs typical |", "|---|---|---|---|"]

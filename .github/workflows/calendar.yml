@@ -20,6 +20,11 @@ on:
         description: "Post even if that slot (or today's limit) is already used"
         type: boolean
         default: false
+      format:
+        description: "auto = the calendar decides (config.json reels); or force a Reel or a carousel"
+        type: choice
+        options: [auto, reel, carousel]
+        default: auto
 concurrency:
   group: carousel
   cancel-in-progress: false
@@ -49,6 +54,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           playwright install --with-deps chromium
+          command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
+      - name: Cache the backup voice model (only downloaded if edge-tts is down)
+        if: steps.due.outputs.slot != ''
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/kokoro
+          key: kokoro-v1.0
       - name: Learn from posts that are 3+ days old
         if: steps.due.outputs.slot != ''
         continue-on-error: true  # never block a post if Instagram insights fail
@@ -72,7 +84,18 @@ jobs:
         env:
           SLOT: ${{ steps.due.outputs.slot }}
           POST_TIME: ${{ steps.due.outputs.time }}
+          FORMAT: ${{ inputs.format }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}    # optional: free stock b-roll
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}  # optional: free stock b-roll
+      - name: Keep the Reel video (download it from this run's summary page)
+        if: steps.due.outputs.slot != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ github.run_id }}
+          path: posts/*/reel.mp4
+          if-no-files-found: ignore
+          retention-days: 30
       - name: Commit slides
         if: steps.due.outputs.slot != ''
         run: |

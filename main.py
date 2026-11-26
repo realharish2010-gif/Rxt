@@ -6,6 +6,10 @@
    python main.py learn      -> measures posts that are 3+ days old (see learning.py)
    python main.py trends     -> refreshes news, search trends and competitor patterns (see trends.py)
    python main.py weekly     -> writes last week's recap and opens it as a GitHub issue (see weekly.py)
+   python main.py reel-preview [n] -> renders the sample Reels into previews/reels/ (see reels.py)
+
+The calendar's Reel slot (config.json "reels") posts a short video instead of a carousel;
+generate and publish handle both formats.
 """
 import datetime as dt
 import html
@@ -291,6 +295,8 @@ def generate():
     if forced_tpl:
         chosen["template"] = pick_template(history)  # validates and returns the forced one
     notes = (trend_info.get("patterns") or {}).get("notes") or []
+    if make_reel(history, chosen, why, slot, post_time, local):
+        return
     data = write_carousel(history, chosen, notes)
 
     now = dt.datetime.now(dt.timezone.utc)
@@ -311,6 +317,7 @@ def generate():
         tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published", "format")}
         trends.mark_used(t["id"])
     tags["hook"] = data["slides"][0]["title"]
+    tags["format"] = "carousel"
     tags["local_day"] = local
     if slot:
         tags.update(slot=slot, post_time=post_time)
@@ -332,6 +339,67 @@ def generate():
     for old in folders[:-21]:
         shutil.rmtree(old)
     print("Generated:", data["topic"])
+
+
+def make_reel(history, chosen, why, slot, post_time, local):
+    """Makes this slot's post a Reel when the calendar says so (reels.choose_format). Returns
+    False, and the slot posts a carousel instead, if Reels are off or the Reel did not pass
+    its reviews and quality check."""
+    import reels
+    posts = learning.scored(learning.measured_posts())
+    fmt, reason = reels.choose_format(slot, history, local, posts)
+    print(f"Format: {fmt} ({reason})")
+    if fmt != "reel":
+        return False
+    chosen, why = dict(chosen), {**why, "format": reason}
+    remake = reels.pick_remake(history, posts)
+    if remake:  # a proven carousel, retold as a Reel: same type, hook style and topic area
+        chosen.update(trend=None, promo_angle=remake.get("promo_angle"),
+                      angle=remake.get("angle") or "educational",
+                      **{d: remake[d] for d in learning.DIMENSIONS if remake.get(d)})
+        why["remake"] = f"remaking a carousel that scored {remake['rel']:.2f}x typical: {remake.get('topic')}"
+        print("Remake:", why["remake"])
+    if chosen.get("promo_angle"):
+        chosen["content_type"] = "promotional"
+    if chosen.get("trend") and chosen["trend"].get("format") in ("news content", "general trends"):
+        chosen["content_type"] = chosen["trend"]["format"]
+    now = dt.datetime.now(dt.timezone.utc)
+    folder = now.strftime("%Y-%m-%d_%H%M%S")
+    outdir = POSTS / folder
+    try:
+        made = reels.build(history, chosen, gemini_json, outdir, remake)
+    except Exception as e:  # TTS, render or upload trouble must never cost the slot its post
+        print(f"::warning::Reel failed ({e}); posting a carousel in this slot instead")
+        made = None
+    if not made:
+        print("::warning::No Reel passed the checks; posting a carousel in this slot instead")
+        shutil.rmtree(outdir, ignore_errors=True)
+        return False
+    data, info, quality = made
+    for f in ("mix.wav", "reel.html"):
+        (outdir / f).unlink(missing_ok=True)
+    (outdir / "script.json").write_text(json.dumps(data, indent=2, ensure_ascii=False))
+    tags = {d: chosen[d] for d in learning.DIMENSIONS}
+    tags.update(angle=chosen["angle"], format="reel", hook=data["scenes"][0]["say"], local_day=local)
+    if chosen.get("promo_angle"):
+        tags["promo_angle"] = chosen["promo_angle"]
+    if chosen.get("trend"):
+        t = chosen["trend"]
+        tags["trend"] = {k: t.get(k) for k in ("id", "headline", "source", "link", "published", "format")}
+        trends.mark_used(t["id"])
+    if remake:
+        tags["remake_of"] = remake["media_id"]
+    if slot:
+        tags.update(slot=slot, post_time=post_time)
+    LATEST.write_text(json.dumps({
+        "day": now.date().isoformat(), "folder": folder, "topic": data["topic"], "template": "reel", **tags,
+        "plan_reasons": why, "caption": reels.caption(data, info), "cover_ms": info["cover_ms"],
+        "render": info, "quality": quality, "run_id": os.environ.get("GITHUB_RUN_ID"), "posted": False,
+    }, indent=2, ensure_ascii=False))
+    history.append({"day": now.date().isoformat(), "topic": data["topic"], "template": "reel", **tags})
+    HISTORY.write_text(json.dumps(history, indent=2))
+    print("Generated Reel:", data["topic"])
+    return True
 
 
 def api(path, **params):
@@ -372,8 +440,14 @@ def publish():
         if why:
             print(f"Skipping: {why}. Run the publish workflow with 'force' ticked to post anyway.")
             return
-    wait_for_urls(post["urls"])
     uid = os.environ["IG_USER_ID"]
+    if post.get("format") == "reel":
+        import reels
+        check_publish_limit(uid)
+        media = {"id": reels.publish(post, GRAPH, os.environ["IG_TOKEN"], uid)}
+        log_published(post, day, local, media, done_today)
+        return
+    wait_for_urls(post["urls"])
     check_publish_limit(uid)
     kids = [api(f"{uid}/media", image_url=u, is_carousel_item="true")["id"] for u in post["urls"]]
     parent = api(f"{uid}/media", media_type="CAROUSEL", children=",".join(kids), caption=post["caption"])["id"]
@@ -389,6 +463,10 @@ def publish():
             sys.exit("Instagram could not process the carousel")
         time.sleep(5)
     media = api(f"{uid}/media_publish", creation_id=parent)
+    log_published(post, day, local, media, done_today)
+
+
+def log_published(post, day, local, media, done_today):
     post["posted"] = True
     LATEST.write_text(json.dumps(post, indent=2))
     log = published_log()
@@ -448,6 +526,9 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd == "preview":
         preview(sys.argv[2:])
+    elif cmd == "reel-preview":
+        import reels
+        reels.preview(int(sys.argv[2]) - 1 if len(sys.argv) > 2 else None)
     elif cmd == "learn":
         learning.sync(classify=gemini_json if os.environ.get("GEMINI_API_KEY") else None)
     elif cmd == "due":

@@ -1,3 +1,7 @@
 requests
 google-genai
 playwright
+numpy
+edge-tts
+kokoro-onnx
+soundfile

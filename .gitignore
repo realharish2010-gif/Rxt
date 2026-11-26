@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 previews/
+# Reel videos go to Instagram and the workflow artifact, not git
+posts/**/reel.mp4
+posts/**/*.wav
+posts/**/bg/

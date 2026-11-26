@@ -48,6 +48,16 @@
       "RXT does not sell or recommend specific financial products, and never promises returns."
     ]
   },
+  "reels": {
+    "enabled": true,
+    "per_day": 1,
+    "slots": ["evening"],
+    "remake_share": 0.5,
+    "seconds": [20, 35],
+    "language": "English",
+    "voice": {"edge": "en-IN-NeerjaNeural", "edge_hindi": "hi-IN-SwaraNeural", "rate": "+8%"},
+    "quality": {"min_score": 7, "min_each": 6}
+  },
   "colors": {
     "bg": "#FFFFFF",
     "accent": "#F2C94C",

@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- Reel renderer: 1080x1920 motion graphics in RXT brand colors. Python (reel_render.py)
+     fills window.REEL, then calls seek(t) once per frame and screenshots the page, so every
+     frame is a pure function of time: no CSS animations, nothing depends on render speed. -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Noto+Sans+Devanagari:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--accent:#F2C94C;--text:#087A50;--muted:#333;--deep:#05402a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden}
+body{position:relative;font-family:'Archivo','Noto Sans Devanagari',sans-serif;background:var(--text)}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.scene.on{display:block}
+.dark{background:var(--text);color:#fff}
+.light{background:var(--bg);color:var(--deep)}
+.accent{background:var(--accent);color:var(--deep)}
+.bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,64,42,.55) 0%,rgba(5,64,42,.35) 35%,rgba(5,64,42,.85) 100%)}
+.blob{position:absolute;border-radius:50%}
+.dark .blob{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.light .blob{background:color-mix(in srgb,var(--text) 10%,transparent)}
+.accent .blob{background:color-mix(in srgb,#fff 35%,transparent)}
+.ring-deco{position:absolute;border-radius:50%;border:6px solid currentColor;opacity:.12}
+.ht{position:absolute;width:520px;opacity:.16}
+.ht svg{width:100%;height:auto;display:block}
+.stage{position:absolute;left:90px;right:110px;top:300px;height:880px;display:flex;flex-direction:column;justify-content:center;transform-origin:50% 50%}
+.kicker{font-size:38px;font-weight:800;font-stretch:115%;letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px;opacity:.85}
+.big{font-weight:900;font-stretch:112%;line-height:.98;letter-spacing:-.02em;text-transform:uppercase;font-size:150px}
+.big .w{display:inline-block;margin-right:.22em;position:relative;will-change:transform}
+.mark{position:relative;z-index:0}
+.mark::before{content:"";position:absolute;left:-.08em;right:-.08em;top:.12em;bottom:.02em;background:var(--accent);z-index:-1;transform-origin:0 50%;transform:scaleX(var(--m,0));border-radius:6px}
+.dark .mark{color:var(--deep)}
+.accent .mark::before{background:#fff}
+.sub{font-size:50px;font-weight:600;line-height:1.3;margin-top:34px;max-width:860px}
+/* counter */
+.num{font-weight:900;font-stretch:110%;font-size:230px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num .unit{font-size:.42em;letter-spacing:0;margin-left:.12em}
+.ringwrap{position:relative;width:640px;height:640px;margin:0 auto}
+.ringwrap svg{position:absolute;inset:0}
+.ringwrap .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:170px}
+.label{font-size:60px;font-weight:800;line-height:1.15;margin-top:30px}
+/* bars */
+.bars{display:flex;flex-direction:column;gap:46px;margin-top:40px}
+.bar .row{display:flex;justify-content:space-between;font-size:48px;font-weight:800;margin-bottom:14px}
+.bar .track{height:74px;border-radius:40px;background:color-mix(in srgb,currentColor 12%,transparent);overflow:hidden}
+.bar .fill{height:100%;border-radius:40px;background:var(--text);transform-origin:0 50%}
+.bar:nth-child(2) .fill{background:var(--accent)}
+.bar:nth-child(3) .fill{background:color-mix(in srgb,var(--text) 55%,var(--accent))}
+.bar:nth-child(4) .fill{background:var(--deep)}
+.dark .bar .fill{background:#fff}
+.dark .bar:nth-child(2) .fill{background:var(--accent)}
+.title{font-size:86px;font-weight:900;font-stretch:110%;line-height:1.02;text-transform:uppercase;letter-spacing:-.01em}
+/* compare */
+.cards{display:flex;flex-direction:column;gap:40px;margin-top:46px;position:relative}
+.card{border-radius:36px;padding:44px 50px;background:color-mix(in srgb,#fff 12%,transparent);border:4px solid color-mix(in srgb,#fff 30%,transparent)}
+.light .card{background:#f4f7f5;border-color:#dfe8e3}
+.card .cl{font-size:40px;font-weight:700;opacity:.85;text-transform:uppercase;letter-spacing:.05em}
+.card .cv{font-size:84px;font-weight:900;font-stretch:108%;line-height:1.05;margin-top:8px}
+.card.win{background:var(--accent);color:var(--deep);border-color:var(--accent)}
+.vs{position:absolute;left:50%;top:50%;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;background:var(--deep);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;border:6px solid var(--accent)}
+/* list */
+.items{display:flex;flex-direction:column;gap:34px;margin-top:46px}
+.item{display:flex;align-items:center;gap:30px;font-size:56px;font-weight:800;line-height:1.1}
+.tick{flex:none;width:88px;height:88px;border-radius:50%;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;font-size:46px;font-weight:900}
+.dark .tick{background:var(--accent);color:var(--deep)}
+/* cta */
+.handle{font-size:92px;font-weight:900;font-stretch:108%;margin-top:30px;color:var(--accent)}
+.btn{display:inline-block;margin-top:56px;padding:34px 70px;border-radius:70px;background:var(--accent);color:var(--deep);font-size:58px;font-weight:900;text-transform:uppercase;letter-spacing:.03em}
+/* always-on layers */
+#brand{position:absolute;left:90px;top:150px;font-size:34px;font-weight:800;font-stretch:115%;letter-spacing:.02em;z-index:20}
+#prog{position:absolute;left:0;top:0;height:12px;background:var(--accent);z-index:30}
+#wipe{position:absolute;top:-200px;height:2320px;width:1900px;background:var(--accent);transform:skewX(-12deg);z-index:25;display:none}
+#wipe2{position:absolute;top:-200px;height:2320px;width:1900px;background:var(--deep);transform:skewX(-12deg);z-index:24;display:none}
+#cap{position:absolute;left:70px;right:110px;top:1300px;display:flex;justify-content:center;z-index:22}
+#cap .pill{padding:18px 34px;border-radius:30px;font-size:76px;font-weight:900;font-stretch:105%;line-height:1.12;text-align:center;color:#fff;
+  text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 18px rgba(0,0,0,.35);-webkit-text-stroke:2px rgba(0,0,0,.25)}
+#cap.boxed .pill{background:rgba(5,64,42,.9);text-shadow:none;-webkit-text-stroke:0}
+#cap .cw{display:inline-block;margin:0 .12em}
+#cap .cw.now{color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="brand"></div>
+<div id="root"></div>
+<div id="wipe2"></div>
+<div id="wipe"></div>
+<div id="cap"><div class="pill"></div></div>
+<script>
+const R = window.REEL;
+const C = R.colors;
+document.documentElement.style.setProperty('--bg', C.bg);
+document.documentElement.style.setProperty('--accent', C.accent);
+document.documentElement.style.setProperty('--text', C.text);
+document.documentElement.style.setProperty('--muted', C.muted);
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOutCubic = p => 1 - Math.pow(1 - p, 3);
+const easeOutExpo = p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
+const easeOutBack = p => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const prog = (t, start, dur) => clamp((t - start) / dur);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const countText = (n, v) => {
+  const suf = n.dataset.suf, wordy = /[a-z]{3,}/i.test(suf);
+  return esc(n.dataset.pre) + fmtNum(v, Number(n.dataset.dec || 0)) + (wordy ? `<span class="unit">${esc(suf.trim())}</span>` : esc(suf));
+};
+const fmtNum = (v, dec) => Number(v).toLocaleString('en-IN', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+
+function words(text, accent) {
+  const acc = new Set(String(accent || '').toLowerCase().split(/\s+/).filter(Boolean).map(w => w.replace(/[^\p{L}\p{N}₹%]/gu, '')));
+  return String(text).split(/\s+/).filter(Boolean).map(w => {
+    const k = w.toLowerCase().replace(/[^\p{L}\p{N}₹%]/gu, '');
+    return `<span class="w${acc.has(k) ? ' mark' : ''}">${esc(w)}</span>`;
+  }).join(' ');
+}
+
+function deco(i, theme) {
+  // slow-moving background shapes so no frame is ever static
+  return `<div class="blob" data-drift="${i}" style="width:760px;height:760px;left:${i % 2 ? -260 : 520}px;top:${i % 2 ? 1180 : -200}px"></div>
+    <div class="ring-deco" data-spin="${i}" style="width:520px;height:520px;left:${i % 2 ? 700 : -180}px;top:${i % 2 ? 160 : 1320}px"></div>
+    <div class="ht" data-ht="${i}" style="${i % 2 ? 'left:-60px;top:1500px' : 'right:-40px;top:220px'};color:${theme === 'dark' ? '#fff' : C.text}">${R.halftone || ''}</div>`;
+}
+
+function build(s, i) {
+  let inner = '';
+  const kicker = s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : '';
+  if (s.type === 'hook' || s.type === 'statement') {
+    inner = `${kicker}<div class="big fit">${words(s.text, s.accent)}</div>${s.sub ? `<div class="sub">${esc(s.sub)}</div>` : ''}`;
+  } else if (s.type === 'counter') {
+    const ring = String(s.suffix || '').trim() === '%' && Number(s.value) <= 100;
+    const num = `<div class="num" data-count="${Number(s.value) || 0}" data-dec="${String(s.value).includes('.') ? 1 : 0}" data-pre="${esc(s.prefix || '')}" data-suf="${esc(s.suffix || '')}"></div>`;
+    inner = ring
+      ? `${kicker}<div class="ringwrap"><svg viewBox="0 0 640 640"><circle cx="320" cy="320" r="280" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width="44"/>
+         <circle class="arc" cx="320" cy="320" r="280" fill="none" stroke="${s.theme === 'accent' ? C.text : C.accent}" stroke-width="44" stroke-linecap="round"
+         transform="rotate(-90 320 320)" stroke-dasharray="1759.3" stroke-dashoffset="1759.3" data-pct="${Number(s.value)}"/></svg>${num}</div>
+         <div class="label lab" style="text-align:center">${esc(s.label)}</div>`
+      : `${kicker}${num}<div class="label lab">${esc(s.label)}</div>`;
+  } else if (s.type === 'bars') {
+    const max = Math.max(...s.items.map(x => Number(x.value) || 0), 1);
+    inner = `<div class="title fit">${esc(s.title)}</div><div class="bars">` + s.items.map(x =>
+      `<div class="bar"><div class="row"><span>${esc(x.label)}</span><span class="bv" data-count="${Number(x.value) || 0}" data-pre="${esc(s.prefix || '')}" data-suf="${esc(s.unit || '')}"></span></div>
+       <div class="track"><div class="fill" data-w="${(Number(x.value) || 0) / max}"></div></div></div>`).join('') + '</div>';
+  } else if (s.type === 'compare') {
+    const win = s.better === 'left' ? 0 : s.better === 'right' ? 1 : -1;
+    const card = (c, k) => `<div class="card${win === k ? ' wincand' : ''}"><div class="cl">${esc(c.label)}</div><div class="cv">${esc(c.value)}</div></div>`;
+    inner = `<div class="title fit">${esc(s.title)}</div><div class="cards">${card(s.left, 0)}${card(s.right, 1)}<div class="vs">VS</div></div>`;
+  } else if (s.type === 'list') {
+    inner = `<div class="title fit">${esc(s.title)}</div><div class="items">` + s.items.map((x, k) =>
+      `<div class="item"><div class="tick">${s.numbered ? k + 1 : '✓'}</div><div>${esc(x)}</div></div>`).join('') + '</div>';
+  } else if (s.type === 'cta') {
+    inner = `<div class="big fit" style="font-size:120px">${words(s.text, s.accent)}</div>
+      <div class="handle">${esc(R.handle)}</div><div><span class="btn">${esc(s.button || 'Follow')}</span></div>`;
+  }
+  const bg = s.bg ? `<img class="bgimg" src=""><div class="shade"></div>` : deco(i, s.theme);
+  return `<section class="scene ${s.theme}" id="s${i}">${bg}<div class="stage">${inner}</div></section>`;
+}
+
+const root = document.getElementById('root');
+root.innerHTML = R.scenes.map(build).join('');
+document.getElementById('brand').textContent = R.brand;
+const scenes = R.scenes.map((s, i) => ({...s, el: document.getElementById('s' + i)}));
+
+function fitAll() {
+  for (const s of scenes) {
+    s.el.classList.add('on');
+    const stage = s.el.querySelector('.stage');
+    // counters: size the number for its final value so it never runs off the screen
+    for (const n of s.el.querySelectorAll('.num')) {
+      n.innerHTML = countText(n, Number(n.dataset.count));
+      const limit = n.parentElement.classList.contains('ringwrap') ? 470 : 880;
+      let size = parseFloat(getComputedStyle(n).fontSize);
+      const width = () => { const r = document.createRange(); r.selectNodeContents(n); return r.getBoundingClientRect().width; };
+      while (width() > limit && size > 60) { size -= 6; n.style.fontSize = size + 'px'; }
+    }
+    for (const f of s.el.querySelectorAll('.fit')) {
+      let size = parseFloat(getComputedStyle(f).fontSize);
+      // shrink the headline until the whole scene fits its area (and each word fits one line)
+      const tooBig = () => stage.scrollHeight > 900 || [...f.querySelectorAll('.w')].some(w => w.offsetWidth > 880) || f.scrollWidth > 900;
+      while (tooBig() && size > 50) { size -= 4; f.style.fontSize = size + 'px'; }
+    }
+    s.el.classList.remove('on');
+  }
+}
+
+const imgCache = {};
+async function setBg(s, lt) {
+  const img = s.el.querySelector('.bgimg');
+  if (!img || !s.bg) return;
+  const n = clamp(Math.floor(lt * R.fps), 0, s.bg.count - 1);
+  const src = `${s.bg.dir}/${String(n + 1).padStart(4, '0')}.jpg`;
+  if (img.getAttribute('src') !== src) {
+    img.setAttribute('src', src);
+    try { await img.decode(); } catch (e) {}
+  }
+}
+
+function animateWords(el, lt, base, step) {
+  el.querySelectorAll('.w').forEach((w, k) => {
+    const p = prog(lt, base + k * step, .38);
+    const e = easeOutBack(p);
+    w.style.opacity = clamp(p * 3);
+    w.style.transform = `translateY(${(1 - e) * 70}px) scale(${.86 + .14 * e})`;
+    if (w.classList.contains('mark')) {
+      const m = easeOutCubic(prog(lt, base + k * step + .22, .3));
+      w.style.setProperty('--m', m);
+      w.style.color = m > .45 ? '' : 'inherit';  // keep the word readable until its highlight is in
+    }
+  });
+}
+
+function animate(s, lt, t) {
+  const el = s.el, dur = s.end - s.start, first = s.index === 0;
+  // continuous motion: slow push-in on the content, drifting shapes
+  const stage = el.querySelector('.stage');
+  stage.style.transform = `scale(${1 + lt * .012})`;
+  el.querySelectorAll('[data-drift]').forEach(b => b.style.transform = `translate(${Math.sin(t * .5) * 60}px, ${Math.cos(t * .4) * 50}px) scale(${1 + Math.sin(t * .3) * .05})`);
+  el.querySelectorAll('[data-spin]').forEach(b => b.style.transform = `scale(${1 + .08 * Math.sin(t * .7)})`);
+  el.querySelectorAll('[data-ht]').forEach(b => b.style.transform = `translateY(${Math.sin(t * .6) * 30}px) rotate(${t * 4}deg)`);
+  const img = el.querySelector('.bgimg');
+  if (img) img.style.transform = `scale(${1.06 + lt * .015})`;
+  const kick = el.querySelector('.kicker');
+  if (kick) { const p = easeOutCubic(prog(lt, 0, .3)); kick.style.opacity = p; kick.style.transform = `translateX(${(1 - p) * -40}px)`; }
+
+  if (s.type === 'hook' || s.type === 'statement' || s.type === 'cta') {
+    // the hook is already on screen in frame 1 (no fade from empty): it has 2 seconds to stop the scroll
+    animateWords(el, lt + (first ? .3 : 0), first ? 0 : .08, first ? .045 : .07);
+    const sub = el.querySelector('.sub');
+    if (sub) { const p = easeOutCubic(prog(lt, .5, .4)); sub.style.opacity = p; sub.style.transform = `translateY(${(1 - p) * 30}px)`; }
+    const h = el.querySelector('.handle'), b = el.querySelector('.btn');
+    if (h) { const p = easeOutBack(prog(lt, .45, .45)); h.style.opacity = clamp(p); h.style.transform = `scale(${.7 + .3 * p})`; }
+    if (b) { const p = easeOutBack(prog(lt, .8, .45)); b.style.opacity = clamp(p);
+      b.style.transform = `scale(${(.6 + .4 * p) * (1 + .04 * Math.sin(Math.max(0, lt - 1.3) * 6))})`; }
+  }
+  if (s.type === 'counter') {
+    const n = el.querySelector('.num'), v = Number(n.dataset.count), dec = Number(n.dataset.dec);
+    const p = easeOutExpo(prog(lt, .1, Math.min(1.6, dur * .5)));
+    n.innerHTML = countText(n, v * p);
+    const pop = easeOutBack(prog(lt, 0, .35));
+    n.style.transform = `scale(${.75 + .25 * pop})`;
+    const arc = el.querySelector('.arc');
+    if (arc) arc.setAttribute('stroke-dashoffset', 1759.3 * (1 - p * Number(arc.dataset.pct) / 100));
+    const lab = el.querySelector('.lab'), q = easeOutCubic(prog(lt, .5, .4));
+    lab.style.opacity = q; lab.style.transform = `translateY(${(1 - q) * 30}px)`;
+  }
+  if (s.type === 'bars' || s.type === 'compare' || s.type === 'list') {
+    const ti = el.querySelector('.title'), q = easeOutCubic(prog(lt, 0, .35));
+    ti.style.opacity = q; ti.style.transform = `translateY(${(1 - q) * 40}px)`;
+  }
+  if (s.type === 'bars') {
+    el.querySelectorAll('.bar').forEach((b, k) => {
+      const d = .3 + k * .28, p = easeOutCubic(prog(lt, d, .8));
+      b.style.opacity = clamp(prog(lt, d, .15));
+      b.querySelector('.fill').style.transform = `scaleX(${p * Number(b.querySelector('.fill').dataset.w)})`;
+      const v = b.querySelector('.bv');
+      v.textContent = v.dataset.pre + fmtNum(Number(v.dataset.count) * p, 0) + v.dataset.suf;
+    });
+  }
+  if (s.type === 'compare') {
+    const cards = el.querySelectorAll('.card');
+    cards.forEach((c, k) => {
+      const p = easeOutBack(prog(lt, .25 + k * .45, .5));
+      c.style.opacity = clamp(p * 2);
+      c.style.transform = `translateX(${(1 - p) * (k ? 900 : -900)}px)`;
+      if (c.classList.contains('wincand')) c.classList.toggle('win', lt > .25 + 1 * .45 + .6);
+    });
+    const vs = el.querySelector('.vs'), p = easeOutBack(prog(lt, .55, .4));
+    vs.style.transform = `scale(${p}) rotate(${(1 - p) * -90}deg)`;
+  }
+  if (s.type === 'list') {
+    const items = el.querySelectorAll('.item');
+    const span = Math.max(.4, (dur * .72 - .3) / Math.max(1, items.length));
+    items.forEach((it, k) => {
+      const d = .3 + k * span, p = easeOutBack(prog(lt, d, .45));
+      it.style.opacity = clamp(p * 2);
+      it.style.transform = `translateX(${(1 - p) * 120}px)`;
+      it.querySelector('.tick').style.transform = `scale(${easeOutBack(prog(lt, d + .05, .4))})`;
+    });
+  }
+}
+
+function captions(t, theme) {
+  const cap = document.getElementById('cap'), pill = cap.querySelector('.pill');
+  const g = R.captions.find(c => t >= c.t0 && t < c.t1);
+  if (!g) { cap.style.opacity = 0; return; }
+  cap.style.opacity = 1;
+  cap.classList.toggle('boxed', theme !== 'dark');
+  const key = g.t0.toFixed(3);
+  if (pill.dataset.key !== key) {
+    pill.dataset.key = key;
+    pill.innerHTML = g.words.map(w => `<span class="cw">${esc(w.w)}</span>`).join(' ');
+  }
+  const spans = pill.querySelectorAll('.cw');
+  g.words.forEach((w, k) => {
+    const on = t >= w.t0 && (k === g.words.length - 1 || t < g.words[k + 1].t0);
+    spans[k].classList.toggle('now', on);
+    spans[k].style.transform = on ? `scale(${1 + .1 * easeOutBack(prog(t, w.t0, .15))})` : 'scale(1)';
+  });
+  const p = easeOutBack(prog(t, g.t0, .16));
+  pill.style.transform = `scale(${.8 + .2 * p})`;
+}
+
+function wipe(t) {
+  // a quick diagonal wipe in brand colours covers each cut between scenes
+  const w = document.getElementById('wipe'), w2 = document.getElementById('wipe2');
+  const cut = scenes.slice(1).map(s => s.start).find(c => Math.abs(t - c) < .2);
+  if (cut === undefined) { w.style.display = w2.style.display = 'none'; return; }
+  const p = easeInOut(clamp((t - cut + .2) / .4));
+  w.style.display = w2.style.display = 'block';
+  w.style.left = (-2400 + p * 4000) + 'px';
+  w2.style.left = (-2400 + clamp(p - .08) * 4000) + 'px';
+}
+
+window.seek = async function (t) {
+  const i = Math.max(0, scenes.findIndex(s => t >= s.start && t < s.end) === -1
+    ? (t < scenes[0].start ? 0 : scenes.length - 1)
+    : scenes.findIndex(s => t >= s.start && t < s.end));
+  const s = scenes[i];
+  scenes.forEach((x, k) => x.el.classList.toggle('on', k === i));
+  const lt = t - s.start;
+  await setBg(s, lt);
+  animate(s, lt, t);
+  captions(t, s.bg ? 'dark' : s.theme);
+  wipe(t);
+  document.getElementById('prog').style.width = (1080 * clamp(t / R.duration)) + 'px';
+  const brand = document.getElementById('brand');
+  brand.style.color = (s.theme === 'dark' || s.bg) ? '#fff' : C.text;
+  return i;
+};
+
+window.ready = (async () => {
+  scenes.forEach((s, i) => s.index = i);
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  fitAll();
+  return true;
+})();
+</script>
+</body>
+</html>

@@ -133,7 +133,7 @@ def week_posts(start, end, log, problems):
     for m in media:
         posted = learning.parse_time(m["timestamp"])
         day = posted.astimezone(slots.tz()).date().isoformat()
-        if day not in inweek or m.get("media_type") != "CAROUSEL_ALBUM":
+        if day not in inweek or m.get("media_type") not in ("CAROUSEL_ALBUM", "VIDEO"):
             continue
         meta = learning.match_log(m, posted, log)
         if meta:
@@ -148,6 +148,7 @@ def week_posts(start, end, log, problems):
                       "local_day": day, "slot": meta.get("slot") or slots.slot_of(posted),
                       "angle": learning.OLD_ANGLES.get(meta.get("angle"), meta.get("angle")),
                       "topic": meta.get("topic") or (m.get("caption") or "").split("\n")[0][:80],
+                      "format": meta.get("format") or ("reel" if m.get("media_type") == "VIDEO" else "carousel"),
                       "by_hand": not meta, "live": live, "snap": snap})
     # logged as published but not found on Instagram (no token, or deleted)
     for p in log:
@@ -316,6 +317,9 @@ def build(start, end):
         out += ["## By content type", "", *table([(type_name(r[0]), *r[1:]) for r in by_type], head), ""]
     if by_slot:
         out += ["## By time slot", "", *table(by_slot, head), ""]
+    by_format = group(posts, lambda p: p.get("format") or "carousel", ["carousel", "reel"])
+    if len(by_format) > 1:
+        out += ["## Carousels vs Reels", "", *table([(r[0].capitalize(), *r[1:]) for r in by_format], head), ""]
 
     # mix shift
     out += ["## How the content mix shifted", ""]
