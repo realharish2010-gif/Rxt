@@ -4,7 +4,7 @@ import {
   COOKIE, can, cookieHeader, cookies, githubEnabled, githubIdentity, makeSession, randomState,
   readSession, roleFor, verifyGoogle,
 } from "../../lib/auth.js";
-import { GitHubError, branch, dispatch, file, gh, repo, runs, setVariable, tree, variable } from "../../lib/github.js";
+import { GitHubError, alerts, branch, closeIssue, dispatch, file, gh, repo, runs, setVariable, tree, variable } from "../../lib/github.js";
 import { clearTrigger, markTriggered, recent, record, recentlyTriggered } from "../../lib/audit.js";
 
 const SLOTS = ["next", "morning", "midday", "evening"]; // the choices calendar.yml accepts
@@ -108,7 +108,7 @@ const routes = {
 
   // Everything the home page needs in one call.
   "GET /api/overview": async ({ env }) => {
-    const [config, published, latest, autoPublish, cal, pub, weekly] = await Promise.all([
+    const [config, published, latest, autoPublish, cal, pub, weekly, health, alertList] = await Promise.all([
       file(env, "config.json", { json: true, fallback: {} }),
       file(env, "posts/published.json", { json: true, fallback: [] }),
       file(env, "posts/latest.json", { json: true, fallback: null }),
@@ -116,11 +116,14 @@ const routes = {
       runs(env, "calendar", 20),
       runs(env, "publish", 8),
       runs(env, "weekly", 4),
+      runs(env, "health", 3).catch(() => []),
+      alertsOrNull(env),
     ]);
     return json({
+      alerts: alertList ? alertList.open.map(({ number, title, url, updated_at }) => ({ number, title, url, updated_at })) : null,
       schedule: config.schedule || {}, reels: config.reels || {}, brand: config.brand, handle: config.handle,
       published, latest: latest && slimLatest(latest), autoPublish: autoPublish === "true", autoPublishRaw: autoPublish,
-      runs: [...cal, ...pub, ...weekly].sort((a, b) => b.created_at.localeCompare(a.created_at)),
+      runs: [...cal, ...pub, ...weekly, ...health].sort((a, b) => b.created_at.localeCompare(a.created_at)),
       liveEnabled: liveEnabled(env), repo: repo(env), branch: branch(env),
     });
   },
@@ -177,7 +180,8 @@ const routes = {
   },
 
   "GET /api/runs": async ({ env }) => {
-    const all = await Promise.all([runs(env, "calendar", 30), runs(env, "publish", 15), runs(env, "weekly", 8)]);
+    const all = await Promise.all([runs(env, "calendar", 30), runs(env, "publish", 15), runs(env, "weekly", 8),
+      runs(env, "health", 8).catch(() => [])]);
     return json({ runs: all.flat().sort((a, b) => b.created_at.localeCompare(a.created_at)) });
   },
 
@@ -208,6 +212,12 @@ const routes = {
     const zip = await fetch(loc);
     if (!zip.ok) throw new HttpError(502, "could not download the Reel from GitHub");
     return new Response(zip.body, { headers: { "Content-Type": "application/zip", "Cache-Control": "private, max-age=3600" } });
+  },
+
+  // The bot's failure alerts (GitHub issues labelled bot-alert). null = the token cannot read issues.
+  "GET /api/alerts": async ({ env }) => {
+    const a = await alertsOrNull(env);
+    return json(a ? { ...a, enabled: true } : { enabled: false, open: [], closed: [] });
   },
 
   "GET /api/audit": async ({ env, url }) => json(await recent(env, 100, url.searchParams.get("cursor") || undefined)),
@@ -251,6 +261,38 @@ const routes = {
     return json({ ok: true, run, started_at: new Date().toISOString() });
   },
 
+  "POST /api/health": async ({ env, session }) => {
+    if (!can.post(session)) throw new HttpError(403, "your role can only view");
+    if (await recentlyTriggered(env, "health")) throw new HttpError(409, "a health check was started less than 90 seconds ago");
+    await markTriggered(env, "health", 90);
+    let run;
+    try {
+      run = await dispatch(env, "health", {});
+    } catch (e) {
+      await clearTrigger(env, "health");
+      throw e;
+    }
+    await record(env, session, "ran the health check", { run: run?.id ? String(run.id) : "" });
+    return json({ ok: true, run, started_at: new Date().toISOString() });
+  },
+
+  "POST /api/alerts/close": async ({ env, request, session }) => {
+    if (!can.post(session)) throw new HttpError(403, "your role can only view");
+    const { number } = await body(request);
+    if (!Number.isInteger(number) || number < 1) throw new HttpError(400, "bad alert number");
+    const a = await alertsOrNull(env);
+    const issue = a && a.open.find((i) => i.number === number);
+    if (!issue) throw new HttpError(404, "that alert is not open (or not a bot alert)");
+    try {
+      await closeIssue(env, number, `Marked as fixed from the dashboard by ${session.name || session.email}.`);
+    } catch (e) {
+      if (e.status === 403 || e.status === 404) throw new HttpError(403, "the dashboard's GitHub token needs Issues: Read and write to close alerts (see the setup guide)");
+      throw e;
+    }
+    await record(env, session, "marked an alert fixed", { title: issue.title, issue: String(number) });
+    return json({ ok: true });
+  },
+
   "POST /api/autopublish": async ({ env, request, session }) => {
     if (!can.admin(session)) throw new HttpError(403, "only admins can change the publishing mode");
     const { enabled } = await body(request);
@@ -285,6 +327,15 @@ function publicSession(s) {
 function slimLatest(l) {
   const { render, ...rest } = l; // the Reel render timeline is large and not needed
   return { ...rest, render: render ? { duration: render.duration, tts: render.tts, music: render.music } : undefined };
+}
+
+async function alertsOrNull(env) {
+  try {
+    return await alerts(env);
+  } catch (e) {
+    if (e.status === 403 || e.status === 404) return null; // token has no Issues permission
+    throw e;
+  }
 }
 
 function liveEnabled(env) {

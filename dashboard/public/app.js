@@ -305,6 +305,17 @@
     });
     page.focus({ preventScroll: true });
     window.scrollTo(0, 0);
+    updateAlertCount();
+  }
+
+  // The red number next to "Alerts" in the menu: open bot alerts (GitHub issues labelled bot-alert).
+  function updateAlertCount() {
+    cached("/api/alerts", 60).then((a) => {
+      const el = $("#alert-count");
+      if (!el) return;
+      el.textContent = a.open.length;
+      el.hidden = !a.open.length;
+    }).catch(() => {});
   }
 
   // ---------------------------------------------------------------- shared data logic
@@ -397,7 +408,7 @@
   }
 
   function runLabel(r) {
-    const wf = { calendar: "Content calendar", publish: "Publish", weekly: "Weekly recap" }[r.workflow] || r.name;
+    const wf = { calendar: "Content calendar", publish: "Publish", weekly: "Weekly recap", health: "Health check" }[r.workflow] || r.name;
     const secs = r.started_at && r.updated_at ? (Date.parse(r.updated_at) - Date.parse(r.started_at)) / 1000 : null;
     const quick = r.workflow === "calendar" && r.event === "schedule" && r.status === "completed" && r.conclusion === "success" && secs !== null && secs < 100;
     let badge;
@@ -478,7 +489,9 @@
     page.innerHTML = `
       <div class="page-head"><div><h1>Today, <em>at a glance</em></h1><p class="muted">${esc(o.brand || "RXT")} ${o.handle ? "· " + esc(o.handle) : ""} · times in ${tzLabel()}</p></div>
         ${canPost() ? '<a class="btn" href="#/new">New post</a>' : ""}</div>
-      ${failed.length ? `<div class="callout bad" style="margin-bottom:16px"><strong>${failed.length} run${failed.length > 1 ? "s" : ""} failed in the last 2 days</strong><span><a href="#/runs">See Runs</a> for details.</span></div>` : ""}
+      ${o.alerts && o.alerts.length ? `<div class="callout bad" style="margin-bottom:16px"><strong>${o.alerts.length} open alert${o.alerts.length > 1 ? "s" : ""} from the bot</strong>
+        <span>${o.alerts.slice(0, 3).map((a) => `${esc(alertName(a.title))} <span class="muted small">(${esc(ago(a.updated_at))})</span>`).join(" · ")} · <a href="#/alerts">See alerts</a></span></div>`
+      : failed.length ? `<div class="callout bad" style="margin-bottom:16px"><strong>${failed.length} run${failed.length > 1 ? "s" : ""} failed in the last 2 days</strong><span><a href="#/runs">See Runs</a> for details.</span></div>` : ""}
       <div class="tiles">
         <div class="tile wide"><div class="label">Publishing mode</div>
           <div style="margin-top:8px"><div class="seg" id="mode" role="radiogroup" aria-label="Publishing mode">
@@ -1009,7 +1022,7 @@
     const drawWatch = async (r) => {
       const box = $("#watch");
       if (!r) {
-        box.innerHTML = `<div class="card" style="margin-bottom:16px"><div class="row"><span class="spinner"></span><b>Starting your ${watch === "publish" ? "publish" : "post"}…</b></div><p class="muted small" style="margin:6px 0 0">GitHub usually picks it up within a minute.</p></div>`;
+        box.innerHTML = `<div class="card" style="margin-bottom:16px"><div class="row"><span class="spinner"></span><b>Starting your ${watch === "publish" ? "publish" : watch === "health" ? "health check" : "post"}…</b></div><p class="muted small" style="margin:6px 0 0">GitHub usually picks it up within a minute.</p></div>`;
         return;
       }
       const l = runLabel(r);
@@ -1024,7 +1037,9 @@
       const gen = flat.find((s) => s.name === "Generate");
       const pub = flat.find((s) => /^Publish/.test(s.name));
       let result = "";
-      if (done && r.conclusion === "success") {
+      if (done && r.conclusion === "success" && watch === "health") {
+        result = `<div class="callout good" style="margin-top:12px"><strong>Check finished</strong><span><a href="#/alerts">See Alerts</a>: anything it found is listed there.</span></div>`;
+      } else if (done && r.conclusion === "success") {
         if (watch === "calendar" && gen && gen.conclusion === "skipped") {
           result = `<div class="callout warn" style="margin-top:12px"><strong>The bot decided not to post</strong>The slot or today's limit was already used. <a href="${esc(r.url)}" target="_blank" rel="noopener">The run's summary</a> says why. You can try again with "Post anyway".</div>`;
         } else if (watch === "calendar" && pub && pub.conclusion === "skipped") {
@@ -1035,7 +1050,7 @@
       } else if (done) {
         result = `<div class="callout bad" style="margin-top:12px"><strong>The run ${esc(r.conclusion || "failed")}</strong><span><a href="${esc(r.url)}" target="_blank" rel="noopener">Open it on GitHub</a> to see what went wrong.</span></div>`;
       }
-      box.innerHTML = `<div class="card" style="margin-bottom:16px"><div class="card-head"><h2>Your ${watch === "publish" ? "publish" : "new post"}</h2>${l.badge}</div>
+      box.innerHTML = `<div class="card" style="margin-bottom:16px"><div class="card-head"><h2>Your ${watch === "publish" ? "publish" : watch === "health" ? "health check" : "new post"}</h2>${l.badge}</div>
         <p class="muted small" style="margin:0">${esc(l.wf)} · started ${esc(ago(r.created_at))} · <a href="${esc(r.url)}" target="_blank" rel="noopener">GitHub</a></p>${steps}${result}</div>`;
       if (done) bust();
     };
@@ -1050,6 +1065,75 @@
     } else if (!watch) {
       state.timers.push(setInterval(() => draw().catch(() => {}), 30000));
     }
+  };
+
+  // ---------------------------------------------------------------- Alerts
+
+  function alertName(title) {
+    return String(title || "").replace(/^Bot alert:\s*/, "");
+  }
+
+  function alertKind(title) {
+    if (/token/i.test(title)) return { label: "Instagram token", cls: "bad" };
+    if (/missed/i.test(title)) return { label: "Missed post", cls: "warn" };
+    return { label: "Run failed", cls: "bad" };
+  }
+
+  pages.alerts = async function () {
+    page.innerHTML = `
+      <div class="page-head"><div><h1>Bot <em>alerts</em></h1><p class="muted">When a post, Reel or run fails, the Instagram token has a problem, or a slot passes without a post. Each alert is also emailed to you as a GitHub issue.</p></div>
+        ${canPost() ? '<button class="btn btn-ghost" id="run-health">Run health check now</button>' : ""}</div>
+      <div id="alerts"><div class="empty"><span class="spinner"></span></div></div>`;
+    const draw = async () => {
+      const a = await cached("/api/alerts", 30);
+      const box = $("#alerts");
+      if (!a.enabled) {
+        box.innerHTML = `<div class="callout warn"><strong>The dashboard cannot read alerts yet</strong>
+          <span>Edit the dashboard's GitHub token and set <b>Issues</b> to <b>Read and write</b> (step 1 of the setup guide in dashboard/README.md). The alert emails still reach you in the meantime.</span></div>`;
+        return;
+      }
+      const card = (i) => {
+        const k = alertKind(i.title);
+        return `<div class="card alert-card" style="margin-bottom:16px">
+          <div class="card-head"><h2>${esc(alertName(i.title))}</h2><span class="badge ${k.cls}">${esc(k.label)}</span></div>
+          <p class="muted small" style="margin:0 0 10px">First seen ${esc(fmtDate(i.created_at))} ${tzLabel()}${i.comments ? ` · happened again ${i.comments} time${i.comments > 1 ? "s" : ""}, last ${esc(ago(i.updated_at))}` : ""}</p>
+          <div class="md">${window.renderMarkdown(i.latest ? i.latest.body.replace(/^\*\*It happened again\.\*\*\s*/, "") : i.body)}</div>
+          <div class="row" style="margin-top:12px">
+            ${canPost() ? `<button class="btn btn-sm" data-close="${i.number}" data-title="${esc(alertName(i.title))}">Mark fixed</button>` : ""}
+            <a class="btn btn-ghost btn-sm" href="${esc(i.url)}" target="_blank" rel="noopener">Open on GitHub</a></div>
+        </div>`;
+      };
+      box.innerHTML = (a.open.length ? a.open.map(card).join("")
+        : `<div class="callout good" style="margin-bottom:16px"><strong>All clear</strong><span>No open alerts. The daily health check runs at about 22:57 ${tzLabel()}.</span></div>`)
+        + `<div class="card"><div class="card-head"><h2>Recently fixed</h2></div>${a.closed.length
+          ? `<div class="table-wrap"><table><thead><tr><th>Alert</th><th>Started</th><th>Fixed</th><th></th></tr></thead><tbody>${a.closed.map((i) => `<tr>
+            <td>${esc(alertName(i.title))}</td><td style="white-space:nowrap">${esc(fmtDate(i.created_at))}</td><td style="white-space:nowrap">${esc(fmtDate(i.closed_at))}</td>
+            <td><a class="small" href="${esc(i.url)}" target="_blank" rel="noopener">GitHub</a></td></tr>`).join("")}</tbody></table></div>`
+          : '<p class="empty">Nothing yet.</p>'}</div>`;
+      box.querySelectorAll("[data-close]").forEach((b) => {
+        b.onclick = async () => {
+          const ok = await confirmBox({ title: "Mark this alert fixed?", body: `<p>This closes “${esc(b.dataset.title)}” on GitHub. If the problem happens again, the bot opens a new alert.</p>`, ok: "Mark fixed" });
+          if (!ok) return;
+          try {
+            await api("/api/alerts/close", { method: "POST", body: { number: Number(b.dataset.close) } });
+            toast("Alert closed");
+            bust();
+            route();
+          } catch (e) { toast(e.message, 7000); }
+        };
+      });
+    };
+    if ($("#run-health")) {
+      $("#run-health").onclick = async () => {
+        try {
+          const res = await api("/api/health", { method: "POST" });
+          toast("Health check started. Any problem shows up here in about a minute.");
+          location.hash = `#/runs?watch=health&since=${encodeURIComponent(res.started_at)}${res.run?.id ? "&id=" + res.run.id : ""}`;
+        } catch (e) { toast(e.message, 6000); }
+      };
+    }
+    await draw();
+    state.timers.push(setInterval(() => { delete state.cache["/api/alerts"]; draw().catch(() => {}); }, 60000));
   };
 
   // ---------------------------------------------------------------- Reports
@@ -1106,6 +1190,7 @@
         const det = e.details || {};
         if (e.action === "started a post") return `Started a post · slot ${esc(det.slot)}, format ${esc(det.format)}${det.force ? ", post anyway" : ""}`;
         if (e.action === "published the draft") return `Published the draft “${esc(det.topic)}”${det.force ? " (post anyway)" : ""}`;
+        if (e.action === "marked an alert fixed") return `Marked alert fixed · ${esc(det.title || "")}`;
         if (e.action === "sign-in refused") return `<span class="error">Sign-in refused</span> · ${esc(det.reason || "")}`;
         return esc(cap(e.action));
       };
