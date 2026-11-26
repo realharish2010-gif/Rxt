@@ -44,9 +44,11 @@ DEFAULTS = {
     "language": "English",  # English, Hinglish (Roman script) or Hindi (Devanagari)
     "tts": "edge,kokoro",  # tried in order
     "voice": {
-        "edge": "en-IN-NeerjaNeural",  # also good: en-IN-PrabhatNeural (male)
+        # the "Multilingual" voices are Microsoft's most natural; also good: en-US-AndrewMultilingualNeural
+        # (male), en-US-EmmaMultilingualNeural, or en-IN-NeerjaNeural for an Indian accent
+        "edge": "en-US-AvaMultilingualNeural",
         "edge_hindi": "hi-IN-SwaraNeural",  # or hi-IN-MadhurNeural (male)
-        "rate": "+8%",
+        "rate": "+5%",
         "kokoro": "af_heart",
         "kokoro_speed": 1.08,
     },
@@ -125,7 +127,7 @@ def script_prompt(past, learnings, voice, remake=None, feedback=""):
     s = settings()
     lo, hi = s["seconds"]
     lang = s["language"]
-    lang_rule = {"english": "Write everything in clear Indian English.",
+    lang_rule = {"english": "Write everything in clear, natural English (Indian context and ₹ are fine).",
                  "hinglish": "Write the spoken lines and on-screen text in natural Hinglish (Hindi and English mixed, Roman script), the way young Indians talk.",
                  "hindi": "Write the spoken lines and on-screen text in simple, everyday Hindi (Devanagari script); English money words are fine."}.get(lang.lower(), f"Write in {lang}.")
     source = ""
