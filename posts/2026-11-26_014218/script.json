@@ -1,0 +1,70 @@
+{
+  "topic": "Financial planning for wedding celebrations",
+  "scenes": [
+    {
+      "type": "hook",
+      "say": "Love the giant bubble entrance? Check budgets.",
+      "text": "Wedding goals vs actual budget",
+      "accent": "budget",
+      "broll": "couple wedding entry"
+    },
+    {
+      "type": "statement",
+      "say": "Viral trends are fun, but your bank account prefers a plan.",
+      "text": "Keep celebrations within limits",
+      "accent": "limits",
+      "sub": "Don't dip into future savings",
+      "broll": "person using calculator"
+    },
+    {
+      "type": "compare",
+      "say": "Decide between the big entry or your future home deposit.",
+      "title": "Prioritize your goals",
+      "left": {
+        "label": "Viral entrance",
+        "value": "One-time memory"
+      },
+      "right": {
+        "label": "Future fund",
+        "value": "Long-term security"
+      },
+      "better": "right"
+    },
+    {
+      "type": "list",
+      "say": "Try this: Fix a total limit, then allocate to specific categories.",
+      "title": "The planning approach",
+      "items": [
+        "Set a total amount",
+        "List your top priorities",
+        "Research actual vendor costs"
+      ],
+      "numbered": true
+    },
+    {
+      "type": "counter",
+      "say": "If your total budget is ₹5 lakhs, assign a firm cap to each category.",
+      "value": 500000.0,
+      "prefix": "₹",
+      "suffix": "",
+      "label": "Example total wedding budget",
+      "kicker": "Be specific"
+    },
+    {
+      "type": "statement",
+      "say": "Treat it like a project: once the category limit is hit, stop spending.",
+      "text": "Strict limits prevent overspending",
+      "accent": "prevent",
+      "sub": "Stay within your defined cap",
+      "broll": "writing in notebook"
+    },
+    {
+      "type": "cta",
+      "say": "Want better financial health? Follow RXT for more smart planning.",
+      "text": "Plan your money wisely",
+      "accent": "wisely",
+      "button": "Follow"
+    }
+  ],
+  "caption": "Grand wedding entrances are fun, but your post-wedding finances deserve the spotlight. Use these steps to align your celebration with your financial goals: \n\n1. Set a total, realistic budget. \n2. Prioritize what matters most to you.\n3. Research actual costs before booking.\n4. Stick to your category limits.\n\nBuilding a plan keeps your future goals on solid ground. Follow RXT for better financial health. \n\n#RXTFinancial #WeddingBudget #MoneyTips #FinancialPlanning #SmartSpending #PersonalFinanceIndia"
+}
