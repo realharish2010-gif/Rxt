@@ -105,7 +105,28 @@ jobs:
           git config user.email "carousel-bot@users.noreply.github.com"
           git add -A
           git commit -m "New carousel $(date -u +%F) ${{ steps.due.outputs.slot }}" || true
-          git push
+          # main may have moved on (a merged PR) while the post was being made
+          for i in 1 2 3 4; do git push -q && exit 0; echo "Push refused (main moved on), rebasing and retrying"; git pull --rebase -q || { git rebase --abort; exit 1; }; sleep 5; done
+          exit 1
+      - name: Is the post a Reel made by an earlier run?
+        id: reel
+        if: steps.due.outputs.slot != '' && vars.AUTO_PUBLISH == 'true'
+        # a rerun after a failed publish reuses the saved post, but a Reel's MP4 is not in git
+        run: |
+          python - >> "$GITHUB_OUTPUT" <<'PY'
+          import json, pathlib
+          p = json.loads(pathlib.Path("posts/latest.json").read_text()) if pathlib.Path("posts/latest.json").exists() else {}
+          need = p.get("format") == "reel" and not p.get("posted") and not (pathlib.Path("posts") / p.get("folder", "-") / "reel.mp4").exists()
+          print("run_id=" + ((p.get("run_id") or "") if need else ""))
+          PY
+      - name: Fetch the Reel video
+        if: steps.reel.outputs.run_id != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: reel-${{ steps.reel.outputs.run_id }}
+          path: posts
+          run-id: ${{ steps.reel.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish (only when AUTO_PUBLISH is true)
         if: steps.due.outputs.slot != '' && vars.AUTO_PUBLISH == 'true'
         run: python main.py publish
@@ -118,7 +139,9 @@ jobs:
         run: |
           git add -A
           git commit -m "Mark posted" || true
-          git push
+          # must land, or the next run would post this slot again
+          for i in 1 2 3 4; do git push -q && exit 0; echo "Push refused (main moved on), rebasing and retrying"; git pull --rebase -q || { git rebase --abort; exit 1; }; sleep 5; done
+          exit 1
       - name: Email an alert if this run failed (opens a GitHub issue, see alerts.py)
         if: failure() || cancelled()
         run: python alerts.py failed
