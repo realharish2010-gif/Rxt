@@ -60,3 +60,15 @@ jobs:
           git commit -m "Weekly recap $(date -u +%F)" || exit 0
           for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 15; done
           exit 1
+      - name: Email an alert if this run failed (opens a GitHub issue, see alerts.py)
+        if: failure() || cancelled()
+        run: python alerts.py failed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTIFY: ${{ github.repository_owner }}
+      - name: Close the alert once a run works again
+        if: success()
+        continue-on-error: true  # never fail a run that worked
+        run: python alerts.py recovered
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
