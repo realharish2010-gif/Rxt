@@ -13,6 +13,11 @@ on:
         description: "Leave unticked. Set by the Cloudflare timer (timer/)"
         type: boolean
         default: false
+# the timer and GitHub's own schedule both start this; one at a time, so the second run sees
+# the first one's alert issue instead of opening a duplicate
+concurrency:
+  group: health-check
+  cancel-in-progress: false
 permissions:
   contents: read
   issues: write
