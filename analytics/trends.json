@@ -1,134 +1,47 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-27T03:09:11+00:00",
-  "candidates": 186,
+  "updated": "2026-11-27T07:10:07+00:00",
+  "candidates": 195,
   "picks": [
     {
       "id": "robotic-surgery-how-much-will-your-health-insurance-policy-a",
       "kind": "news",
       "headline": "Robotic surgery: How much will your health insurance policy actually pay? - Business Standard",
       "source": "Business Standard",
-      "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNMmt0NDVUeVNJVDFVNXdJa0JBb0IxaG91dThsSTN2OE80S0pHd2dNTFR6a1dqQ2lnd2dWbUd2OVYyanlsZlVvSUVmT25oTWlfMkVTZGxkOUY5QjB5OXROVFdCUXlKb0o4cmdWVTJ0dmtXampFRzdBcTVZZWFvWGFKbHdWTmZLVzlzWmxhQWZmX3FnZUVDN25TS3JoVElLenRGNnBnT0kySmNjTHdmS0RyUTZzZlBqWWlzQ01TUG9qUHhzZjJFRHpkd3UwdW1VVm1EYnRRVWMyNzBqbDRrSWhzTzZUZDDSAeoBQVVfeXFMTmFyLXF4VVF1ZkhyV2dtSEFGVUtCSzNISW5xaF9JV3ZYMnMzWnA1S1RNSDdyczlOZklNWW9hZkxpME1KY1dLUFNRS2ZvajVRQmdiU2Q5QzhjOGtMbzhDZjVBWi0xaEh0bWV6LURaZ3ZEbDFTWV9KOE5zdXk1ZGxiX1lGWXBfTkdYSTA0YjdwdmxjZXZzUWk3OHk1RUpBaW15RXBkcE1XRWxrTXR6Mjh5azc1eTlXQ3h1VDZxOHVCMDlENlhXLXFGUjl4T3puWFp0a1RpN1loQmdncEtjbHlCdUYxRFA1NjlwRjF3?oc=5",
+      "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOYXItcXhVUXVmSHJXZ21IQUZVS0JLM0hJbnFoX0lXdlgyczNacDVLVE1IN3JzOU5mSU1Zb2FmTGkwTUpjV0tQU1FLZm9qNVFCZ2JTZDlDOGM4a0xvOENmNUFaLTFoSHRtZXotRFpndkRsMVNZX0o4TnN1eTVkbGJfWUZZcF9OR1hJMDRiN3B2bGNldnNRaTc4eTVFSkFpbXlFcGRwTVdFbGtNdHoyOHlrNzV5OVdDeHVUNnE4dUIwOUQ2WFctcUZSOXhPem5YWnRrVGk3WWhCZ2dwS2NseUJ1RjFEUDU2OXBGMXfSAeoBQVVfeXFMTmFyLXF4VVF1ZkhyV2dtSEFGVUtCSzNISW5xaF9JV3ZYMnMzWnA1S1RNSDdyczlOZklNWW9hZkxpME1KY1dLUFNRS2ZvajVRQmdiU2Q5QzhjOGtMbzhDZjVBWi0xaEh0bWV6LURaZ3ZEbDFTWV9KOE5zdXk1ZGxiX1lGWXBfTkdYSTA0YjdwdmxjZXZzUWk3OHk1RUpBaW15RXBkcE1XRWxrTXR6Mjh5azc1eTlXQ3h1VDZxOHVCMDlENlhXLXFGUjl4T3puWFp0a1RpN1loQmdncEtjbHlCdUYxRFA1NjlwRjF3?oc=5",
       "published": "2026-11-26T17:19:48+00:00",
       "topic_area": "insurance basics",
-      "angle": "Read the fine print of your health insurance policy to understand what treatments are covered before an emergency happens.",
+      "angle": "When evaluating your health insurance, always check if modern medical procedures, such as robotic surgery, are covered under your policy's terms.",
       "facts": [
-        "How much will your health insurance policy actually pay?"
+        "Health insurance coverage for robotic surgery",
+        "Policyholders should check what their health insurance policy actually pays"
       ],
-      "avoid": "Do not predict future costs or claim that certain insurance companies are better than others.",
-      "relevance": 5,
-      "evergreen_ok": true,
-      "format": "lesson"
-    },
-    {
-      "id": "credit-card-spending-rises-20-to-2-45-lakh-crore-in-october",
-      "kind": "news",
-      "headline": "Credit card spending rises 20% to ₹2.45 lakh crore in October as festive shopping boosts consumer demand across India - Livemint",
-      "source": "Livemint",
-      "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxNMHNSc19RVUxtLWZWZXczUWduMXgwa1BBT1ZPcEs2a0Rpb2VvYkFSbWNwNFVJRE14SS1KazVOc2tOQUVwY0NlM3pua0p5MHFKeFRfY010UEo5WDg2Z0ZNN0VMc0FsSDA0bTV0WmdsNWk5WV9YTmd5NUtGdERNYlh6QXEzTmhhSHRIUzBFTG12LVhxaGtIaWZWdnZrZTVwdW1xLVFVM005OXFrR1A3NDF4RWlUTHNmc0x2b1JrWEZLYWRCZFh3OENXb1lsM2lXN25GVVFyQnBQMTRsazdFa0l5Q3pKRGJlTmlDeXB4b24zWTVjNG8yUW4taFZOc24tUEpjVWRzNHpabE5vQnVWTjc3d9IBlgJBVV95cUxPSG5KM1VMTUtfelNLdVRyekoxc3Bka05QdGlCLXprOTFiTV9xQ1FpX0xpdDFKQmJkV2QyVmxySGVscFBpTFU0bVJSMkxZbEhfMGwwQXNxN2RBZXJOZGJ1a1RQMGdKc3otMW9HVVVZQUhTbE1UNjZWcHI0RktvNWpaaEd0QlF2dk9CckRWSndYSXJkN19lSUl4M0RKYmtLU0lYMm9iV2FOaWRrRTRXSTVjMlg0ekExeS1GOFZEdEpCQURoSzZpdjB3eHhldUk1LUhGUnVDLTBsVGtSRk81c25yZ0ZsYUJtOUgyQVdnUjF1X3YzY041LWREQkpYakVfVy10QmJHM2x4UTVMaVA1akhkV1h5cFVwQQ?oc=5",
-      "published": "2026-11-26T02:11:51+00:00",
-      "topic_area": "budgeting",
-      "angle": "High festive spending is a common trap; learn to track your credit card usage to ensure your monthly debt payments remain manageable.",
-      "facts": [
-        "Credit card spending rises 20% to ₹2.45 lakh crore",
-        "Festive shopping boosts consumer demand"
-      ],
-      "avoid": "Do not frame spending as negative or positive, and avoid giving advice on whether to use credit cards or not.",
+      "avoid": "Do not recommend specific insurance companies, plans, or medical providers.",
       "relevance": 4,
       "evergreen_ok": true,
       "format": "lesson"
     },
     {
-      "id": "gold-loans-grow-60-6-to-2-33-trillion-ticket-size-up-32-7-re",
+      "id": "india-s-love-affair-with-cash-is-fading-why-are-more-people",
       "kind": "news",
-      "headline": "Gold loans grow 60.6% to ₹2.33 trillion, ticket size up 32.7%: Report - Business Standard",
-      "source": "Business Standard",
-      "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxONzZCQzUxNXNJa1VfaldSenJvY0c2Z19qQzBDSU1PTWZnUHRPa2x4NUhqaThyRWVHcDVoYmFqUm12RG9hUnNYVF9EQ2oyNm9CeHV4YUE0RDFYN3MxNFNXN1Yya3ZsVGJfZGxJSkdrdndoUlVGYTFZekxnRjNqTzY1eDVnT0RwaFRnSGJJczNlQnUxcXZLZndNNmRCbTZLdS1XYWJrTEZlaXhwQVRubEJrQkZtY1JuM3h2eXZEVFB3Si04b3RiY0JfT0I1dTlVeURUQTE3aFBCT3dZbXPSAeABQVVfeXFMUEdiTWNRVnpvYTRCNjNOZnZoVE1hWWIzcVpWWkhuZm16ckZxUVNaUjlZd19pbEU0QmppdWdjTHhwTV9sSkZuMGtBZmc0aC1aZ2VtZkVBY1Vnd3h3M1FJN3FFZllmTTJXZ0tjdThpbUlKU0FUNVJaaW9kenVleTFEQkZYdGU3WFlpR1dTTUkySmx6VEdyRExGU1Z4ZzVFbV9kUEtLUlFKWWMxN3E1REFZS2hjeEVvV3NwRzd4cVcwRDNZbUxRZE5Ea2plZUQyV1ZfdzJFSEphS2pXNXZRUGNMUmI?oc=5",
-      "published": "2026-11-26T08:55:46+00:00",
+      "headline": "India's love affair with cash is fading: Why are more people swiping credit cards? - India Today",
+      "source": "India Today",
+      "link": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxOLTF4OWNVaGVib0k3UXBfZ2d2OUlRa1dSUDJnMEsyQVpTa0t3azVuUlQzUmlxSDZuMy0xbWZBenExY2sxVUZNWGJHYjBDb3FoeXpSb1k0QzNueUZxS0U0elFwRGhJOFRxdGtoNktSbUVFX20zOWppTFJIZmc0b3NwbUhHVm91Y2dXRExMV2MtbzlENmg0RURmZVFldURYQXQzN0l1YlpqQVBYbnY0YWVrcmdXUVJTNVRHSV9WMUZyS09fN3V6RWR6TGdqTHp4dllIRkk2eVNaV2RBY0F6SE1QRExuWjRiZVRyaVdzc1E0NGtxbnMxUGtHYzZubUJCaVc4ZGlua0s0OGvSAY4CQVVfeXFMTWx6TXI1Z1B0a3NvLUhIcDVjd2hKUnRHT1cyME1IQS0xcUFVTWpmTXNxRUhIQ3FjYlo1UWROdGlXVTlmQlYxVVdRZ1F5SFlzbENraVRraWoxUFhSSzRKS2tYZXZhelVncnJ1N3NjUkVsWjF2Y2VPTWNYbnAyT1BZOUtHcWNST1ZRaVdWUXVwUkRwOGE3YkFEUjVrVGc4WW1jQTRnTkFTZk1hY25nN3czRnc2UGRpMFpGRFFkTjVLZk9Gc0UzNnBrWWNQZmpxSHZ4WUFOSTFORDQxWlgyZXJfS3ZUZ3JZTjRJM3Z2OXdxWm9fMGhkVTRMb1RMSFJuZU1YLUJ0M1ZtNThYZE9EUWJB?oc=5",
+      "published": "2026-11-27T03:55:43+00:00",
       "topic_area": "debt",
-      "angle": "Before taking a loan against any asset like gold, calculate if the interest cost fits your budget and understand the risks of default.",
+      "angle": "Using credit cards can offer convenience, but it is essential to treat them as a tool for short-term payment rather than an extension of your income to avoid high-interest debt.",
       "facts": [
-        "Gold loans grow 60.6% to ₹2.33 trillion",
-        "Ticket size up 32.7%"
+        "India's love affair with cash is fading",
+        "Increase in people swiping credit cards"
       ],
-      "avoid": "Do not recommend gold loans as an easy solution or judge people for using them; avoid suggesting specific lenders.",
+      "avoid": "Do not encourage the use of credit cards or advise against them; stay neutral on the utility of credit products.",
       "relevance": 4,
       "evergreen_ok": true,
       "format": "lesson"
     }
   ],
-  "general_candidates": 123,
-  "general_picks": [
-    {
-      "id": "gt-iphone-17-pro-max-under-rs-97-000-iphone-16-under-rs-46-0",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Black Friday Sales",
-      "story": "iPhone 17 Pro Max under Rs 97,000, iPhone 16 under Rs 46,000: Croma Black Friday deals - The Indian Express",
-      "source": "The Indian Express",
-      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQZWtabVVac1dhWDJHeDR1dEFTc21pV3NVbjhRZm5xTFRmdVZvZTlCSjF0V1QzX0pyd2NMeVgwUThzVzE2MW84NFZFT1MxR3FkaTRMSmNBTjJBaGxyLVFlM3libTZ6OGk2c1VrRTBKNW9hVWhhRVVqQ3p6TU93MGU2Nk5TT1dWcFBCMVpMbkkwaEM2dFE3VTJiQW1EX19pUjhRZ2g5Ty05ZDJwdE3SAbIBQVVfeXFMTUY5SnpWeUduNWNtNkZ4N1JYM2REaVM3N1Rmdy12d3B6clVhaUhRSURSb3FYYTUtOXQydFdEdU1YakdyS0JiMFdhYUxweXAxUXdhdHBwMkFaWDF1dTg4MncwX3lDdUR6ZlJhUkxqamtKRWYxUlhhblpKeUpIMDRrX2ZYU18tNkdHejljaGtaX0NkNTdVdHg5b0dZVUhEbHhSQ0pUZ3NBVWhZQnZ5eTg3ZGRHQQ?oc=5",
-      "published": "2026-11-26T13:41:19+00:00",
-      "traffic": "",
-      "topic_area": "budgeting",
-      "why_popular": "Major discounts on electronics like iPhones are trending across India as the sale season begins.",
-      "bridge": "Just like a big sale, your money needs a 'wishlist' strategy so you don't overspend on impulse buys.",
-      "hook": "POV: You have a sale-proof shopping plan",
-      "meme_format": "POV: ...",
-      "facts": [
-        "Major brands are offering significant price drops on the latest smartphone models.",
-        "Sales are currently driving high traffic to both online and physical retail stores."
-      ],
-      "avoid": "Do not imply that buying these items on sale is a smart financial investment or a way to save money.",
-      "relevance": 5,
-      "fun": 4
-    },
-    {
-      "id": "gt-today-s-nyt-wordle-hints-answer-and-help-for-friday-nov-2",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Daily Wordle Puzzle",
-      "story": "Today’s NYT Wordle Hints, Answer and Help for Friday, Nov. 27, #1987 - CNET",
-      "source": "CNET",
-      "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNSWszVmt0T05YVFpVaFYyZWg5dW1ZQ0JXS1AxUXZEN1ZvckNHSFF4N3RHdlpoWUc2Ym1DYjZDLVNMNXJXWFN0TmJMNE1kTUY2aWp1Mk00WERUendJamRjYUZhVEh5cV9NbzE0N09nVG9qVGR1ZFdNY1AyMUZOY3VGQVQwUQ?oc=5",
-      "published": "2026-11-26T21:00:24+00:00",
-      "traffic": "",
-      "topic_area": "money habits and mindset",
-      "why_popular": "Thousands of people search for hints and answers to the daily word puzzle every single morning.",
-      "bridge": "Solving your daily money habits is like playing Wordle—a little bit of consistent daily effort eventually reveals the big picture.",
-      "hook": "If consistency was a money habit",
-      "meme_format": "If ... were a money habit",
-      "facts": [
-        "Wordle remains a daily habit for millions of users worldwide.",
-        "The game challenges players to solve a puzzle with limited attempts."
-      ],
-      "avoid": "Do not frame financial health as a game of luck or chance.",
-      "relevance": 4,
-      "fun": 5
-    },
-    {
-      "id": "gt-whatsapp-users-can-also-schedule-messages-now-news-on-air",
-      "kind": "general",
-      "format": "general trends",
-      "headline": "Scheduled Messages",
-      "story": "WhatsApp users can also schedule messages now - News On AIR",
-      "source": "News On AIR",
-      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1hZnZDano3UnRMT2FBR3lJZnVZbmRXVXBWMDVkczItT0tocUdCS01mRHVYd1lTY3lkS21XSGFFWFdaTWZpc0VpdG1BZ292UF9FazZWNUdYblRpaUpxMmhncFJNWkp4QjZ3dndhOUphSXFKcWFhZjloWXJ0OA?oc=5",
-      "published": "2026-11-26T15:58:02+00:00",
-      "traffic": "",
-      "topic_area": "financial goals and planning",
-      "why_popular": "The feature to schedule messages on WhatsApp has recently become a widely used tool for better communication.",
-      "bridge": "Just like you can schedule a message, you can automate your 'savings' message to yourself every payday.",
-      "hook": "Things that just make sense: Automating your savings",
-      "meme_format": "Things that just make sense",
-      "facts": [
-        "WhatsApp now allows users to schedule messages for both individual and group chats.",
-        "This feature helps users manage their communication timing more effectively."
-      ],
-      "avoid": "Do not suggest using automated banking apps or specific high-risk investment platforms.",
-      "relevance": 4,
-      "fun": 4
-    }
-  ],
+  "general_candidates": 124,
+  "general_picks": [],
   "patterns": {
     "hints": {
       "content_type": [
@@ -366,15 +279,11 @@
     "looked_at": 120
   },
   "errors": [
-    "Competitor @finshots: Invalid user id",
-    "Hashtag #personalfinance: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #moneytips: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #financialliteracy: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #budgeting: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
-    "Hashtag #savingmoney: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)"
+    "Gemini general trend screen failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
   ],
   "used": [
     "2-years-to-sell-a-home-inventory-pile-up-raises-warning-sign",
+    "advisory-regarding-unregulated-pre-listing-premium-often-cal",
     "caution-to-investors-regarding-impersonation-of-sebi-registe",
     "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
     "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"

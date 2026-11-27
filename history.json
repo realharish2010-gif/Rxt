@@ -155,5 +155,27 @@
     "local_day": "2026-11-27",
     "slot": "morning",
     "post_time": "07:30"
+  },
+  {
+    "day": "2026-11-27",
+    "topic": "Understanding Unregulated Pre-listing Premiums (GMP)",
+    "template": "brutal",
+    "content_type": "simple explainer",
+    "hook_style": "relatable everyday situation",
+    "topic_area": "financial goals and planning",
+    "angle": "trend-tied",
+    "trend": {
+      "id": "advisory-regarding-unregulated-pre-listing-premium-often-cal",
+      "headline": "Advisory Regarding Unregulated Pre-listing Premium often called as Grey Market Premium (GMP) for Upcoming Initial Public Offers (IPOs)",
+      "source": "SEBI",
+      "link": "https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2026/advisory-regarding-unregulated-pre-listing-premium-often-called-as-grey-market-premium-gmp-for-upcoming-initial-public-offers-ipos-_105942.html",
+      "published": null,
+      "format": "lesson"
+    },
+    "hook": "Confused by 'Grey Market' IPO premiums?",
+    "format": "carousel",
+    "local_day": "2026-11-27",
+    "slot": "midday",
+    "post_time": "12:30"
   }
 ]
