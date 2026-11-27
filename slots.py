@@ -208,12 +208,20 @@ def due(now=None, wanted=None, manual=False, force=False, auto_publish=True):
     return None, None, "no slot is due right now"
 
 
+def timed_run():
+    """True for a run started by the clock: GitHub's own schedule, or the Cloudflare timer
+    (timer/), which starts the calendar through workflow_dispatch with timer=true because
+    GitHub often runs scheduled workflows late or skips them."""
+    timer = os.environ.get("TIMER", "").strip().lower() in ("1", "true", "yes")
+    return os.environ.get("GITHUB_EVENT_NAME", "") == "schedule" or timer
+
+
 def cli():
     event = os.environ.get("GITHUB_EVENT_NAME", "")
     force = os.environ.get("FORCE_PUBLISH", "").strip().lower() in ("1", "true", "yes")
     auto = os.environ.get("AUTO_PUBLISH", "true").strip().lower() == "true"
     slot, t, reason = due(wanted=os.environ.get("SLOT_INPUT", "").strip(), force=force,
-                          manual=event == "workflow_dispatch", auto_publish=auto)
+                          manual=event == "workflow_dispatch" and not timed_run(), auto_publish=auto)
     now = local_now()
     lines = [f"Now: {now:%Y-%m-%d %H:%M} (UTC{settings()['utc_offset']})", "",
              "| Slot | Planned time | Why | Status |", "|---|---|---|---|"]

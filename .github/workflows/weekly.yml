@@ -1,4 +1,5 @@
 name: Weekly recap
+run-name: ${{ inputs.timer && 'Weekly recap (timer)' || 'Weekly recap' }}
 # Every Monday morning India time: last week's reach, saves, best and worst post, results by
 # content type and slot, how the mix shifted, and anything that failed (see weekly.py).
 # The recap is committed to analytics/weekly/ and opened as a GitHub issue, which GitHub
@@ -17,6 +18,10 @@ on:
         default: ""
       force:
         description: "Redo the recap even if it already exists"
+        type: boolean
+        default: false
+      timer:
+        description: "Leave unticked. Set by the Cloudflare timer (timer/)"
         type: boolean
         default: false
 concurrency:

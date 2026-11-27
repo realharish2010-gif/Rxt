@@ -410,13 +410,14 @@
   function runLabel(r) {
     const wf = { calendar: "Content calendar", publish: "Publish", weekly: "Weekly recap", health: "Health check" }[r.workflow] || r.name;
     const secs = r.started_at && r.updated_at ? (Date.parse(r.updated_at) - Date.parse(r.started_at)) / 1000 : null;
-    const quick = r.workflow === "calendar" && r.event === "schedule" && r.status === "completed" && r.conclusion === "success" && secs !== null && secs < 100;
+    const timed = r.event === "schedule" || /\(timer\)/.test(r.title || ""); // timer = Cloudflare timer (timer/)
+    const quick = r.workflow === "calendar" && timed && r.status === "completed" && r.conclusion === "success" && secs !== null && secs < 100;
     let badge;
     if (r.status !== "completed") badge = `<span class="badge info"><span class="dot pulse"></span>${r.status === "queued" || r.status === "waiting" || r.status === "pending" ? "Waiting" : "Running"}</span>`;
     else if (r.conclusion === "success") badge = quick ? `<span class="badge">Checked</span>` : `<span class="badge good">Done</span>`;
     else if (r.conclusion === "skipped" || r.conclusion === "cancelled") badge = `<span class="badge">${cap(r.conclusion)}</span>`;
     else badge = `<span class="badge bad">Failed</span>`;
-    const how = r.event === "schedule" ? "on schedule" : r.event === "workflow_dispatch" ? `started by hand` : r.event;
+    const how = timed ? "on schedule" : r.event === "workflow_dispatch" ? `started by hand` : r.event;
     return { wf, badge, how, quick, secs };
   }
 
@@ -1006,7 +1007,7 @@
       if (watch) {
         let r = watchId ? runs.find((x) => String(x.id) === String(watchId)) : null;
         if (!r && since) {
-          r = runs.filter((x) => x.workflow === watch && x.event === "workflow_dispatch" && Date.parse(x.created_at) >= Date.parse(since) - 20e3)
+          r = runs.filter((x) => x.workflow === watch && x.event === "workflow_dispatch" && !/\(timer\)/.test(x.title || "") && Date.parse(x.created_at) >= Date.parse(since) - 20e3)
             .sort((a, b) => a.created_at.localeCompare(b.created_at))[0];
         }
         if (r) watchId = String(r.id);

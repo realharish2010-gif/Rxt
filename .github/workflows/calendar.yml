@@ -1,9 +1,12 @@
 name: Content calendar
+run-name: ${{ inputs.timer && 'Content calendar (timer)' || 'Content calendar' }}
 # Up to 3 posts a day (morning, midday, evening India time). This runs every 30 minutes inside
 # the slot windows; the first step decides in seconds whether a slot is due (see slots.py) and
 # the rest only runs when one is. Running often covers GitHub's late or skipped scheduled runs.
 # Times are UTC, at :07 and :37 because GitHub delays runs at the top of the hour the most.
 # If you change the windows in config.json "schedule", make sure these still cover them.
+# GitHub often starts scheduled runs late or skips them, so a Cloudflare timer (timer/) also
+# starts this workflow on the same times with timer=true; the slot checks stop double posts.
 on:
   schedule:
     - cron: "7,37 1-4 * * *"    # 06:37 to 10:07 IST, morning slot
@@ -25,6 +28,10 @@ on:
         type: choice
         options: [auto, reel, carousel]
         default: auto
+      timer:
+        description: "Leave unticked. Set by the Cloudflare timer (timer/), so the run acts like a scheduled one"
+        type: boolean
+        default: false
 concurrency:
   group: carousel
   cancel-in-progress: false
@@ -49,6 +56,7 @@ jobs:
           python main.py due
         env:
           SLOT_INPUT: ${{ inputs.slot }}
+          TIMER: ${{ inputs.timer }}
           FORCE_PUBLISH: ${{ inputs.force }}
           AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
       - name: Install
@@ -134,6 +142,7 @@ jobs:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           FORCE_PUBLISH: ${{ inputs.force }}
+          TIMER: ${{ inputs.timer }}
       - name: Save posted state
         if: steps.due.outputs.slot != '' && vars.AUTO_PUBLISH == 'true'
         run: |

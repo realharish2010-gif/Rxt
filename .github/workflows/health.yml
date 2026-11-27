@@ -1,4 +1,5 @@
 name: Daily health check
+run-name: ${{ inputs.timer && 'Daily health check (timer)' || 'Daily health check' }}
 # Once a day, after the evening slot's window closes (22:57 India time): is the dashboard's
 # GitHub token about to expire (warned 14 days ahead)? Did any of
 # today's slots pass without a post? Problems open a GitHub issue labelled bot-alert, which
@@ -7,6 +8,11 @@ on:
   schedule:
     - cron: "27 17 * * *"
   workflow_dispatch:
+    inputs:
+      timer:
+        description: "Leave unticked. Set by the Cloudflare timer (timer/)"
+        type: boolean
+        default: false
 permissions:
   contents: read
   issues: write
