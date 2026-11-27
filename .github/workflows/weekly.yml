@@ -36,6 +36,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # branch tip, not the commit the run was started on: the timer and GitHub's own
+          # schedule both start this at 00:17 UTC, and the second run (queued behind the first)
+          # must see the first one's recap file so it skips instead of writing a duplicate
+          ref: ${{ github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
