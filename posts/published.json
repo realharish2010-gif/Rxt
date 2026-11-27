@@ -165,5 +165,23 @@
     "media_id": "18237705850321622",
     "forced": false,
     "at": "2026-11-27T00:33:57+00:00"
+  },
+  {
+    "day": "2026-11-27",
+    "folder": "2026-11-27_030947",
+    "topic": "The mechanics of credit score reporting frequency",
+    "template": "spray",
+    "hook": "3 Facts About Your Credit Score Updates",
+    "content_type": "simple explainer",
+    "hook_style": "number or list",
+    "topic_area": "credit",
+    "angle": "educational",
+    "slot": "morning",
+    "post_time": "07:30",
+    "local_day": "2026-11-27",
+    "format": "carousel",
+    "media_id": "18124272175945087",
+    "forced": false,
+    "at": "2026-11-27T03:10:30+00:00"
   }
 ]
