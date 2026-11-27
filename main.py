@@ -438,7 +438,7 @@ def publish():
             why = f"already {len(done_today)} posts today"
         elif not slot and done_today:
             why = "a post already went out today and this carousel has no calendar slot"
-        elif slot and post.get("local_day") != local and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+        elif slot and post.get("local_day") != local and slots.timed_run():
             why = f"this carousel was made for {post.get('local_day')}'s {slot} slot"
         if why:
             print(f"Skipping: {why}. Run the publish workflow with 'force' ticked to post anyway.")

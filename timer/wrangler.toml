@@ -1,0 +1,9 @@
+# Deploy from this folder: npx wrangler deploy   (then: npx wrangler secret put GITHUB_TOKEN)
+# Times are UTC and must match JOBS in worker.js.
+name = "rxt-timer"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+workers_dev = true
+
+[triggers]
+crons = ["7,37 1-4,6-9,13-16 * * *", "27 17 * * *", "17 0 * * MON"]
