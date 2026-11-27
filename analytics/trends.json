@@ -1,98 +1,140 @@
 {
   "hashtag_ids": {},
-  "updated": "2026-11-26T14:35:26+00:00",
-  "candidates": 137,
+  "updated": "2026-11-27T03:09:11+00:00",
+  "candidates": 186,
   "picks": [
     {
-      "id": "credit-card-spending-surpasses-atm-cash-withdrawals-for-firs",
+      "id": "robotic-surgery-how-much-will-your-health-insurance-policy-a",
       "kind": "news",
-      "headline": "Credit card spending surpasses ATM cash withdrawals for first time in India - CNBC TV18",
-      "source": "CNBC TV18",
-      "link": "https://news.google.com/rss/articles/CBMitgJBVV95cUxNbEUweVpWc1FVNE1BSVdYekZBaHBlb1plNUxxM1JheE16NXFyenlTaVJ0OTJRYUFfLU9BVnczU1NYdzc0UlNRRUNWZXBycW1xQlVMZnJWVUpKMmhPbTRNU2VzeEltamR0NDNLcEZnaHZDODc3bjhzb0xqTVBzbk9YZnJmTkNiYm04M0o2d0Q3MkdaY0RSamt0c2VqYTFJUi1rZTNKRTd0YXpTREctaXp3cUR5MTFGVjRTZzVLbFFhWElaYlNUcTlzd0ZJaFhIYmtEb010bzUyejYzQVhKVmhWNFR1LXlDRzIxa29VVDdxa3BCV3FEMUlvUll4Q0F2S3NDR3gxbmVhV1ZEM2RkaXNETFVQbWNJcnNsYWoxQUFwRnRDTGFtNGUycGFNRmk3ejJ3UHVDT0ZB0gG7AkFVX3lxTE9CS2c0dG1hN2FFNHZwQlZiN2ZJLVlia3E1eHlxcHZIV2ZCSTJGakpYNlY4NGJtNjVIR2t6bVA3SzlXRUdTZ2dCN2dGYVJ3ejRfTG5LckJ6SVVTdERoRjYxS3I0c1YzM3A4a1p2VldqbXpSOW5QSGswbU5ESXhKdzlTWHUtelQ3RUNCLWN4d0xKQ01QYWpESzN3a2xESmtnQ3IzR2tfODhHc1RsMENGOVlrQXBKWWxadVp0Z1lxbFptRmo0OGd3WjhNdUxDSTlKd3lnbGF2XzF4Z2IwV3lXMWVKR2lSdkkyQ2s5S3l1UnNCUDhsVXZ3ZFJXVUY5Z0ZEYlpTaHZiaWdUX0c5c1RfOEF4Ul9nTU9tUHlyWXhSV2xLVGg1OFgxelkwUk1GOEwyX1ppWVJYcVY1U19KQQ?oc=5",
-      "published": "2026-11-26T07:53:54+00:00",
-      "topic_area": "credit",
-      "angle": "With credit card spending now exceeding cash withdrawals, it is a reminder to treat every card swipe like spending actual cash from your bank account.",
+      "headline": "Robotic surgery: How much will your health insurance policy actually pay? - Business Standard",
+      "source": "Business Standard",
+      "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNMmt0NDVUeVNJVDFVNXdJa0JBb0IxaG91dThsSTN2OE80S0pHd2dNTFR6a1dqQ2lnd2dWbUd2OVYyanlsZlVvSUVmT25oTWlfMkVTZGxkOUY5QjB5OXROVFdCUXlKb0o4cmdWVTJ0dmtXampFRzdBcTVZZWFvWGFKbHdWTmZLVzlzWmxhQWZmX3FnZUVDN25TS3JoVElLenRGNnBnT0kySmNjTHdmS0RyUTZzZlBqWWlzQ01TUG9qUHhzZjJFRHpkd3UwdW1VVm1EYnRRVWMyNzBqbDRrSWhzTzZUZDDSAeoBQVVfeXFMTmFyLXF4VVF1ZkhyV2dtSEFGVUtCSzNISW5xaF9JV3ZYMnMzWnA1S1RNSDdyczlOZklNWW9hZkxpME1KY1dLUFNRS2ZvajVRQmdiU2Q5QzhjOGtMbzhDZjVBWi0xaEh0bWV6LURaZ3ZEbDFTWV9KOE5zdXk1ZGxiX1lGWXBfTkdYSTA0YjdwdmxjZXZzUWk3OHk1RUpBaW15RXBkcE1XRWxrTXR6Mjh5azc1eTlXQ3h1VDZxOHVCMDlENlhXLXFGUjl4T3puWFp0a1RpN1loQmdncEtjbHlCdUYxRFA1NjlwRjF3?oc=5",
+      "published": "2026-11-26T17:19:48+00:00",
+      "topic_area": "insurance basics",
+      "angle": "Read the fine print of your health insurance policy to understand what treatments are covered before an emergency happens.",
       "facts": [
-        "Credit card spending surpasses ATM cash withdrawals for first time in India"
+        "How much will your health insurance policy actually pay?"
       ],
-      "avoid": "Do not imply that credit cards are inherently good or bad, and do not recommend specific cards.",
-      "relevance": 4,
+      "avoid": "Do not predict future costs or claim that certain insurance companies are better than others.",
+      "relevance": 5,
       "evergreen_ok": true,
-      "format": "news content"
+      "format": "lesson"
     },
     {
-      "id": "fd-rates-up-to-8-25-which-banks-offer-the-highest-returns-in",
+      "id": "credit-card-spending-rises-20-to-2-45-lakh-crore-in-october",
       "kind": "news",
-      "headline": "FD rates up to 8.25%: Which banks offer the highest returns in India now? - Business Standard",
-      "source": "Business Standard",
-      "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNUXAtaVdVMjlYa0h1WV9kcWl1T2NZQldfd0VYTUo5TDFPS3lmWmRmREk4aHVERHVnNVN5djBFb3F1YmxHNzRjd2trd3o2dndueXhYWHdPejIwVnFRaEdtVUNuVDV1Yi1OdFpBOElicmhINHBWYW56WFhFeW9yalVIZERRYVlkc2EtdFRrbVo2X1FIWXZCdzNlb21DT2hPaFdxcmF3UVBTazZ4UHF2cXo4Y21Nd3B3c0t5b1JqN2hvUW5GdlpVYWhiRE9kNjhfNXpCYV8tdmMtMlBRQkVUczd6dE1Qb9IB6AFBVV95cUxPc1dIZ3J2M01RRmRoRDFVTFVHQzRXNlFSMGF1Wjg4d1FkTWlHckIxb2FPODFhdVU5RFVwMnB0NF8zcW16aFhETEp3MV9wU3ljSEI1b2trNGsxd09pNnBJWUJxVnI2N2w3WEpzVmlRcF91YkpQcC0zeENPQkM2UDNfaEQtMV9OSTcwcXFMc3A0UWcxa2NDY2ZUWmVfZjJ1TTFrMEpOM2NyQlQya1ZteFJKX2tGUXJLMkpMWFpmc0V0TWlOVzNBdGxNS3ZCMW5wNWd2NnlqOUVPZEg4WDR6X2FFZDJuM0JiWDVL?oc=5",
-      "published": "2026-11-26T10:12:37+00:00",
-      "topic_area": "saving",
-      "angle": "When interest rates for fixed deposits vary, focus on building an emergency fund that keeps your money accessible rather than chasing the highest return.",
+      "headline": "Credit card spending rises 20% to ₹2.45 lakh crore in October as festive shopping boosts consumer demand across India - Livemint",
+      "source": "Livemint",
+      "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxNMHNSc19RVUxtLWZWZXczUWduMXgwa1BBT1ZPcEs2a0Rpb2VvYkFSbWNwNFVJRE14SS1KazVOc2tOQUVwY0NlM3pua0p5MHFKeFRfY010UEo5WDg2Z0ZNN0VMc0FsSDA0bTV0WmdsNWk5WV9YTmd5NUtGdERNYlh6QXEzTmhhSHRIUzBFTG12LVhxaGtIaWZWdnZrZTVwdW1xLVFVM005OXFrR1A3NDF4RWlUTHNmc0x2b1JrWEZLYWRCZFh3OENXb1lsM2lXN25GVVFyQnBQMTRsazdFa0l5Q3pKRGJlTmlDeXB4b24zWTVjNG8yUW4taFZOc24tUEpjVWRzNHpabE5vQnVWTjc3d9IBlgJBVV95cUxPSG5KM1VMTUtfelNLdVRyekoxc3Bka05QdGlCLXprOTFiTV9xQ1FpX0xpdDFKQmJkV2QyVmxySGVscFBpTFU0bVJSMkxZbEhfMGwwQXNxN2RBZXJOZGJ1a1RQMGdKc3otMW9HVVVZQUhTbE1UNjZWcHI0RktvNWpaaEd0QlF2dk9CckRWSndYSXJkN19lSUl4M0RKYmtLU0lYMm9iV2FOaWRrRTRXSTVjMlg0ekExeS1GOFZEdEpCQURoSzZpdjB3eHhldUk1LUhGUnVDLTBsVGtSRk81c25yZ0ZsYUJtOUgyQVdnUjF1X3YzY041LWREQkpYakVfVy10QmJHM2x4UTVMaVA1akhkV1h5cFVwQQ?oc=5",
+      "published": "2026-11-26T02:11:51+00:00",
+      "topic_area": "budgeting",
+      "angle": "High festive spending is a common trap; learn to track your credit card usage to ensure your monthly debt payments remain manageable.",
       "facts": [
-        "FD rates up to 8.25%"
+        "Credit card spending rises 20% to ₹2.45 lakh crore",
+        "Festive shopping boosts consumer demand"
       ],
-      "avoid": "Do not name specific banks or promise specific investment returns.",
-      "relevance": 3,
+      "avoid": "Do not frame spending as negative or positive, and avoid giving advice on whether to use credit cards or not.",
+      "relevance": 4,
+      "evergreen_ok": true,
+      "format": "lesson"
+    },
+    {
+      "id": "gold-loans-grow-60-6-to-2-33-trillion-ticket-size-up-32-7-re",
+      "kind": "news",
+      "headline": "Gold loans grow 60.6% to ₹2.33 trillion, ticket size up 32.7%: Report - Business Standard",
+      "source": "Business Standard",
+      "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxONzZCQzUxNXNJa1VfaldSenJvY0c2Z19qQzBDSU1PTWZnUHRPa2x4NUhqaThyRWVHcDVoYmFqUm12RG9hUnNYVF9EQ2oyNm9CeHV4YUE0RDFYN3MxNFNXN1Yya3ZsVGJfZGxJSkdrdndoUlVGYTFZekxnRjNqTzY1eDVnT0RwaFRnSGJJczNlQnUxcXZLZndNNmRCbTZLdS1XYWJrTEZlaXhwQVRubEJrQkZtY1JuM3h2eXZEVFB3Si04b3RiY0JfT0I1dTlVeURUQTE3aFBCT3dZbXPSAeABQVVfeXFMUEdiTWNRVnpvYTRCNjNOZnZoVE1hWWIzcVpWWkhuZm16ckZxUVNaUjlZd19pbEU0QmppdWdjTHhwTV9sSkZuMGtBZmc0aC1aZ2VtZkVBY1Vnd3h3M1FJN3FFZllmTTJXZ0tjdThpbUlKU0FUNVJaaW9kenVleTFEQkZYdGU3WFlpR1dTTUkySmx6VEdyRExGU1Z4ZzVFbV9kUEtLUlFKWWMxN3E1REFZS2hjeEVvV3NwRzd4cVcwRDNZbUxRZE5Ea2plZUQyV1ZfdzJFSEphS2pXNXZRUGNMUmI?oc=5",
+      "published": "2026-11-26T08:55:46+00:00",
+      "topic_area": "debt",
+      "angle": "Before taking a loan against any asset like gold, calculate if the interest cost fits your budget and understand the risks of default.",
+      "facts": [
+        "Gold loans grow 60.6% to ₹2.33 trillion",
+        "Ticket size up 32.7%"
+      ],
+      "avoid": "Do not recommend gold loans as an easy solution or judge people for using them; avoid suggesting specific lenders.",
+      "relevance": 4,
       "evergreen_ok": true,
       "format": "lesson"
     }
   ],
-  "general_candidates": 125,
+  "general_candidates": 123,
   "general_picks": [
     {
-      "id": "gt-croma-black-friday-sale-iphone-16-iphone-17-pro-max-macbo",
+      "id": "gt-iphone-17-pro-max-under-rs-97-000-iphone-16-under-rs-46-0",
       "kind": "general",
       "format": "general trends",
       "headline": "Black Friday Sales",
-      "story": "Croma Black Friday Sale: iPhone 16, iPhone 17 Pro Max, MacBook Neo available at discounted prices - Moneycontrol.com",
-      "source": "Moneycontrol.com",
-      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPQl8yQUNmWV9uY0E0T0ViT0dCc0UwRm9xWEdLX016alhSWmNRb0ZNQWxwRFNSVVMtbGlpeHVQbEFnNElBSHVoWDNjeDJnZndYTjhHNnRtNWN2MEo3TUxERnRNUU5tRVY4UFQxUTBEOERib0ZiRmVIdUt6V2JTWWJ6U1pQZnlnRTVtWm9SR29EVHlGSU5oOGNZWVJsdDkyNVhoWWRNYkpteEcyRHFTaXluZDRsdjdUdE1ZMlBaLVhCcmJWM2RUVHdfVjFQTi1LS2ZQdXhYR1JCMEhDTUhxV21DdXpOTzhFMk9iYzNQTw?oc=5",
-      "published": "2026-11-26T12:14:19+00:00",
+      "story": "iPhone 17 Pro Max under Rs 97,000, iPhone 16 under Rs 46,000: Croma Black Friday deals - The Indian Express",
+      "source": "The Indian Express",
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQZWtabVVac1dhWDJHeDR1dEFTc21pV3NVbjhRZm5xTFRmdVZvZTlCSjF0V1QzX0pyd2NMeVgwUThzVzE2MW84NFZFT1MxR3FkaTRMSmNBTjJBaGxyLVFlM3libTZ6OGk2c1VrRTBKNW9hVWhhRVVqQ3p6TU93MGU2Nk5TT1dWcFBCMVpMbkkwaEM2dFE3VTJiQW1EX19pUjhRZ2g5Ty05ZDJwdE3SAbIBQVVfeXFMTUY5SnpWeUduNWNtNkZ4N1JYM2REaVM3N1Rmdy12d3B6clVhaUhRSURSb3FYYTUtOXQydFdEdU1YakdyS0JiMFdhYUxweXAxUXdhdHBwMkFaWDF1dTg4MncwX3lDdUR6ZlJhUkxqamtKRWYxUlhhblpKeUpIMDRrX2ZYU18tNkdHejljaGtaX0NkNTdVdHg5b0dZVUhEbHhSQ0pUZ3NBVWhZQnZ5eTg3ZGRHQQ?oc=5",
+      "published": "2026-11-26T13:41:19+00:00",
       "traffic": "",
       "topic_area": "budgeting",
-      "why_popular": "Major retail platforms are running significant discount events on popular electronics like smartphones and MacBooks.",
-      "bridge": "Just because something is on sale doesn't mean it fits your budget; always check if you have the funds before chasing a discount.",
-      "hook": "Seeing a 50% discount but your bank balance cries.",
-      "meme_format": "Expectation vs reality",
+      "why_popular": "Major discounts on electronics like iPhones are trending across India as the sale season begins.",
+      "bridge": "Just like a big sale, your money needs a 'wishlist' strategy so you don't overspend on impulse buys.",
+      "hook": "POV: You have a sale-proof shopping plan",
+      "meme_format": "POV: ...",
       "facts": [
-        "Major retail platforms are offering discounts on premium smartphone models.",
-        "Sales events often include high-end electronics like MacBooks and iPhones."
+        "Major brands are offering significant price drops on the latest smartphone models.",
+        "Sales are currently driving high traffic to both online and physical retail stores."
       ],
-      "avoid": "Do not imply that people should use credit cards or loans to afford these discounted items.",
+      "avoid": "Do not imply that buying these items on sale is a smart financial investment or a way to save money.",
       "relevance": 5,
       "fun": 4
     },
     {
-      "id": "gt-employees-provident-fund-organisation",
+      "id": "gt-today-s-nyt-wordle-hints-answer-and-help-for-friday-nov-2",
       "kind": "general",
       "format": "general trends",
-      "headline": "EPFO Withdrawal Rules",
-      "story": "employees' provident fund organisation",
-      "source": "Google Trends",
-      "link": "https://trends.google.com/trending/rss?geo=IN",
-      "published": "2026-11-26T05:50:00-08:00",
-      "traffic": "1000+",
-      "topic_area": "saving",
-      "why_popular": "There is significant public interest in upcoming changes to PF withdrawal percentages and systematic withdrawal plans for retirees.",
-      "bridge": "Your retirement savings are like a long-term investment; withdrawing early can cost you the 'magic' of compounding later.",
-      "hook": "Thinking about withdrawing your PF early for shopping?",
-      "meme_format": "Red flag / green flag",
+      "headline": "Daily Wordle Puzzle",
+      "story": "Today’s NYT Wordle Hints, Answer and Help for Friday, Nov. 27, #1987 - CNET",
+      "source": "CNET",
+      "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNSWszVmt0T05YVFpVaFYyZWg5dW1ZQ0JXS1AxUXZEN1ZvckNHSFF4N3RHdlpoWUc2Ym1DYjZDLVNMNXJXWFN0TmJMNE1kTUY2aWp1Mk00WERUendJamRjYUZhVEh5cV9NbzE0N09nVG9qVGR1ZFdNY1AyMUZOY3VGQVQwUQ?oc=5",
+      "published": "2026-11-26T21:00:24+00:00",
+      "traffic": "",
+      "topic_area": "money habits and mindset",
+      "why_popular": "Thousands of people search for hints and answers to the daily word puzzle every single morning.",
+      "bridge": "Solving your daily money habits is like playing Wordle—a little bit of consistent daily effort eventually reveals the big picture.",
+      "hook": "If consistency was a money habit",
+      "meme_format": "If ... were a money habit",
       "facts": [
-        "Discussions are ongoing about potential changes to PF withdrawal percentages.",
-        "Systematic Withdrawal Plans (SWP) are being explored for retirees."
+        "Wordle remains a daily habit for millions of users worldwide.",
+        "The game challenges players to solve a puzzle with limited attempts."
       ],
-      "avoid": "Do not give specific financial advice on whether a user should or should not withdraw their own specific funds.",
+      "avoid": "Do not frame financial health as a game of luck or chance.",
       "relevance": 4,
-      "fun": 3
+      "fun": 5
+    },
+    {
+      "id": "gt-whatsapp-users-can-also-schedule-messages-now-news-on-air",
+      "kind": "general",
+      "format": "general trends",
+      "headline": "Scheduled Messages",
+      "story": "WhatsApp users can also schedule messages now - News On AIR",
+      "source": "News On AIR",
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1hZnZDano3UnRMT2FBR3lJZnVZbmRXVXBWMDVkczItT0tocUdCS01mRHVYd1lTY3lkS21XSGFFWFdaTWZpc0VpdG1BZ292UF9FazZWNUdYblRpaUpxMmhncFJNWkp4QjZ3dndhOUphSXFKcWFhZjloWXJ0OA?oc=5",
+      "published": "2026-11-26T15:58:02+00:00",
+      "traffic": "",
+      "topic_area": "financial goals and planning",
+      "why_popular": "The feature to schedule messages on WhatsApp has recently become a widely used tool for better communication.",
+      "bridge": "Just like you can schedule a message, you can automate your 'savings' message to yourself every payday.",
+      "hook": "Things that just make sense: Automating your savings",
+      "meme_format": "Things that just make sense",
+      "facts": [
+        "WhatsApp now allows users to schedule messages for both individual and group chats.",
+        "This feature helps users manage their communication timing more effectively."
+      ],
+      "avoid": "Do not suggest using automated banking apps or specific high-risk investment platforms.",
+      "relevance": 4,
+      "fun": 4
     }
   ],
   "patterns": {
     "hints": {
       "content_type": [
         "simple explainer",
-        "quick rule of thumb",
-        "checklist"
+        "worked example with numbers",
+        "step-by-step how-to"
       ],
       "hook_style": [
         "bold clear statement",
@@ -101,115 +143,157 @@
       ],
       "topic_area": [
         "financial goals and planning",
-        "saving",
         "money habits and mindset"
       ]
     },
     "counts": {
       "content_type": {
-        "quick rule of thumb": 2,
+        "step-by-step how-to": 1,
         "simple explainer": 18,
-        "worked example with numbers": 1,
-        "checklist": 2,
-        "step-by-step how-to": 1
+        "myth vs fact": 1,
+        "checklist": 1,
+        "common mistakes to avoid": 1,
+        "worked example with numbers": 2
       },
       "hook_style": {
-        "bold clear statement": 11,
-        "surprising but true fact": 5,
-        "relatable everyday situation": 5,
-        "direct question": 1,
-        "number or list": 1,
-        "myth-busting": 1
+        "bold clear statement": 14,
+        "surprising but true fact": 2,
+        "relatable everyday situation": 2,
+        "direct question": 2,
+        "myth-busting": 1,
+        "common mistake": 1,
+        "number or list": 2
       },
       "topic_area": {
-        "saving": 1,
         "financial goals and planning": 2,
-        "money habits and mindset": 1
+        "money habits and mindset": 2
       }
     },
     "formats": {
-      "reel": 18,
-      "carousel": 4,
-      "single image/video": 19
+      "reel": 22,
+      "single image/video": 21,
+      "carousel": 3
     },
     "best_hours_ist": [
+      10,
       12,
       13,
+      14,
+      15,
       16,
       17,
-      18,
       19,
       20,
       21,
       22
     ],
     "notes": [
-      "Imperative call to action promising practical tips to save money",
-      "Curiosity-sparking geographical contrast highlighting an unexpected medical journey",
-      "Urgent emoji coupled with a major milestone data point",
-      "Observational narrative describing an eye-opening scene that prompts debate",
-      "Controversial headline highlighting international tension and pop culture friction",
-      "Provocative political slogan creating immediate high-stakes drama",
-      "Seasonal celebration tied directly into an alternative gifting habit",
-      "Contrasting an annual holiday against sustained everyday long-term impact"
+      "Promises valuable practical hacks for a specific service",
+      "Uses shocking statistics to highlight a global trend",
+      "Uses a chaotic visual event to generate curiosity",
+      "Focuses on celebrity and high-profile news reporting",
+      "Highlights a high-impact number regarding migration data",
+      "Provides a somber factual historical retrospective",
+      "Uses provocative questioning to engage political interest",
+      "Reports a unique high-value financial donation story"
     ],
     "examples": [
       {
         "account": "labourlawadvisor",
         "permalink": "https://www.instagram.com/reel/DfhgNATxcjG/",
-        "rel": 56.5,
+        "rel": 64.27,
         "format": "REELS",
         "first_line": "Don’t miss these IRCTC Hacks!",
-        "content_type": "quick rule of thumb",
+        "content_type": "step-by-step how-to",
         "hook_style": "bold clear statement",
-        "topic_area": "saving"
-      },
-      {
-        "account": "labourlawadvisor",
-        "permalink": "https://www.instagram.com/reel/De13cFotBww/",
-        "rel": 50.49,
-        "format": "REELS",
-        "first_line": "London to UP, Bachaa Paida Karne",
-        "content_type": "simple explainer",
-        "hook_style": "surprising but true fact",
         "topic_area": "other"
       },
       {
         "account": "moneycontrolcom",
-        "permalink": "https://www.instagram.com/p/DgKwhgaBpCS/",
-        "rel": 11.0,
+        "permalink": "https://www.instagram.com/p/DgMjvGmhtl5/",
+        "rel": 15.19,
         "format": "FEED",
-        "first_line": "🚨India has overtaken the UK to become the world’s fourth-largest stock market, marking a major milestone for the country",
+        "first_line": "🚨 India accounted for the largest number of YouTube video removals globally in the April-June 2026 quarter, with the pla",
         "content_type": "simple explainer",
         "hook_style": "surprising but true fact",
         "topic_area": "other"
       },
       {
         "account": "moneycontrolcom",
-        "permalink": "https://www.instagram.com/reel/DgJ_7E5CBva/",
-        "rel": 10.92,
+        "permalink": "https://www.instagram.com/reel/DgMUMFRDjC6/",
+        "rel": 9.49,
         "format": "REELS",
-        "first_line": "A group of foreign tourists has been filmed collecting plastic waste and litter along the banks of the Ganga in Rishikes",
+        "first_line": "#WATCH | A wedding feast turned chaotic in Bihar's Nadwan village as a massive crowd gathered for the wedding of Mokama ",
         "content_type": "simple explainer",
         "hook_style": "relatable everyday situation",
         "topic_area": "other"
       },
       {
-        "account": "economictimes",
-        "permalink": "https://www.instagram.com/p/DgK-qWjF1WY/",
-        "rel": 6.89,
-        "format": "FEED",
-        "first_line": "#LinkInBio | Pakistani Netflix series sparks a cross-border culture clash | Netflix's upcoming series 'Jo Bachay Hain Sa",
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/reel/DgMyEuFinl4/",
+        "rel": 9.01,
+        "format": "REELS",
+        "first_line": "#WATCH | Union Home and Cooperation Minister Amit Shah met the team behind Ramayana: Part 1 in New Delhi on Wednesday, N",
         "content_type": "simple explainer",
         "hook_style": "bold clear statement",
         "topic_area": "other"
       },
       {
         "account": "economictimes",
-        "permalink": "https://www.instagram.com/reel/DgLClZFSXxh/",
-        "rel": 6.78,
+        "permalink": "https://www.instagram.com/p/DgNYspPl0Ip/",
+        "rel": 8.23,
+        "format": "FEED",
+        "first_line": "#LinkInBio | 85,000 Indians left the UK in just 12 months, more than any other nationality | Indian students and workers",
+        "content_type": "simple explainer",
+        "hook_style": "surprising but true fact",
+        "topic_area": "other"
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/p/DgMm27SIx8C/",
+        "rel": 7.8,
+        "format": "FEED",
+        "first_line": "IN PHOTOS | India marks the 18th anniversary of the 26/11 Mumbai terror attacks. On November 26, 2008, 10 terrorists fro",
+        "content_type": "simple explainer",
+        "hook_style": "bold clear statement",
+        "topic_area": "other"
+      },
+      {
+        "account": "economictimes",
+        "permalink": "https://www.instagram.com/reel/DgNm1zFyDXw/",
+        "rel": 6.58,
         "format": "REELS",
-        "first_line": "'#Vote #Chor, #Gaddi Chhod!'| #Rajnath blasts #RahulGandhi over #Italian #leader's remarks against #PM",
+        "first_line": "‘#BJP's #Constitution or #India's?’ #AadityaThackeray questions #Govt over #GenZ crackdown",
+        "content_type": "simple explainer",
+        "hook_style": "direct question",
+        "topic_area": "other"
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/p/DgMuDpiIimx/",
+        "rel": 5.88,
+        "format": "FEED",
+        "first_line": "A Chennai businessman has donated 121 kg of gold ornaments to Lord Venkateswara Swamy at Tirumala, in what is being desc",
+        "content_type": "simple explainer",
+        "hook_style": "bold clear statement",
+        "topic_area": "other"
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/p/DgMRK98IhTQ/",
+        "rel": 5.32,
+        "format": "FEED",
+        "first_line": "The Reserve Bank of India brought 60.08 tonnes of gold back home between April and September, taking its domestically he",
+        "content_type": "simple explainer",
+        "hook_style": "bold clear statement",
+        "topic_area": "other"
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/p/DgM1ZkGBRUe/",
+        "rel": 4.97,
+        "format": "FEED",
+        "first_line": "For the first time, Tamil Nadu chief minister C Joseph Vijay on Thursday introduced paternity leave for male employees w",
         "content_type": "simple explainer",
         "hook_style": "bold clear statement",
         "topic_area": "other"
@@ -217,118 +301,83 @@
       {
         "account": "zerodhaonline",
         "permalink": "https://www.instagram.com/p/DfZJINVOFTI/",
-        "rel": 4.95,
+        "rel": 4.77,
         "format": "FEED",
         "first_line": "This festive season, gift stocks, ETFs, or mutual funds to your loved ones.😀",
-        "content_type": "quick rule of thumb",
-        "hook_style": "relatable everyday situation",
+        "content_type": "simple explainer",
+        "hook_style": "bold clear statement",
         "topic_area": "financial goals and planning"
       },
       {
         "account": "zerodhaonline",
         "permalink": "https://www.instagram.com/p/Dft61niksaP/",
-        "rel": 4.49,
+        "rel": 4.33,
         "format": "FEED",
         "first_line": "Not just on Children’s Day but all year round, across India, we’re helping children learn about money, build financial a",
         "content_type": "simple explainer",
         "hook_style": "bold clear statement",
         "topic_area": "money habits and mindset"
-      },
-      {
-        "account": "zerodhaonline",
-        "permalink": "https://www.instagram.com/p/DfRt41uEr4D/",
-        "rel": 3.9,
-        "format": "FEED",
-        "first_line": "In the latest episode of The Back Office, we talk to Vinay about his journey, how Zerodha’s tech team works, its open-so",
-        "content_type": "simple explainer",
-        "hook_style": "relatable everyday situation",
-        "topic_area": "other"
-      },
-      {
-        "account": "labourlawadvisor",
-        "permalink": "https://www.instagram.com/reel/DfCtqfaoZ4_/",
-        "rel": 3.76,
-        "format": "REELS",
-        "first_line": "FSSAI vs Influencer ",
-        "content_type": "simple explainer",
-        "hook_style": "bold clear statement",
-        "topic_area": "other"
-      },
-      {
-        "account": "moneycontrolcom",
-        "permalink": "https://www.instagram.com/p/DgJ-_A5FF1c/",
-        "rel": 3.71,
-        "format": "FEED",
-        "first_line": "Delhi’s lung cancer burden has come into focus, with RTI data revealing 6,581 cases and 913 deaths reported across four ",
-        "content_type": "worked example with numbers",
-        "hook_style": "surprising but true fact",
-        "topic_area": "other"
-      },
-      {
-        "account": "zerodhaonline",
-        "permalink": "https://www.instagram.com/p/Dfd6zhRMz3r/",
-        "rel": 3.71,
-        "format": "FEED",
-        "first_line": "",
-        "content_type": null,
-        "hook_style": null,
-        "topic_area": null
       }
     ],
     "reels": [
       {
         "account": "labourlawadvisor",
         "permalink": "https://www.instagram.com/reel/DfhgNATxcjG/",
-        "rel": 56.5
-      },
-      {
-        "account": "labourlawadvisor",
-        "permalink": "https://www.instagram.com/reel/De13cFotBww/",
-        "rel": 50.49
+        "rel": 64.27
       },
       {
         "account": "moneycontrolcom",
-        "permalink": "https://www.instagram.com/reel/DgJ_7E5CBva/",
-        "rel": 10.92
+        "permalink": "https://www.instagram.com/reel/DgMUMFRDjC6/",
+        "rel": 9.49
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/reel/DgMyEuFinl4/",
+        "rel": 9.01
       },
       {
         "account": "economictimes",
-        "permalink": "https://www.instagram.com/reel/DgLClZFSXxh/",
-        "rel": 6.78
+        "permalink": "https://www.instagram.com/reel/DgNm1zFyDXw/",
+        "rel": 6.58
       },
       {
         "account": "labourlawadvisor",
         "permalink": "https://www.instagram.com/reel/DfCtqfaoZ4_/",
-        "rel": 3.76
+        "rel": 4.25
+      },
+      {
+        "account": "moneycontrolcom",
+        "permalink": "https://www.instagram.com/reel/DgMibspjN8J/",
+        "rel": 3.84
       },
       {
         "account": "labourlawadvisor",
         "permalink": "https://www.instagram.com/reel/DfzoDe8zu8h/",
-        "rel": 3.33
+        "rel": 3.79
       },
       {
-        "account": "moneycontrolcom",
-        "permalink": "https://www.instagram.com/reel/DgKmjxmji0A/",
-        "rel": 3.27
-      },
-      {
-        "account": "economictimes",
-        "permalink": "https://www.instagram.com/reel/DgKv_lwS_OE/",
-        "rel": 2.96
+        "account": "labourlawadvisor",
+        "permalink": "https://www.instagram.com/reel/DfFLE3Qo9xr/",
+        "rel": 2.97
       }
     ],
-    "measured": 41,
-    "updated": "2026-11-26T01:42:17+00:00",
+    "measured": 46,
+    "updated": "2026-11-27T03:09:11+00:00",
     "looked_at": 120
   },
   "errors": [
-    "Feed failed (https://news.google.com/rss/search?q=credit%20score%20OR%20CIBIL%20OR%20credit%2): 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=credit%20score%20OR%20CIBIL%20OR%20credit%20card%20rules%20when%3A3d&hl=en-IN&gl=IN&ceid=IN:en",
-    "Feed failed (https://news.google.com/rss/search?q=UPI%20OR%20digital%20payments%20fraud%20whe): 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=UPI%20OR%20digital%20payments%20fraud%20when%3A3d&hl=en-IN&gl=IN&ceid=IN:en"
+    "Competitor @finshots: Invalid user id",
+    "Hashtag #personalfinance: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
+    "Hashtag #moneytips: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
+    "Hashtag #financialliteracy: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
+    "Hashtag #budgeting: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)",
+    "Hashtag #savingmoney: (#10) To use 'Instagram Public Content Access', your use of this endpoint must be reviewed and approved by Facebook. To submit this 'Instagram Public Content Access' feature for review please read our documentation on reviewable features: https://developers.facebook.com/docs/apps/review. (hashtag search needs the Instagram Public Content Access feature on the Meta app)"
   ],
   "used": [
     "2-years-to-sell-a-home-inventory-pile-up-raises-warning-sign",
     "caution-to-investors-regarding-impersonation-of-sebi-registe",
     "gt-bride-and-groom-make-spectacular-entry-at-venue-inside-gi",
     "gt-youtube-s-official-gta-6-release-day-numbers-are-staggeri"
-  ]
+  ],
+  "patterns_tried": "2026-11-27T03:08:57+00:00"
 }

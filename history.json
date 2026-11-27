@@ -141,5 +141,19 @@
     "local_day": "2026-11-26",
     "slot": "extra",
     "post_time": "20:01"
+  },
+  {
+    "day": "2026-11-27",
+    "topic": "The mechanics of credit score reporting frequency",
+    "template": "spray",
+    "content_type": "simple explainer",
+    "hook_style": "number or list",
+    "topic_area": "credit",
+    "angle": "educational",
+    "hook": "3 Facts About Your Credit Score Updates",
+    "format": "carousel",
+    "local_day": "2026-11-27",
+    "slot": "morning",
+    "post_time": "07:30"
   }
 ]
