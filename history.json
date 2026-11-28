@@ -199,5 +199,19 @@
     "local_day": "2026-11-28",
     "slot": "morning",
     "post_time": "09:30"
+  },
+  {
+    "day": "2026-11-28",
+    "topic": "The psychological impact of 'money scripts' on spending habits",
+    "template": "collage",
+    "content_type": "simple explainer",
+    "hook_style": "direct question",
+    "topic_area": "money habits and mindset",
+    "angle": "educational",
+    "hook": "Do your childhood money habits control you?",
+    "format": "carousel",
+    "local_day": "2026-11-28",
+    "slot": "midday",
+    "post_time": "14:00"
   }
 ]
